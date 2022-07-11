@@ -1,0 +1,54 @@
+class Expr:
+    EXPR_AR2 = 0
+    EXPR_CALL = 1
+    EXPR_FUNC = 2
+
+    def __init__(self, type, *args):
+        self.type = type
+        self.args = args
+        pass
+
+    @staticmethod
+    def call_expr(operand, method, *args):
+        e = Expr(Expr.EXPR_CALL, operand, method, *args)
+        return e
+
+    @staticmethod
+    def call_func(method, *args):
+        e = Expr(Expr.EXPR_FUNC, method, *args)
+        return e
+
+    @staticmethod
+    def add_expr(op, op1, op2):
+        e = Expr(Expr.EXPR_AR2, op, op1, op2)
+        return e
+
+    def __repr__(self):
+        def transform(x):
+            if isinstance(x, str):
+                return "\"%s\"" % x
+            return str(x)
+
+        if self.type == Expr.EXPR_AR2:
+            return "{op1} {op} {op2}".format(
+                op1=self.args[1],
+                op=self.args[0],
+                op2=self.args[2],
+            )
+        elif self.type == Expr.EXPR_CALL:
+            return "{object}{op}{name}({args})".format(
+                op="~" if self.args[1].endswith("_") else ".",
+                object=self.args[0],
+                name=self.args[1].removesuffix("_"),
+                args=",".join(
+                    [transform(x) for x in self.args[2:]]
+                )
+            )
+        elif self.type == Expr.EXPR_FUNC:
+            return "{op}{name}({args})".format(
+                op="~" if self.args[0].endswith("_") else "",
+                name=self.args[0].removesuffix("_"),
+                args=",".join(
+                    [transform(x) for x in self.args[1:]]
+                )
+            )

@@ -7,6 +7,8 @@ class Statement(Node):
     METHOD_CALL = 1
     FUNC_CALL = 2
     CONTROL_FLOW = 3
+    EXPR = 4
+    ASSIGN = 5
 
     def __init__(self, type, args):
         super().__init__()
@@ -52,3 +54,14 @@ class Statement(Node):
                 )
             )
             pass
+        elif self.type == Statement.EXPR:
+            printer.print(
+                "{expr};",
+                expr=self.args[0]
+            )
+        elif self.type == Statement.ASSIGN:
+            printer.print(
+                "{v} = {expr};",
+                v=self.args[0],
+                expr=self.args[1]
+            )

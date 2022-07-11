@@ -21,11 +21,14 @@ class SimpleStorage:
         with Cond() as c:
             c.match(op == 0x2013)
             r = self.double_the_num(op)
-            r.some_shit()
+            r.recalc()
+            with Cond() as c2:
+                c2.match(sender == 1)
+                sender.destroy()
             c.match(op == 0x2012)
-            print("b")
+            self.double_the_num(1)
             c.otherwise()
-            print("x")
+            self.double_the_num(4)
 
 
 class CompileTestCase(unittest.TestCase):
@@ -38,10 +41,13 @@ class CompileTestCase(unittest.TestCase):
 
     def test_magic_compile(self):
         t = Engine.patch(SimpleStorage, globals())
-        print(t == SimpleStorage)
         Engine.compile(t)
-        print(CallStacks.get_stack())
-        print(CallStacks.func())
+        v = CallStacks.current_contract
+        p = Printer()
+        v.print_func(p)
+        x = open("test.func", "w")
+        x.write(p.out())
+        x.close()
 
 
 if __name__ == '__main__':

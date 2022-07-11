@@ -7,4 +7,3 @@ class _UIntType(type):
 
 def UInt(bits: int):
     return _UIntType(bits)
-

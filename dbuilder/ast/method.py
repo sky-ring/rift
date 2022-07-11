@@ -41,5 +41,3 @@ class Method(Node):
             s.print_func(printer)
         printer.decr_indent()
         printer.print("}}")
-
-

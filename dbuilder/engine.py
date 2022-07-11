@@ -23,8 +23,10 @@ class Engine(object):
                 pass
             if is_method(v):
                 l = v.__args__
-                args = (Entity({"i": i}, name=v.__names__[i + 1]) for i in range(l - 1))
-                CallStacks.declare_method(k, [v.__names__[i + 1] for i in range(l - 1)])
+                args = (Entity({"i": i}, name=v.__names__[
+                        i + 1]) for i in range(l - 1))
+                CallStacks.declare_method(
+                    k, [v.__names__[i + 1] for i in range(l - 1)])
                 r = v(inst, *args, NO_INTERCEPT=1)
                 if isinstance(r, Entity):
                     CallStacks.return_(r)

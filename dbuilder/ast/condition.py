@@ -5,6 +5,7 @@ from dbuilder.ast.statement import Statement
 
 class IfFlow(ControlFlow):
     states: dict[str, list[Statement]]
+
     def __init__(self):
         super().__init__()
         self.conds = []
@@ -28,18 +29,35 @@ class IfFlow(ControlFlow):
         pass
 
     def print_func(self, printer: Printer):
-        for i, c in enumerate(self.conds):
-            printer.print(
-                "{kw} {_is}{cond}{_is_} {{",
-                cond=self.cond_items[c] if c != "def" else "",
-                kw="if" if i == 0 else "else",
-                _is="(" if c != "def" else "",
-                _is_=")" if c != "def" else "",
-            )
-            printer.incr_indent()
-            for s in self.states[c]:
-                s.print_func(printer)
-            printer.decr_indent()
-            printer.print("}}")
+        class IfNode:
+            def __init__(self, c, next):
+                self.c = c
+                self.next = next
 
+        def print_if(node):
+            c = node.c
+            if c != "def":
+                printer.print(
+                    "if ({cond}) {{",
+                    cond=self.cond_items[c] if c != "def" else "",
+                )
+                printer.incr_indent()
+                for s in self.states[c]:
+                    s.print_func(printer)
+                printer.decr_indent()
+                printer.print("}}")
+                if node.next is not None:
+                    printer.print("else {{")
+                    printer.incr_indent()
+                    print_if(node.next)
+                    printer.decr_indent()
+                    printer.print("}}")
+            else:
+                for s in self.states[c]:
+                    s.print_func(printer)
 
+        r = None
+        for i in range(len(self.conds) - 1, -1, -1):
+            n = IfNode(self.conds[i], r)
+            r = n
+        print_if(r)

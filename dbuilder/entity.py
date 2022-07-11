@@ -1,5 +1,6 @@
-# from dbuilder.invokable import Invokable
+from dbuilder.ast.expr import Expr
 from dbuilder.ast.node import Node
+from dbuilder.ast.statement import Statement
 from dbuilder.calls import CallStacks
 
 
@@ -9,8 +10,11 @@ class Invokable:
         self.entity = entity
 
     def __call__(self, *args, **kwargs):
-        e = Entity({})
-        CallStacks.call_(self.name, args, operand=self.entity)
+        e = Entity(
+            Expr.call_expr(self.entity, self.name, *args)
+        )
+        setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
+        e.has_expr = True
         return e
 
 
@@ -26,47 +30,23 @@ class Entity(Node):
             self.name = name
         Entity.N_ID += 1
         self.id = Entity.N_ID
+        self.assigned = False
+        self.has_expr = False
 
     def __eq__(self, other):
         return Entity(
-            {
-                "type": "expr",
-                "op": "==",
-                "op1": self,
-                "op2": other
-            }
+            Expr.add_expr("==", self, other)
         )
         pass
 
     def __add__(self, other):
-        e = Entity(
-            {
-                "type": "expr",
-                "op": "+",
-                "op1": self,
-                "op2": other
-            }
+        return Entity(
+            Expr.add_expr("+", self, other)
         )
-        # CallStacks.add({
-        #     "type": "DEFINE_ENTITY",
-        #     "entity": e,
-        #     "value": {
-        #         "type": "expr",
-        #         "op": "+",
-        #         "op1": self,
-        #         "op2": other,
-        #     }
-        # })
-        return e
 
     def __radd__(self, other):
-        e = Entity(
-            {
-                "type": "expr",
-                "op": "+",
-                "op1": other,
-                "op2": self
-            }
+        return Entity(
+            Expr.add_expr("+", other, self)
         )
         pass
 
@@ -83,14 +63,8 @@ class Entity(Node):
 
     def __ror__(self, other):
         return Entity(
-            {
-                "type": "expr",
-                "op": "|",
-                "op1": other,
-                "op2": self
-            }
+            Expr.add_expr("|", other, self)
         )
-        pass
 
     def __invert__(self):
         return Entity(
@@ -111,7 +85,15 @@ class Entity(Node):
     def __repr__(self):
         if self.NAMED:
             return self.name
-        return "e%d" % self.id
+        return repr(self.data)
 
     def __assign__(self, v):
-        print('called with %s' % v)
+        if self.has_expr:
+            _x = getattr(self, "__expr")
+            s: Statement = Node.find(_x)
+            s.args = (v, s.args[0])
+            s.type = Statement.ASSIGN
+        else:
+            CallStacks.add_statement(Statement.ASSIGN, v, self.data)
+        self.NAMED = True
+        self.name = v

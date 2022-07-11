@@ -58,6 +58,7 @@ class CallStacks(object):
     def add_statement(type, *args):
         s = Statement(type, args)
         CallStacks.current_contract.add_statement(s)
+        return s.node_id()
 
     @staticmethod
     def return_(entity):
@@ -90,82 +91,10 @@ class CallStacks(object):
         CallStacks.current_contract.current_method.end_statement(nif)
         pass
 
-
     @staticmethod
     def call_(name, *args, operand=None):
         if operand:
-            CallStacks.add_statement(Statement.METHOD_CALL, name, operand, *args)
+            CallStacks.add_statement(
+                Statement.METHOD_CALL, name, operand, *args)
         else:
             CallStacks.add_statement(Statement.FUNC_CALL, name, *args)
-
-
-    @staticmethod
-    def func():
-        codes = []
-        indent = 0
-        indents = []
-        for call in CallStacks.get_instance().calls:
-            if call["type"] == "DECL_METHOD":
-                codes.append("_ %s(%s){" % (call["name"], ", ".join(call["args"])))
-                indents.append(indent)
-                indent += 1
-            elif call["type"] == "DEFINE_ENTITY":
-                indents.append(indent)
-                e = call["entity"]
-                v = call["value"]
-                if v["type"] == "expr":
-                    codes.append("var %s = %s %s %s;" % (e, v["op1"], v["op"], v["op2"]))
-            elif call["type"] == "RETURN_ENTITY":
-                indents.append(indent)
-                codes.append("return %s;" % call["entity"])
-            elif call["type"] == "END_METHOD":
-                indent -= 1
-                indents.append(indent)
-                codes.append("}")
-            elif call["type"] == "METHOD_CALL":
-                indents.append(indent)
-                n: str = call["name"]
-                if n.endswith("_"):
-                    n = "~" + n.removesuffix("_")
-                else:
-                    if "operand" in call:
-                        n = "." + n
-                op = call["operand"] if "operand" in call else ""
-
-                # codes.append("var %s = %s%s(%s);" % (call["result"], op, n,
-                #                                      ",".join(
-                #                                          [str(x) for x in call["args"]]
-                #                                      )))
-                def transform(x):
-                    if isinstance(x, str):
-                        return "\"%s\"" % x
-                    return str(x)
-
-                codes.append("%s%s(%s);" % (op, n, ",".join(
-                    [transform(x) for x in call["args"]]
-                )))
-            elif call["type"] == "IF_BLOCK":
-                if call["index"] == 1:
-                    codes.append("if(%s){" % call["cond"])
-                    indents.append(indent)
-                    indent += 1
-                else:
-                    indent -= 1
-                    indents.append(indent)
-                    codes.append("}")
-                    indents.append(indent)
-                    codes.append("else if (%s) {" % call["cond"])
-                    indent += 1
-            elif call["type"] == "ELSE_BLOCK":
-                indent -= 1
-                indents.append(indent)
-                indents.append(indent)
-                codes.append("}")
-                codes.append("else {")
-                indent += 1
-            elif call["type"] == "END_IF":
-                indent -= 1
-                indents.append(indent)
-                codes.append("}")
-
-        return "\n".join(list([(x1 * "\t") + x2 for x1, x2 in zip(indents, codes)]))
