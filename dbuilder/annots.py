@@ -19,12 +19,7 @@ def method(func):
             return func(*args, **kwargs)
         elif hasattr(slf, "__intercepted__") and getattr(slf, "__intercepted__") == 1:
             e = Entity({})
-            CallStacks.add({
-                "type": "METHOD_CALL",
-                "name": func.__name__,
-                "args": args[1:],
-                "result": e,
-            })
+            CallStacks.call_(func.__name__, args[1:])
             return e
         else:
             return func(*args, **kwargs)

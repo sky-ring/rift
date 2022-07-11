@@ -1,4 +1,5 @@
 # from dbuilder.invokable import Invokable
+from dbuilder.ast.node import Node
 from dbuilder.calls import CallStacks
 
 
@@ -9,17 +10,11 @@ class Invokable:
 
     def __call__(self, *args, **kwargs):
         e = Entity({})
-        CallStacks.add({
-            "type": "METHOD_CALL",
-            "operand": self.entity,
-            "name": self.name,
-            "args": args,
-            "result": e,
-        })
+        CallStacks.call_(self.name, args, operand=self.entity)
         return e
 
 
-class Entity:
+class Entity(Node):
     N_ID = 0
 
     def __init__(self, data, name=None) -> None:
@@ -52,16 +47,16 @@ class Entity:
                 "op2": other
             }
         )
-        CallStacks.add({
-            "type": "DEFINE_ENTITY",
-            "entity": e,
-            "value": {
-                "type": "expr",
-                "op": "+",
-                "op1": self,
-                "op2": other,
-            }
-        })
+        # CallStacks.add({
+        #     "type": "DEFINE_ENTITY",
+        #     "entity": e,
+        #     "value": {
+        #         "type": "expr",
+        #         "op": "+",
+        #         "op1": self,
+        #         "op2": other,
+        #     }
+        # })
         return e
 
     def __radd__(self, other):

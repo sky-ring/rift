@@ -14,26 +14,17 @@ class Cond:
     def match(self, cond):
         self.index += 1
         self.conds.append(cond)
-        CallStacks.add({
-            "type": "IF_BLOCK",
-            "id": self.id,
-            "index": self.index,
-            "cond": cond
-        })
+        if self.index == 1:
+            self.id = CallStacks.begin_if(cond)
+        else:
+            CallStacks.else_if(self.id, cond)
 
     def otherwise(self):
-        CallStacks.add({
-            "type": "ELSE_BLOCK",
-            "id": self.id,
-            "index": self.index,
-        })
+        CallStacks.else_if(self.id)
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        CallStacks.add({
-            "type": "END_IF",
-            "id": self.id
-        })
+        CallStacks.end_if(self.id)
 

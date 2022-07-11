@@ -1,6 +1,7 @@
 import unittest
 
 from dbuilder.annots import method
+from dbuilder.ast.printer import Printer
 from dbuilder.calls import CallStacks
 from dbuilder.condition import Cond
 from dbuilder.engine import Engine
@@ -30,8 +31,10 @@ class SimpleStorage:
 class CompileTestCase(unittest.TestCase):
     def test_simple_compile(self):
         Engine.compile(SimpleStorage)
-        print(CallStacks.get_stack())
-        print(CallStacks.func())
+        v = CallStacks.current_contract
+        p = Printer()
+        v.print_func(p)
+        print(p.out())
 
     def test_magic_compile(self):
         t = Engine.patch(SimpleStorage, globals())
