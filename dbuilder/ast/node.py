@@ -1,6 +1,6 @@
 import uuid
 
-from dbuilder.ast.printer import Printer
+from dbuilder.ast import Printer
 
 
 class Node:
@@ -14,7 +14,6 @@ class Node:
         Node.N_ID += 1
         Node.id_to_node[self._id] = self
         Node.index_to_node[self._index] = self
-        pass
 
     def node_id(self):
         return self._id

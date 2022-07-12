@@ -1,4 +1,8 @@
-# FROM: https://gist.github.com/RyanKung/4830d6c8474e6bcefa4edd13f122b4df
+"""
+AST Transformer
+Patches the contract AST to capture the assignments
+Wouldn't be possible without: https://gist.github.com/RyanKung/4830d6c8474e6bcefa4edd13f122b4df
+"""
 
 import ast
 
@@ -23,7 +27,6 @@ class Transformer(ast.NodeTransformer):
                         ctx=ast.Load(),
                     ),
                     args=[ast.Constant(value=str(t), kind=None)],
-
                     keywords=[],
                 ),
             )

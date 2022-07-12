@@ -1,6 +1,4 @@
-from dbuilder.ast.node import Node
-from dbuilder.ast.printer import Printer
-from dbuilder.ast.statement import Statement
+from dbuilder.ast import Node, Printer, Statement
 
 
 class Method(Node):

@@ -1,4 +1,4 @@
-from dbuilder.calls import CallStacks
+from dbuilder.func.calls import CallStacks
 
 
 class Cond:
@@ -9,7 +9,6 @@ class Cond:
         self.id = Cond.C_ID
         self.index = 0
         self.conds = []
-        pass
 
     def match(self, cond):
         self.index += 1

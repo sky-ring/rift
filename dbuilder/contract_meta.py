@@ -1,2 +1,0 @@
-class ContractMeta(type):
-    pass

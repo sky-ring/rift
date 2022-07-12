@@ -1,7 +1,5 @@
-from dbuilder.ast.expr import Expr
-from dbuilder.ast.node import Node
-from dbuilder.ast.statement import Statement
-from dbuilder.calls import CallStacks
+from dbuilder.ast import Node, Expr, Statement
+from dbuilder.func import CallStacks
 
 
 class Invokable:
@@ -35,46 +33,33 @@ class Entity(Node):
 
     def __eq__(self, other):
         return Entity(
-            Expr.add_expr("==", self, other)
+            Expr.binary_op("==", self, other)
         )
-        pass
 
     def __add__(self, other):
         return Entity(
-            Expr.add_expr("+", self, other)
+            Expr.binary_op("+", self, other)
         )
 
     def __radd__(self, other):
         return Entity(
-            Expr.add_expr("+", other, self)
+            Expr.binary_op("+", other, self)
         )
-        pass
 
     def __or__(self, other):
         return Entity(
-            {
-                "type": "expr",
-                "op": "|",
-                "op1": self,
-                "op2": other
-            }
+            Expr.binary_op("|", self, other)
         )
-        pass
 
     def __ror__(self, other):
         return Entity(
-            Expr.add_expr("|", other, self)
+            Expr.binary_op("|", other, self)
         )
 
     def __invert__(self):
         return Entity(
-            {
-                "type": "expr",
-                "op": "~",
-                "op1": self
-            }
+            Expr.unary_op("~", self)
         )
-        pass
 
     def __getattr__(self, item):
         return Invokable(item, self)

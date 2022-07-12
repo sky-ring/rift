@@ -1,10 +1,8 @@
 import ast
 import inspect
 
-from dbuilder.annots import is_method
-from dbuilder.calls import CallStacks
-from dbuilder.entity import Entity
-from dbuilder.magic import patch
+from dbuilder.core import is_method, Entity
+from dbuilder.func import CallStacks, patch, CompiledContract
 
 
 class Engine(object):
@@ -16,10 +14,7 @@ class Engine(object):
         for k in contract.__dict__:
             v = contract.__dict__[k]
             if k == "__annotations__":
-                # for ak in v:
-                #     atype = v[ak]
-                #     if issubclass(atype, _FunCType):
-                #         print("Detected state variable: ", ak, "->", atype)
+                # TODO: Handle global and state variables
                 pass
             if is_method(v):
                 l = v.__args__
@@ -31,7 +26,8 @@ class Engine(object):
                 if isinstance(r, Entity):
                     CallStacks.return_(r)
                 CallStacks.end_method(k)
-        pass
+        contract_ = CallStacks.get_contract(contract.__name__)
+        return CompiledContract(contract_)
 
     @staticmethod
     def patch(contract, _globals):
@@ -40,5 +36,5 @@ class Engine(object):
         x = ast.parse(src)
         patched_ast = patch(x)
         m = {**_globals}
-        exec(compile(patched_ast, "some-shit", "exec"), m)
+        exec(compile(patched_ast, "func-patching", "exec"), m)
         return m[contract.__name__]

@@ -1,6 +1,4 @@
-from dbuilder.ast.control_flow import ControlFlow
-from dbuilder.ast.printer import Printer
-from dbuilder.ast.statement import Statement
+from dbuilder.ast import ControlFlow, Printer, Statement
 
 
 class IfFlow(ControlFlow):
@@ -22,11 +20,9 @@ class IfFlow(ControlFlow):
         self.current_cond = "def"
         self.conds.append("def")
         self.states[self.current_cond] = []
-        pass
 
     def add_statement(self, statement):
         self.states[self.current_cond].append(statement)
-        pass
 
     def print_func(self, printer: Printer):
         class IfNode:

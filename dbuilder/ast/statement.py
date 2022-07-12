@@ -1,5 +1,4 @@
-from dbuilder.ast.node import Node
-from dbuilder.ast.printer import Printer
+from dbuilder.ast import Node, Printer
 
 
 class Statement(Node):
@@ -35,14 +34,11 @@ class Statement(Node):
                     [transform(x) for x in self.args[1]]
                 )
             )
-            pass
         elif self.type == Statement.RETURN:
             printer.print(
                 "return {object};",
                 object=self.args[0]
             )
-
-            pass
         elif self.type == Statement.METHOD_CALL:
             printer.print(
                 "{object}{op}{name}({args});",
@@ -53,7 +49,6 @@ class Statement(Node):
                     [transform(x) for x in self.args[2]]
                 )
             )
-            pass
         elif self.type == Statement.EXPR:
             printer.print(
                 "{expr};",

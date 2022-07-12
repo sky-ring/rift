@@ -1,13 +1,10 @@
 from typing import List
 
-from dbuilder.ast.condition import IfFlow
-from dbuilder.ast.contract import Contract
-from dbuilder.ast.method import Method
-from dbuilder.ast.node import Node
-from dbuilder.ast.statement import Statement
+from dbuilder.ast import IfFlow, Contract, Method, Node, Statement
 
 
 class CallStacks(object):
+    contracts = {}
     calls: List = []
     functions = set()
     __instance = None
@@ -47,12 +44,16 @@ class CallStacks(object):
     @staticmethod
     def declare_contract(name):
         CallStacks.current_contract = Contract(name)
+        CallStacks.contracts[name] = CallStacks.current_contract
+
+    @staticmethod
+    def get_contract(name):
+        return CallStacks.contracts[name]
 
     @staticmethod
     def declare_method(name, args):
         m = Method(name, args)
         CallStacks.current_contract.add_method(m)
-        pass
 
     @staticmethod
     def add_statement(type, *args):
@@ -67,7 +68,6 @@ class CallStacks(object):
     @staticmethod
     def end_method(method):
         CallStacks.current_contract.end_method(method)
-        pass
 
     @staticmethod
     def begin_if(cond):
@@ -83,13 +83,11 @@ class CallStacks(object):
             nif.iff(cond)
         else:
             nif.else_()
-        pass
 
     @staticmethod
     def end_if(id):
         nif: IfFlow = Node.find(id)
         CallStacks.current_contract.current_method.end_statement(nif)
-        pass
 
     @staticmethod
     def call_(name, *args, operand=None):

@@ -1,4 +1,4 @@
-from dbuilder.ast.statement import Statement
+from dbuilder.ast import Statement
 
 
 class ControlFlow(Statement):

@@ -1,7 +1,6 @@
-from dbuilder.ast.expr import Expr
-from dbuilder.ast.statement import Statement
-from dbuilder.calls import CallStacks
-from dbuilder.entity import Entity
+from dbuilder.ast import Expr, Statement
+from dbuilder.func import CallStacks
+from dbuilder.core import Entity
 
 
 def init_func(func):

@@ -2,11 +2,11 @@ class Expr:
     EXPR_AR2 = 0
     EXPR_CALL = 1
     EXPR_FUNC = 2
+    EXPR_AR1 = 3
 
     def __init__(self, type, *args):
         self.type = type
         self.args = args
-        pass
 
     @staticmethod
     def call_expr(operand, method, *args):
@@ -19,8 +19,13 @@ class Expr:
         return e
 
     @staticmethod
-    def add_expr(op, op1, op2):
+    def binary_op(op, op1, op2):
         e = Expr(Expr.EXPR_AR2, op, op1, op2)
+        return e
+
+    @staticmethod
+    def unary_op(op, operand):
+        e = Expr(Expr.EXPR_AR1, op, operand)
         return e
 
     def __repr__(self):
