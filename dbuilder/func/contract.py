@@ -1,11 +1,13 @@
 from dbuilder import Printer
 
 
-class CompiledContract:
+class CompiledContract(object):
+    """Instance of compiled contract."""
+
     def __init__(self, contract_ast):
         self.ast = contract_ast
 
     def to_func(self):
-        p = Printer()
-        self.ast.print_func(p)
-        return p.out()
+        printer = Printer()
+        self.ast.print_func(printer)
+        return printer.out()

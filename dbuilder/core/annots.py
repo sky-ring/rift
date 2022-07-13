@@ -1,6 +1,6 @@
 from dbuilder.ast import Expr, Statement
-from dbuilder.func import CallStacks
 from dbuilder.core import Entity
+from dbuilder.func import CallStacks
 
 
 def init_func(func):
@@ -15,7 +15,7 @@ def method(func):
         if "NO_INTERCEPT" in kwargs:
             kwargs.pop("NO_INTERCEPT")
             return func(*args, **kwargs)
-        elif hasattr(slf, "__intercepted__") and getattr(slf, "__intercepted__") == 1:
+        elif hasattr(slf, "__intercepted__") and getattr(slf, "__intercepted__"):
             e = Entity(
                 Expr.call_func(func.__name__, *args[1:])
             )

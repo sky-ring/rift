@@ -32,7 +32,7 @@ class Method(Node):
             output="_",
             name=self.name,
             args=", ".join(self.args),
-            o="{"
+            o="{",
         )
         printer.incr_indent()
         for s in self.statements:

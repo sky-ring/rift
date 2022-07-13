@@ -1,26 +1,28 @@
 from typing import List
 
-from dbuilder.ast import IfFlow, Contract, Method, Node, Statement
+from dbuilder.ast import Contract, IfFlow, Method, Node, Statement
 
 
 class CallStacks(object):
+    """Class responsible for tracking the calls."""
+
     contracts = {}
     calls: List = []
     functions = set()
-    __instance = None
+    _instance = None
     current_contract: Contract = None
+
+    def __init__(self):
+        if CallStacks._instance is not None:
+            raise RuntimeError("This class is a singleton!")
+        else:
+            CallStacks._instance = self
 
     @staticmethod
     def get_instance() -> "CallStacks":
-        if CallStacks.__instance is None:
+        if CallStacks._instance is None:
             CallStacks()
-        return CallStacks.__instance
-
-    def __init__(self):
-        if CallStacks.__instance is not None:
-            raise Exception("This class is a singleton!")
-        else:
-            CallStacks.__instance = self
+        return CallStacks._instance
 
     @staticmethod
     def add(call):
@@ -77,22 +79,26 @@ class CallStacks(object):
         return nif.node_id()
 
     @staticmethod
-    def else_if(id, cond=None):
-        nif: IfFlow = Node.find(id)
+    def else_if(node_id, cond=None):
+        nif: IfFlow = Node.find(node_id)
         if cond:
             nif.iff(cond)
         else:
             nif.else_()
 
     @staticmethod
-    def end_if(id):
-        nif: IfFlow = Node.find(id)
+    def end_if(node_id):
+        nif: IfFlow = Node.find(node_id)
         CallStacks.current_contract.current_method.end_statement(nif)
 
     @staticmethod
     def call_(name, *args, operand=None):
         if operand:
             CallStacks.add_statement(
-                Statement.METHOD_CALL, name, operand, *args)
+                Statement.METHOD_CALL,
+                name,
+                operand,
+                *args,
+            )
         else:
             CallStacks.add_statement(Statement.FUNC_CALL, name, *args)

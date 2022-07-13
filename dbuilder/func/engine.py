@@ -6,26 +6,32 @@ from dbuilder.func import CallStacks, patch, CompiledContract
 
 
 class Engine(object):
+    """Engine responsible for compiling contracts."""
+
     @staticmethod
     def compile(contract):
         inst = contract()
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
-        for k in contract.__dict__:
-            v = contract.__dict__[k]
-            if k == "__annotations__":
+        for name, value in contract.__dict__.items():
+            if name == "__annotations__":
                 # TODO: Handle global and state variables
                 pass
-            if is_method(v):
-                l = v.__args__
-                args = (Entity({"i": i}, name=v.__names__[
-                        i + 1]) for i in range(l - 1))
+            if is_method(value):
+                func_args = value.__args__
+                names = value.__names__
+                args = (
+                    Entity({"i": i}, name=names[i + 1])
+                    for i in range(func_args - 1)
+                )
                 CallStacks.declare_method(
-                    k, [v.__names__[i + 1] for i in range(l - 1)])
-                r = v(inst, *args, NO_INTERCEPT=1)
-                if isinstance(r, Entity):
-                    CallStacks.return_(r)
-                CallStacks.end_method(k)
+                    name,
+                    [names[i + 1] for i in range(func_args - 1)],
+                )
+                ret = value(inst, *args, NO_INTERCEPT=1)
+                if isinstance(ret, Entity):
+                    CallStacks.return_(ret)
+                CallStacks.end_method(name)
         contract_ = CallStacks.get_contract(contract.__name__)
         return CompiledContract(contract_)
 

@@ -38,5 +38,5 @@ class CompileTestCase(unittest.TestCase):
         print(compiled.to_func())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
