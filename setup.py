@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name='dBuilder-py',
@@ -11,5 +11,5 @@ setup(
     keywords=[],
     url='https://github.com/decentralized-builder/dBuilder.py',
     install_requires=[],
-    extras_require={}
+    extras_require={},
 )

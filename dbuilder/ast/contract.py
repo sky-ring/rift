@@ -24,7 +24,5 @@ class Contract(Node):
         pass
 
     def print_func(self, printer: Printer):
-        # printer.incr_indent()
         for m in self.methods:
             m.print_func(printer)
-        # printer.decr_indent()

@@ -32,34 +32,22 @@ class Entity(Node):
         self.has_expr = False
 
     def __eq__(self, other):
-        return Entity(
-            Expr.binary_op("==", self, other)
-        )
+        return Entity(Expr.binary_op("==", self, other))
 
     def __add__(self, other):
-        return Entity(
-            Expr.binary_op("+", self, other)
-        )
+        return Entity(Expr.binary_op("+", self, other))
 
     def __radd__(self, other):
-        return Entity(
-            Expr.binary_op("+", other, self)
-        )
+        return Entity(Expr.binary_op("+", other, self))
 
     def __or__(self, other):
-        return Entity(
-            Expr.binary_op("|", self, other)
-        )
+        return Entity(Expr.binary_op("|", self, other))
 
     def __ror__(self, other):
-        return Entity(
-            Expr.binary_op("|", other, self)
-        )
+        return Entity(Expr.binary_op("|", other, self))
 
     def __invert__(self):
-        return Entity(
-            Expr.unary_op("~", self)
-        )
+        return Entity(Expr.unary_op("~", self))
 
     def __getattr__(self, item):
         return Invokable(item, self)

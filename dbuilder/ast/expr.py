@@ -31,7 +31,7 @@ class Expr:
     def __repr__(self):
         def transform(x):
             if isinstance(x, str):
-                return "\"%s\"" % x
+                return '"%s"' % x
             return str(x)
 
         if self.type == Expr.EXPR_AR2:
@@ -45,15 +45,11 @@ class Expr:
                 op="~" if self.args[1].endswith("_") else ".",
                 object=self.args[0],
                 name=self.args[1].removesuffix("_"),
-                args=",".join(
-                    [transform(x) for x in self.args[2:]]
-                )
+                args=",".join([transform(x) for x in self.args[2:]]),
             )
         elif self.type == Expr.EXPR_FUNC:
             return "{op}{name}({args})".format(
                 op="~" if self.args[0].endswith("_") else "",
                 name=self.args[0].removesuffix("_"),
-                args=",".join(
-                    [transform(x) for x in self.args[1:]]
-                )
+                args=",".join([transform(x) for x in self.args[1:]]),
             )
