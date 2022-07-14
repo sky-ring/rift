@@ -6,9 +6,17 @@ class Invokable:
     def __init__(self, name, entity):
         self.name = name
         self.entity = entity
+        self.method_annotations = None
 
     def __call__(self, *args, **kwargs):
-        e = Entity(Expr.call_expr(self.entity, self.name, *args))
+        e = Entity(
+            Expr.call_expr(
+                self.entity,
+                self.name,
+                *args,
+                annotations=self.method_annotations,
+            ),
+        )
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
         return e
@@ -65,6 +73,7 @@ class Entity(Node):
             s.args = (v, s.args[0])
             s.type = Statement.ASSIGN
         else:
+            # TODO: Most likely this never occurs (cleanup)
             CallStacks.add_statement(Statement.ASSIGN, v, self.data)
         self.NAMED = True
         self.name = v

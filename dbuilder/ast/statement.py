@@ -1,4 +1,5 @@
 from dbuilder.ast import Node, Printer
+from dbuilder.ast.utils import _type_name
 
 
 class Statement(Node):
@@ -46,4 +47,16 @@ class Statement(Node):
         elif self.type == Statement.EXPR:
             printer.print("{expr};", expr=self.args[0])
         elif self.type == Statement.ASSIGN:
-            printer.print("{v} = {expr};", v=self.args[0], expr=self.args[1])
+            expr = self.args[1]
+            annotations = expr.annotations
+            if annotations:
+                type_hint = annotations["return"]
+                type_hint = _type_name(type_hint)
+            else:
+                type_hint = "var"
+            printer.print(
+                "{type_} {v} = {expr};",
+                type_=type_hint,
+                v=self.args[0],
+                expr=expr,
+            )

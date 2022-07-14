@@ -16,11 +16,15 @@ def method(func):
             kwargs.pop("NO_INTERCEPT")
             return func(*args, **kwargs)
         elif hasattr(slf, "__intercepted__") and getattr(
-            slf, "__intercepted__"
+            slf, "__intercepted__",
         ):
-            e = Entity(Expr.call_func(func.__name__, *args[1:]))
+            e = Entity(
+                Expr.call_func(
+                    func.__name__, *args[1:], annotations=func.__annotations__,
+                ),
+            )
             setattr(
-                e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data)
+                e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data),
             )
             e.has_expr = True
             return e

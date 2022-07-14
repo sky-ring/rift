@@ -4,18 +4,21 @@ class Expr:
     EXPR_FUNC = 2
     EXPR_AR1 = 3
 
-    def __init__(self, type, *args):
+    def __init__(self, type, *args, annotations=None):
         self.type = type
         self.args = args
+        self.annotations = annotations
 
     @staticmethod
-    def call_expr(operand, method, *args):
-        e = Expr(Expr.EXPR_CALL, operand, method, *args)
+    def call_expr(operand, method, *args, annotations=None):
+        e = Expr(
+            Expr.EXPR_CALL, operand, method, *args, annotations=annotations,
+        )
         return e
 
     @staticmethod
-    def call_func(method, *args):
-        e = Expr(Expr.EXPR_FUNC, method, *args)
+    def call_func(method, *args, annotations=None):
+        e = Expr(Expr.EXPR_FUNC, method, *args, annotations=annotations)
         return e
 
     @staticmethod
@@ -45,7 +48,7 @@ class Expr:
                 op="~" if self.args[1].endswith("_") else ".",
                 object=self.args[0],
                 name=self.args[1].removesuffix("_"),
-                args=",".join([transform(x) for x in self.args[2:]]),
+                args=",".join([transform(x) for x in self.args[3:]]),
             )
         elif self.type == Expr.EXPR_FUNC:
             return "{op}{name}({args})".format(
