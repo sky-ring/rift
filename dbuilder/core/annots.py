@@ -15,12 +15,13 @@ def method(func):
         if "NO_INTERCEPT" in kwargs:
             kwargs.pop("NO_INTERCEPT")
             return func(*args, **kwargs)
-        elif hasattr(slf, "__intercepted__") and getattr(slf, "__intercepted__"):
-            e = Entity(
-                Expr.call_func(func.__name__, *args[1:])
+        elif hasattr(slf, "__intercepted__") and getattr(
+            slf, "__intercepted__"
+        ):
+            e = Entity(Expr.call_func(func.__name__, *args[1:]))
+            setattr(
+                e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data)
             )
-            setattr(e, "__expr", CallStacks.add_statement(
-                Statement.EXPR, e.data))
             e.has_expr = True
             return e
         else:
@@ -29,8 +30,12 @@ def method(func):
     nf = init_func(nf)
     nf.__pyfunc__["type"] = ["method"]
     setattr(nf, "__args__", func.__code__.co_argcount)
-    setattr(nf, "__names__",
-            func.__code__.co_varnames[:func.__code__.co_argcount])
+    setattr(nf, "__annotations__", func.__annotations__)
+    setattr(
+        nf,
+        "__names__",
+        func.__code__.co_varnames[: func.__code__.co_argcount],
+    )
     return nf
 
 

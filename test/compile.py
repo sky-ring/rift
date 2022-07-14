@@ -1,15 +1,22 @@
 import unittest
 
 from dbuilder import method, Cond, Engine
+from dbuilder.types import Cell, Slice
 
 
 class SimpleStorage:
     @method
-    def double_the_num(self, val):
+    def double_the_num(self, val: int) -> int:
         return val + 2 + 3
 
     @method
-    def rcv_internal(self, balance, msg_value, in_msg_full, in_msg_body):
+    def rcv_internal(
+        self,
+        balance: int,
+        msg_value: int,
+        in_msg_full: Cell,
+        in_msg_body: Slice,
+    ) -> None:
         cs = in_msg_full.begin_parse()
         cs.skip_bits_(4)
         sender = cs.load_msg_addr_()

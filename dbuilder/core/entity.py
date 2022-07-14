@@ -8,9 +8,7 @@ class Invokable:
         self.entity = entity
 
     def __call__(self, *args, **kwargs):
-        e = Entity(
-            Expr.call_expr(self.entity, self.name, *args)
-        )
+        e = Entity(Expr.call_expr(self.entity, self.name, *args))
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
         return e
@@ -70,3 +68,7 @@ class Entity(Node):
             CallStacks.add_statement(Statement.ASSIGN, v, self.data)
         self.NAMED = True
         self.name = v
+
+    @classmethod
+    def type_name(cls) -> str:
+        return ""

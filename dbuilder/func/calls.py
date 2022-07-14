@@ -53,8 +53,8 @@ class CallStacks(object):
         return CallStacks.contracts[name]
 
     @staticmethod
-    def declare_method(name, args):
-        m = Method(name, args)
+    def declare_method(name, args, annotations):
+        m = Method(name, args, annotations)
         CallStacks.current_contract.add_method(m)
 
     @staticmethod

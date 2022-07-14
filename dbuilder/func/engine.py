@@ -20,6 +20,7 @@ class Engine(object):
             if is_method(value):
                 func_args = value.__args__
                 names = value.__names__
+                annots = value.__annotations__
                 args = (
                     Entity({"i": i}, name=names[i + 1])
                     for i in range(func_args - 1)
@@ -27,6 +28,7 @@ class Engine(object):
                 CallStacks.declare_method(
                     name,
                     [names[i + 1] for i in range(func_args - 1)],
+                    annots,
                 )
                 ret = value(inst, *args, NO_INTERCEPT=1)
                 if isinstance(ret, Entity):
