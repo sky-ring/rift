@@ -20,13 +20,42 @@ class Transformer(ast.NodeTransformer):
     def visit_Assign(self, node):
         tg = node.targets[0]
         if isinstance(tg, ast.Tuple):
-            node.targets = node.targets + [
+            node.targets = [
                 ast.Name(
                     id="__tmp__",
                     ctx=ast.Store(),
                 ),
             ]
             vars = [v.id for v in tg.dims]
+            e_expr = ast.Assign(
+                targets=[
+                    ast.Tuple(
+                        elts=[
+                            ast.Name(
+                                id=v,
+                                ctx=ast.Store(),
+                            )
+                            for v in vars
+                        ],
+                        ctx=ast.Store(),
+                    ),
+                ],
+                value=ast.Name(
+                    id="__tmp__",
+                    ctx=ast.Load(),
+                ),
+            )
+            p_expr = ast.Expr(
+                value=ast.Call(
+                    func=ast.Attribute(
+                        value=ast.Name(id="__tmp__", ctx=ast.Load()),
+                        attr="__prep_unpack__",
+                        ctx=ast.Load(),
+                    ),
+                    args=[ast.Constant(value=len(vars), kind=None)],
+                    keywords=[],
+                ),
+            )
             a_expr = ast.Expr(
                 value=ast.Call(
                     func=ast.Attribute(
@@ -53,7 +82,7 @@ class Transformer(ast.NodeTransformer):
                     keywords=[],
                 ),
             )
-            nodes = [node, a_expr]
+            nodes = [node, p_expr, e_expr, a_expr]
         else:
             target = node.targets[0].id
             nodes = [node]

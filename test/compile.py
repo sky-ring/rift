@@ -37,6 +37,7 @@ class SimpleStorage:
             y1, y2 = self.copy_num(2)
             t = self.copy_num(9)
             x1, x2 = t
+            u1, u2, u3 = x1.untyped_func(4, 4, "str", x2)
             c.otherwise()
             self.double_the_num(4)
 

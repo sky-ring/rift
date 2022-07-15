@@ -17,6 +17,7 @@ class Invokable:
                 annotations=self.method_annotations,
             ),
         )
+        setattr(e, "__unpackable", True)
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
         return e
@@ -92,6 +93,14 @@ class Entity(Node):
         for x, v in zip(xs, vs):
             x.NAMED = True
             x.name = v
+
+    def __prep_unpack__(self, l_):
+        self._unpack_len = l_
+
+    def __iter__(self):
+        if hasattr(self, "__unpackable") and self.__unpackable:
+            for _ in range(self._unpack_len):
+                yield Entity()
 
     @classmethod
     def type_name(cls) -> str:
