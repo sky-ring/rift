@@ -12,7 +12,11 @@ class Expr:
     @staticmethod
     def call_expr(operand, method, *args, annotations=None):
         e = Expr(
-            Expr.EXPR_CALL, operand, method, *args, annotations=annotations,
+            Expr.EXPR_CALL,
+            operand,
+            method,
+            *args,
+            annotations=annotations,
         )
         return e
 

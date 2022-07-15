@@ -30,7 +30,8 @@ class Method(Node):
 
     def print_func(self, printer: Printer):
         type_namer = lambda x: "{type} {name}".format(
-            type=_type_name(x[0]), name=x[1],
+            type=_type_name(x[0]),
+            name=x[1],
         )
         tupler = lambda x: (self.annotations[x], x)
         arg_defs = list(map(type_namer, map(tupler, self.args)))

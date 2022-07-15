@@ -1,4 +1,4 @@
-from dbuilder import Entity
+from dbuilder.core import Entity
 
 
 class Int(Entity):
@@ -35,6 +35,16 @@ class Builder(Entity):
     @classmethod
     def type_name(cls) -> str:
         return "builder"
+
+
+class Tensor(Entity, tuple):
+    def __new__(cls, *args, **kwargs):
+        return super().__new__(cls, *args)
+
+    def __init__(self, *args, **kwargs):
+        name = kwargs.pop("name", None)
+        data = kwargs.pop("data", None)
+        super().__init__(data=data, name=name)
 
 
 class Tuple(Entity):

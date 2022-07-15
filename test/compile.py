@@ -6,6 +6,10 @@ from dbuilder.types import Cell, Slice
 
 class SimpleStorage:
     @method
+    def copy_num(self, val: int) -> tuple[int, int]:
+        return val, val
+
+    @method
     def double_the_num(self, val: int) -> int:
         return val + 2 + 3
 
@@ -30,6 +34,7 @@ class SimpleStorage:
                 sender.destroy()
             c.match(op == 0x2012)
             self.double_the_num(1)
+            t = self.copy_num(9)
             c.otherwise()
             self.double_the_num(4)
 

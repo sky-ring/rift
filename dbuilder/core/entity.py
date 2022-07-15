@@ -25,8 +25,10 @@ class Invokable:
 class Entity(Node):
     N_ID = 0
 
-    def __init__(self, data, name=None) -> None:
+    def __init__(self, data=None, name=None) -> None:
         super().__init__()
+        if data is None:
+            data = {}
         self.data = data
         self.NAMED = False
         if name is not None:
@@ -81,3 +83,7 @@ class Entity(Node):
     @classmethod
     def type_name(cls) -> str:
         return ""
+
+    @classmethod
+    def abstract_init(cls, *args, **kwargs) -> "Entity":
+        return cls(*args, **kwargs)

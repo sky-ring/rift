@@ -2,6 +2,7 @@ import ast
 import inspect
 
 from dbuilder.core import is_method, Entity
+from dbuilder.core.utils import init_abstract_type
 from dbuilder.func import CallStacks, patch, CompiledContract
 
 
@@ -21,9 +22,10 @@ class Engine(object):
                 func_args = value.__args__
                 names = value.__names__
                 annots = value.__annotations__
+                e_annots = annots if annots else {}
                 args = (
-                    Entity({"i": i}, name=names[i + 1])
-                    for i in range(func_args - 1)
+                    init_abstract_type(e_annots.get(arg, Entity), name=arg)
+                    for arg in names[1:]
                 )
                 CallStacks.declare_method(
                     name,
@@ -31,8 +33,9 @@ class Engine(object):
                     annots,
                 )
                 ret = value(inst, *args, NO_INTERCEPT=1)
-                if isinstance(ret, Entity):
+                if isinstance(ret, Entity) or isinstance(ret, tuple):
                     CallStacks.return_(ret)
+
                 CallStacks.end_method(name)
         contract_ = CallStacks.get_contract(contract.__name__)
         return CompiledContract(contract_)
