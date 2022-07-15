@@ -80,6 +80,19 @@ class Entity(Node):
         self.NAMED = True
         self.name = v
 
+    def __massign__(self, vs, xs):
+        if self.has_expr:
+            _x = getattr(self, "__expr")
+            s: Statement = Node.find(_x)
+            if s.type == s.EXPR:
+                s.args = (vs, s.args[0])
+                s.type = Statement.M_ASSIGN
+            else:
+                CallStacks.add_statement(Statement.M_ASSIGN, vs, self.data)
+        for x, v in zip(xs, vs):
+            x.NAMED = True
+            x.name = v
+
     @classmethod
     def type_name(cls) -> str:
         return ""

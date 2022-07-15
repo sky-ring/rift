@@ -2,6 +2,7 @@ from dbuilder.ast import Expr, Statement
 from dbuilder.core import Entity
 from dbuilder.core.utils import init_abstract_type
 from dbuilder.func import CallStacks
+from dbuilder.types.types import Tensor
 
 
 def init_func(func):
@@ -39,7 +40,10 @@ def method(func):
             e.has_expr = True
             return e
         else:
-            return func(*args, **kwargs)
+            ret = func(*args, **kwargs)
+            if isinstance(ret, tuple):
+                ret = Tensor(list(ret))
+            return ret
 
     nf = init_func(nf)
     nf.__pyfunc__["type"] = ["method"]

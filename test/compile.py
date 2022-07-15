@@ -34,7 +34,9 @@ class SimpleStorage:
                 sender.destroy()
             c.match(op == 0x2012)
             self.double_the_num(1)
+            y1, y2 = self.copy_num(2)
             t = self.copy_num(9)
+            x1, x2 = t
             c.otherwise()
             self.double_the_num(4)
 

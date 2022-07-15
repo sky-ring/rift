@@ -9,6 +9,7 @@ class Statement(Node):
     CONTROL_FLOW = 3
     EXPR = 4
     ASSIGN = 5
+    M_ASSIGN = 6
 
     def __init__(self, type, args):
         super().__init__()
@@ -58,5 +59,24 @@ class Statement(Node):
                 "{type_} {v} = {expr};",
                 type_=type_hint,
                 v=self.args[0],
+                expr=expr,
+            )
+        elif self.type == Statement.M_ASSIGN:
+            v_list = self.args[0]
+            expr = self.args[1]
+            annotations = expr.annotations or {}
+            ret_type = annotations.get("return")
+            args = getattr(ret_type, "__args__", None)
+            if args is None:
+                args = ["var" for _ in v_list]
+            if len(args) != len(v_list):
+                raise RuntimeError("non matching outputs")
+            t_decl = [
+                "{type_} {v}".format(type_=_type_name(t), v=v)
+                for v, t in zip(v_list, args)
+            ]
+            printer.print(
+                "({t_decl}) = {expr};",
+                t_decl=", ".join(t_decl),
                 expr=expr,
             )

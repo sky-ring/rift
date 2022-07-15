@@ -13,4 +13,6 @@ def _type_name(type_):
         return "()"
     elif type_ == int:
         return "int"
+    elif type_ == "var":
+        return "var"
     return "_"
