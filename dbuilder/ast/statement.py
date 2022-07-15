@@ -36,7 +36,10 @@ class Statement(Node):
                 args=",".join([transform(x) for x in self.args[1]]),
             )
         elif self.type == Statement.RETURN:
-            printer.print("return {object};", object=self.args[0])
+            obj = self.args[0]
+            if obj is None:
+                obj = "()"
+            printer.print("return {object};", object=obj)
         elif self.type == Statement.METHOD_CALL:
             printer.print(
                 "{object}{op}{name}({args});",

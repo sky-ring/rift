@@ -1,13 +1,13 @@
 """
 AST Transformer.
 
-Patches the contract AST to capture the assignments
+Patches the contract AST to capture the assignments, wrap the returns
 Wouldn't be possible without:
 https://gist.github.com/RyanKung/4830d6c8474e6bcefa4edd13f122b4df
 """
 
 import ast
-from collections import namedtuple
+from typing import Any
 
 
 class Transformer(ast.NodeTransformer):
@@ -16,6 +16,25 @@ class Transformer(ast.NodeTransformer):
     def generic_visit(self, node):
         ast.NodeTransformer.generic_visit(self, node)
         return node
+
+    def visit_Return(self, node: ast.Return) -> Any:
+        v = node.value
+        if v is None:
+            v = ast.Constant(None)
+        u_node = ast.Expr(
+            value=ast.Call(
+                func=ast.Attribute(
+                    value=ast.Name(id="self", ctx=ast.Load()),
+                    attr="ret_",
+                    ctx=ast.Load(),
+                ),
+                args=[v],
+                keywords=[],
+            ),
+        )
+        ast.fix_missing_locations(u_node)
+        return u_node
+        pass
 
     def visit_Assign(self, node):
         tg = node.targets[0]
@@ -86,7 +105,6 @@ class Transformer(ast.NodeTransformer):
         else:
             target = node.targets[0].id
             nodes = [node]
-            # for target in targets:
             a_expr = ast.Expr(
                 value=ast.Call(
                     func=ast.Attribute(

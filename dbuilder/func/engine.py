@@ -12,6 +12,7 @@ class Engine(object):
     @staticmethod
     def compile(contract):
         inst = contract()
+        inst.ret_ = lambda t: CallStacks.return_(t)
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
         for name, value in contract.__dict__.items():
@@ -32,10 +33,7 @@ class Engine(object):
                     [names[i + 1] for i in range(func_args - 1)],
                     annots,
                 )
-                ret = value(inst, *args, NO_INTERCEPT=1)
-                if isinstance(ret, Entity) or isinstance(ret, tuple):
-                    CallStacks.return_(ret)
-
+                value(inst, *args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)
         contract_ = CallStacks.get_contract(contract.__name__)
         return CompiledContract(contract_)

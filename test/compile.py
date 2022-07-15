@@ -32,6 +32,7 @@ class SimpleStorage:
             with Cond() as c2:
                 c2.match(sender == 1)
                 sender.destroy()
+                return
             c.match(op == 0x2012)
             self.double_the_num(1)
             y1, y2 = self.copy_num(2)
@@ -40,6 +41,7 @@ class SimpleStorage:
             u1, u2, u3 = x1.untyped_func(4, 4, "str", x2)
             c.otherwise()
             self.double_the_num(4)
+            return
 
 
 class CompileTestCase(unittest.TestCase):
