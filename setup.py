@@ -9,6 +9,11 @@ setup(
     author="Amin Rezaei",
     author_email="AminRezaei0x443@gmail.com",
     keywords=[],
+    entry_points={
+        "console_scripts": [
+            "dbuilder = dbuilder.cli.entry:entry",
+        ],
+    },
     url="https://github.com/decentralized-builder/dBuilder.py",
     install_requires=[],
     extras_require={},
