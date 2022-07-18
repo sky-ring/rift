@@ -12,6 +12,9 @@ def init_func(func):
 
 
 def method(func):
+    if is_method(func):
+        return func
+
     def nf(*args, **kwargs):
         slf = args[0]
         if "NO_INTERCEPT" in kwargs:

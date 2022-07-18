@@ -19,7 +19,9 @@ class Engine(object):
         )
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
-        for name, value in contract.__dict__.items():
+        attrs = dir(contract)
+        d = zip(attrs, [getattr(contract, attr) for attr in attrs])
+        for name, value in d:
             if name == "__annotations__":
                 # TODO: Handle global and state variables
                 pass
@@ -53,3 +55,17 @@ class Engine(object):
         m = {**_globals}
         exec(compile(patched_ast, "func-patching", "exec"), m)
         return m[contract.__name__]
+
+    @staticmethod
+    def is_patched(contract):
+        return hasattr(contract, "__is_patched__") and contract.__is_patched__
+
+    @staticmethod
+    def patched(contract):
+        if Engine.is_patched(contract):
+            return contract
+        t_globals = inspect.stack()[1][0].f_globals
+        t_globals["Engine"].patched = lambda c: c
+        patched = Engine.patch(contract, t_globals)
+        patched.__is_patched__ = True
+        return patched
