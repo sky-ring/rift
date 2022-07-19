@@ -1,13 +1,52 @@
-from dbuilder import Printer
+from dbuilder import method, CallStacks, impure
+from dbuilder.core.entity import mark
+from dbuilder.core.invokable import InvokableFunc
+from dbuilder.types import Cell, Slice
 
 
-class CompiledContract(object):
-    """Instance of compiled contract."""
+class Contract:
+    def __init__(self):
+        pass
 
-    def __init__(self, contract_ast):
-        self.ast = contract_ast
+    @impure
+    @method
+    def recv_internal(
+        self,
+        balance: int,
+        msg_value: int,
+        in_msg_full: Cell,
+        in_msg_body: Slice,
+    ) -> None:
+        self.internal_receive(balance, msg_value, in_msg_full, in_msg_body)
 
-    def to_func(self):
-        printer = Printer()
-        self.ast.print_func(printer)
-        return printer.out()
+    @impure
+    @method
+    def recv_external(
+        self,
+        in_msg_body: Slice,
+    ) -> None:
+        self.external_receive(in_msg_body)
+
+    def internal_receive(
+        self,
+        balance: int,
+        msg_value: int,
+        in_msg_full: Cell,
+        in_msg_body: Slice,
+    ) -> None:
+        pass
+
+    def external_receive(
+        self,
+        in_msg_body: Slice,
+    ) -> None:
+        pass
+
+    def __getattr__(self, item):
+        return InvokableFunc(item)
+
+    def ret_(self, *t):
+        mark(*t)
+        if len(t) == 0:
+            CallStacks.return_(None)
+        return CallStacks.return_(*t)
