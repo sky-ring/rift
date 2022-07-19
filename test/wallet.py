@@ -1,6 +1,7 @@
 import unittest
 
-from dbuilder import Engine
+from dbuilder import Engine, method
+from dbuilder.core.loop import while_
 from dbuilder.func.contract import Contract
 from dbuilder.types import Slice
 
@@ -33,7 +34,26 @@ class SimpleWallet(Contract):
         )
         self.accept_message()
         cs.touch_()
-        self.begin_cell().store_uint(1, 23).store_uint(1, 43).end_cell()
+        with while_(cs.slice_refs()):
+            mode = cs.load_uint_(8)
+            self.send_raw_message(cs.load_ref_(), mode)
+        cs.end_parse()
+        self.set_data(
+            self.begin_cell()
+            .store_uint(stored_seqno + 1, 32)
+            .store_uint(public_key, 256)
+            .end_cell(),
+        )
+
+    @method
+    def seqno(self) -> int:
+        return self.get_data().begin_parse().preload_uint(32)
+
+    @method
+    def get_public_key(self) -> int:
+        cs = self.get_data().begin_parse()
+        cs.load_uint_(32)
+        return cs.preload_uint(256)
 
 
 class CompileTestCase(unittest.TestCase):

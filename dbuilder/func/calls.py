@@ -1,6 +1,7 @@
 from typing import List
 
 from dbuilder.ast import Contract, IfFlow, Method, Node, Statement
+from dbuilder.ast.loop import WhileLoop
 
 
 class CallStacks(object):
@@ -89,6 +90,17 @@ class CallStacks(object):
     @staticmethod
     def end_if(node_id):
         nif: IfFlow = Node.find(node_id)
+        CallStacks.current_contract.current_method.end_statement(nif)
+
+    @staticmethod
+    def begin_while(cond):
+        nif = WhileLoop(cond)
+        CallStacks.current_contract.add_statement(nif)
+        return nif.node_id()
+
+    @staticmethod
+    def end_while(node_id):
+        nif: WhileLoop = Node.find(node_id)
         CallStacks.current_contract.current_method.end_statement(nif)
 
     @staticmethod

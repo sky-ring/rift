@@ -12,11 +12,6 @@ class Engine(object):
     @staticmethod
     def compile(contract):
         inst = contract()
-        inst.ret_ = (
-            lambda *t: CallStacks.return_(*t)
-            if len(t) != 0
-            else CallStacks.return_(None)
-        )
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
         attrs = dir(contract)

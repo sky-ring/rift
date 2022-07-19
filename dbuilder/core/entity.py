@@ -16,6 +16,7 @@ class Invokable:
         self.method_annotations = None
 
     def __call__(self, *args, **kwargs):
+        mark(*args)
         e = Entity(
             Expr.call_expr(
                 self.entity,

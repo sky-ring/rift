@@ -1,4 +1,5 @@
 from dbuilder import Entity, Expr, Statement, CallStacks
+from dbuilder.core.entity import mark
 
 
 class InvokableFunc:
@@ -7,6 +8,7 @@ class InvokableFunc:
         self.method_annotations = None
 
     def __call__(self, *args, **kwargs):
+        mark(*args)
         e = Entity(
             Expr.call_func(
                 self.name,

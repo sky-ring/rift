@@ -1,3 +1,4 @@
+from dbuilder.core.entity import mark
 from dbuilder.func.calls import CallStacks
 
 
@@ -11,6 +12,7 @@ class Cond:
         self.conds = []
 
     def match(self, cond):
+        mark(cond)
         self.index += 1
         self.conds.append(cond)
         if self.index == 1:

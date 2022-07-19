@@ -1,4 +1,5 @@
-from dbuilder import method
+from dbuilder import method, CallStacks
+from dbuilder.core.entity import mark
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.types import Cell, Slice
 
@@ -41,3 +42,9 @@ class Contract:
 
     def __getattr__(self, item):
         return InvokableFunc(item)
+
+    def ret_(self, *t):
+        mark(*t)
+        if len(t) == 0:
+            CallStacks.return_(None)
+        return CallStacks.return_(*t)
