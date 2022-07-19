@@ -64,16 +64,26 @@ class Transformer(ast.NodeTransformer):
                     ctx=ast.Load(),
                 ),
             )
-            p_expr = ast.Expr(
-                value=ast.Call(
-                    func=ast.Attribute(
-                        value=ast.Name(id="__tmp__", ctx=ast.Load()),
-                        attr="__prep_unpack__",
-                        ctx=ast.Load(),
-                    ),
-                    args=[ast.Constant(value=len(vars), kind=None)],
-                    keywords=[],
+            l_expr = ast.Call(
+                func=ast.Name(id="hasattr", ctx=ast.Load()),
+                args=[
+                    ast.Name(id="__tmp__", ctx=ast.Load()),
+                    ast.Constant(value="__prep_unpack__", kind=None),
+                ],
+                keywords=[],
+            )
+            r_expr = ast.Call(
+                func=ast.Attribute(
+                    value=ast.Name(id="__tmp__", ctx=ast.Load()),
+                    attr="__prep_unpack__",
+                    ctx=ast.Load(),
                 ),
+                args=[ast.Constant(value=len(vars), kind=None)],
+                keywords=[],
+            )
+
+            p_expr = ast.Expr(
+                value=ast.BoolOp(op=ast.And(), values=[l_expr, r_expr]),
             )
             a_expr = ast.Expr(
                 value=ast.Call(

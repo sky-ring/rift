@@ -2,6 +2,13 @@ from dbuilder.ast import Node, Expr, Statement
 from dbuilder.func import CallStacks
 
 
+def mark(*args):
+    for o in args:
+        if isinstance(o, Entity):
+            if isinstance(o.data, Expr):
+                o.data.__hide__ = True
+
+
 class Invokable:
     def __init__(self, name, entity):
         self.name = name
@@ -39,26 +46,38 @@ class Entity(Node):
         self.id = Entity.N_ID
         self.assigned = False
         self.has_expr = False
+        self.__used__ = False
 
     def __eq__(self, other):
+        mark(self, other)
         return Entity(Expr.binary_op("==", self, other))
 
+    def __le__(self, other):
+        mark(self, other)
+        return Entity(Expr.binary_op("<=", self, other))
+
     def __add__(self, other):
+        mark(self, other)
         return Entity(Expr.binary_op("+", self, other))
 
     def __radd__(self, other):
+        mark(self, other)
         return Entity(Expr.binary_op("+", other, self))
 
     def __or__(self, other):
+        mark(self, other)
         return Entity(Expr.binary_op("|", self, other))
 
     def __ror__(self, other):
+        mark(self, other)
         return Entity(Expr.binary_op("|", other, self))
 
     def __invert__(self):
+        mark(self)
         return Entity(Expr.unary_op("~", self))
 
     def __getattr__(self, item):
+        mark(self)
         return Invokable(item, self)
 
     def __str__(self):
@@ -70,6 +89,8 @@ class Entity(Node):
         return repr(self.data)
 
     def __assign__(self, v):
+        if self.NAMED:
+            return
         if self.has_expr:
             _x = getattr(self, "__expr")
             s: Statement = Node.find(_x)

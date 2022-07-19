@@ -22,7 +22,10 @@ class SimpleStorage(Contract):
         in_msg_body: Slice,
     ) -> None:
         super(SimpleStorage, self).internal_receive(
-            balance, msg_value, in_msg_full, in_msg_body,
+            balance,
+            msg_value,
+            in_msg_full,
+            in_msg_body,
         )
         cs = in_msg_full.begin_parse()
         cs.skip_bits_(4)

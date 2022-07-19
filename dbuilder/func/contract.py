@@ -1,8 +1,8 @@
-from dbuilder import method, Engine
+from dbuilder import method
+from dbuilder.core.invokable import InvokableFunc
 from dbuilder.types import Cell, Slice
 
 
-@Engine.patched
 class Contract:
     def __init__(self):
         pass
@@ -38,3 +38,6 @@ class Contract:
         in_msg_body: Slice,
     ) -> None:
         pass
+
+    def __getattr__(self, item):
+        return InvokableFunc(item)

@@ -3,6 +3,7 @@ class Expr:
     EXPR_CALL = 1
     EXPR_FUNC = 2
     EXPR_AR1 = 3
+    EXPR_VAR = 4
 
     def __init__(self, type, *args, annotations=None):
         self.type = type
@@ -35,6 +36,11 @@ class Expr:
         e = Expr(Expr.EXPR_AR1, op, operand)
         return e
 
+    @staticmethod
+    def variable(x):
+        e = Expr(Expr.EXPR_VAR, x)
+        return e
+
     def __repr__(self):
         def transform(x):
             if isinstance(x, str):
@@ -60,3 +66,5 @@ class Expr:
                 name=self.args[0].removesuffix("_"),
                 args=", ".join([transform(x) for x in self.args[1:]]),
             )
+        elif self.type == Expr.EXPR_VAR:
+            return "{name}".format(name=self.args[0])

@@ -49,10 +49,12 @@ class Statement(Node):
                 args=",".join([transform(x) for x in self.args[2]]),
             )
         elif self.type == Statement.EXPR:
-            printer.print("{expr};", expr=self.args[0])
+            expr = self.args[0]
+            if not (hasattr(expr, "__hide__") and expr.__hide__):
+                printer.print("{expr};", expr=expr)
         elif self.type == Statement.ASSIGN:
             expr = self.args[1]
-            annotations = expr.annotations
+            annotations = getattr(expr, "annotations")
             if annotations:
                 type_hint = annotations["return"]
                 type_hint = _type_name(type_hint)
