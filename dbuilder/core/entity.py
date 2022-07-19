@@ -48,33 +48,77 @@ class Entity(Node):
         self.has_expr = False
         self.__used__ = False
 
-    def __eq__(self, other):
+    def _binary(self, op, other, r=False):
         mark(self, other)
-        return Entity(Expr.binary_op("==", self, other))
+        e = Entity(
+            Expr.binary_op(op, other if r else self, self if r else other),
+        )
+        return e
+
+    def _unary(self, op):
+        mark(self)
+        e = Entity(Expr.unary_op(op, self))
+        return e
+
+    def __eq__(self, other):
+        return self._binary("==", other)
+
+    def __neg__(self):
+        return self._unary("-")
+
+    def __ne__(self, other):
+        return self._binary("!=", other)
 
     def __le__(self, other):
-        mark(self, other)
-        return Entity(Expr.binary_op("<=", self, other))
+        return self._binary("<=", other)
+
+    def __lt__(self, other):
+        return self._binary("<", other)
+
+    def __gt__(self, other):
+        return self._binary(">", other)
+
+    def __ge__(self, other):
+        return self._binary(">=", other)
 
     def __add__(self, other):
-        mark(self, other)
-        return Entity(Expr.binary_op("+", self, other))
+        return self._binary("+", other)
 
     def __radd__(self, other):
-        mark(self, other)
-        return Entity(Expr.binary_op("+", other, self))
+        return self._binary("+", other, r=True)
+
+    def __sub__(self, other):
+        return self._binary("-", other)
+
+    def __rsub__(self, other):
+        return self._binary("-", other, r=True)
+
+    def __truediv__(self, other):
+        return self._binary("/", other)
+
+    def __rtruediv__(self, other):
+        return self._binary("/", other, r=True)
+
+    def __mul__(self, other):
+        return self._binary("*", other)
+
+    def __rmul__(self, other):
+        return self._binary("*", other, r=True)
 
     def __or__(self, other):
-        mark(self, other)
-        return Entity(Expr.binary_op("|", self, other))
+        return self._binary("|", other)
 
     def __ror__(self, other):
-        mark(self, other)
-        return Entity(Expr.binary_op("|", other, self))
+        return self._binary("|", other, r=True)
+
+    def __and__(self, other):
+        return self._binary("&", other)
+
+    def __rand__(self, other):
+        return self._binary("&", other, r=True)
 
     def __invert__(self):
-        mark(self)
-        return Entity(Expr.unary_op("~", self))
+        return self._unary("~")
 
     def __getattr__(self, item):
         mark(self)
@@ -91,7 +135,9 @@ class Entity(Node):
     def __assign__(self, v):
         if self.NAMED:
             CallStacks.add_statement(
-                Statement.ASSIGN, v, Expr.variable(self.name),
+                Statement.ASSIGN,
+                v,
+                Expr.variable(self.name),
             )
             return Entity(
                 name=v,
