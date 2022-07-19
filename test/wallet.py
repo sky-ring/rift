@@ -1,6 +1,6 @@
 import unittest
 
-from dbuilder import Engine, method
+from dbuilder import Engine, method, method_id
 from dbuilder.core.loop import while_
 from dbuilder.func.contract import Contract
 from dbuilder.types import Slice
@@ -45,10 +45,12 @@ class SimpleWallet(Contract):
             .end_cell(),
         )
 
+    @method_id
     @method
     def seqno(self) -> int:
         return self.get_data().begin_parse().preload_uint(32)
 
+    @method_id
     @method
     def get_public_key(self) -> int:
         cs = self.get_data().begin_parse()

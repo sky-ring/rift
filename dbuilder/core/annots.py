@@ -60,6 +60,59 @@ def method(func):
     return nf
 
 
+def inline_ref(f):
+    if is_inline(f):
+        raise RuntimeError("the function already has the inline specifier")
+    if is_method_id(f):
+        raise RuntimeError("the function already has the method-id specifier")
+    setattr(f, "__inline_ref__", True)
+    return f
+
+
+def inline(f):
+    if is_inline_ref(f):
+        raise RuntimeError(
+            "the function already has the inline_ref specifier",
+        )
+    if is_method_id(f):
+        raise RuntimeError("the function already has the method-id specifier")
+    setattr(f, "__inline__", True)
+    return f
+
+
+def impure(f):
+    setattr(f, "__impure__", True)
+    return f
+
+
+def method_id(f, id=None):
+    if is_inline_ref(f):
+        raise RuntimeError(
+            "the function already has the inline_ref specifier",
+        )
+    if is_inline(f):
+        raise RuntimeError("the function already has the inline specifier")
+    setattr(f, "__method_id__", True)
+    setattr(f, "__method_id_val__", id)
+    return f
+
+
+def is_inline(f):
+    return hasattr(f, "__inline__") and f.__inline__
+
+
+def is_impure(f):
+    return hasattr(f, "__impure__") and f.__impure__
+
+
+def is_method_id(f):
+    return hasattr(f, "__method_id__") and f.__method_id__
+
+
+def is_inline_ref(f):
+    return hasattr(f, "__inline_ref__") and f.__inline_ref__
+
+
 def is_method(func):
     if not hasattr(func, "__pyfunc__"):
         return False

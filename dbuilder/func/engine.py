@@ -1,7 +1,14 @@
 import ast
 import inspect
 
-from dbuilder.core import is_method, Entity
+from dbuilder.core import (
+    is_method,
+    Entity,
+    is_method_id,
+    is_inline,
+    is_inline_ref,
+    is_impure,
+)
 from dbuilder.core.utils import init_abstract_type
 from dbuilder.func import CallStacks, patch, CompiledContract
 
@@ -24,11 +31,18 @@ class Engine(object):
                 func_args = value.__args__
                 names = value.__names__
                 annots = value.__annotations__
-                e_annots = annots if annots else {}
+                annots = annots if annots else {}
                 args = (
-                    init_abstract_type(e_annots.get(arg, Entity), name=arg)
+                    init_abstract_type(annots.get(arg, Entity), name=arg)
                     for arg in names[1:]
                 )
+                annots["_method"] = {
+                    "impure": is_impure(value),
+                    "inline": is_inline(value),
+                    "inline_ref": is_inline_ref(value),
+                    "method_id": is_method_id(value),
+                    "method_id_v": getattr(value, "__method_id_val__", None),
+                }
                 CallStacks.declare_method(
                     name,
                     [names[i + 1] for i in range(func_args - 1)],

@@ -1,4 +1,4 @@
-from dbuilder import method, CallStacks
+from dbuilder import method, CallStacks, impure
 from dbuilder.core.entity import mark
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.types import Cell, Slice
@@ -8,6 +8,7 @@ class Contract:
     def __init__(self):
         pass
 
+    @impure
     @method
     def recv_internal(
         self,
@@ -18,6 +19,7 @@ class Contract:
     ) -> None:
         self.internal_receive(balance, msg_value, in_msg_full, in_msg_body)
 
+    @impure
     @method
     def recv_external(
         self,
