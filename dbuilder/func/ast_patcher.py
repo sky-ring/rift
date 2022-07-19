@@ -115,17 +115,24 @@ class Transformer(ast.NodeTransformer):
         else:
             target = node.targets[0].id
             nodes = [node]
-            a_expr = ast.Expr(
-                value=ast.Call(
-                    func=ast.Attribute(
-                        value=ast.Name(id=target, ctx=ast.Load()),
-                        attr="__assign__",
-                        ctx=ast.Load(),
-                    ),
-                    args=[ast.Constant(value=str(target), kind=None)],
-                    keywords=[],
+            c_expr = ast.Call(
+                func=ast.Attribute(
+                    value=ast.Name(id=target, ctx=ast.Load()),
+                    attr="__assign__",
+                    ctx=ast.Load(),
                 ),
+                args=[ast.Constant(value=str(target), kind=None)],
+                keywords=[],
             )
+            if isinstance(node.value, ast.Name):
+                a_expr = ast.Assign(
+                    targets=[ast.Name(id=target, ctx=ast.Store())],
+                    value=c_expr,
+                )
+            else:
+                a_expr = ast.Expr(
+                    value=c_expr,
+                )
             nodes.append(a_expr)
         for g_node in nodes:
             ast.fix_missing_locations(g_node)

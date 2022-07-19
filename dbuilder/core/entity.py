@@ -90,7 +90,12 @@ class Entity(Node):
 
     def __assign__(self, v):
         if self.NAMED:
-            return
+            CallStacks.add_statement(
+                Statement.ASSIGN, v, Expr.variable(self.name),
+            )
+            return Entity(
+                name=v,
+            )
         if self.has_expr:
             _x = getattr(self, "__expr")
             s: Statement = Node.find(_x)
