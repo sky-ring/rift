@@ -51,12 +51,8 @@ class SimpleStorage(Contract):
 
 
 class CompileTestCase(unittest.TestCase):
-    def test_simple_compile(self):
-        compiled = Engine.compile(SimpleStorage)
-        print(compiled.to_func())
-
-    def test_patched_compile(self):
-        t = Engine.patch(SimpleStorage, globals())
+    def test_compile(self):
+        t = Engine.patched(SimpleStorage)
         compiled = Engine.compile(t)
         print(compiled.to_func())
 

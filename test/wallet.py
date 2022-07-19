@@ -37,11 +37,7 @@ class SimpleWallet(Contract):
 
 
 class CompileTestCase(unittest.TestCase):
-    def test_simple_compile(self):
-        compiled = Engine.compile(SimpleWallet)
-        print(compiled.to_func())
-
-    def test_patched_compile(self):
+    def test_compile(self):
         t = Engine.patched(SimpleWallet)
         compiled = Engine.compile(t)
         print(compiled.to_func())
