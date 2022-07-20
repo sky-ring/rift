@@ -34,7 +34,7 @@ def build():
         code = f.read()
         mod.__file__ = fp
         sys.modules[mod_name] = mod
-        compiled = compile(code, p_join(c_dir, cf), "exec")
+        compiled = compile(code, fp, "exec")
         exec(compiled, mod.__dict__)
         click.echo(f"compiling {cf}")
 
