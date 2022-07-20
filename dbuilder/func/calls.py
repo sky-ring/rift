@@ -1,5 +1,3 @@
-from typing import List
-
 from dbuilder.ast import Contract, IfFlow, Method, Node, Statement
 from dbuilder.ast.loop import WhileLoop
 
@@ -8,8 +6,6 @@ class CallStacks(object):
     """Class responsible for tracking the calls."""
 
     contracts = {}
-    calls: List = []
-    functions = set()
     _instance = None
     current_contract: Contract = None
 
@@ -24,25 +20,6 @@ class CallStacks(object):
         if CallStacks._instance is None:
             CallStacks()
         return CallStacks._instance
-
-    @staticmethod
-    def add(call):
-        CallStacks.get_instance().calls.append(call)
-        return len(CallStacks.get_instance().calls) - 1
-
-    @staticmethod
-    def insert(call, pos=-1):
-        if pos == -1:
-            CallStacks.add(call)
-            return
-        CallStacks.get_instance().calls.insert(pos, call)
-
-    @staticmethod
-    def get_stack() -> str:
-        x = ""
-        for call in CallStacks.get_instance().calls:
-            x += str(call) + "\n"
-        return x
 
     @staticmethod
     def declare_contract(name):

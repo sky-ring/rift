@@ -9,6 +9,7 @@ class Contract(Node):
     def __init__(self, name):
         super().__init__()
         self.name = name
+        self.methods = []
 
     def add_method(self, method):
         self.current_method = method

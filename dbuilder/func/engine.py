@@ -56,11 +56,8 @@ class Engine(object):
     @staticmethod
     def patch(contract, _globals):
         src = inspect.getsource(contract)
-        print(src)
         x = ast.parse(src)
         patched_ast = patch(x)
-        y = ast.unparse(patched_ast)
-        print(y)
         m = {**_globals}
         exec(compile(patched_ast, "func-patching", "exec"), m)
         return m[contract.__name__]

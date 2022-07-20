@@ -1,10 +1,11 @@
 from dbuilder import method, CallStacks, impure
 from dbuilder.core.entity import mark
 from dbuilder.core.invokable import InvokableFunc
+from dbuilder.func.meta_contract import ContractMeta
 from dbuilder.types import Cell, Slice
 
 
-class Contract:
+class Contract(metaclass=ContractMeta):
     def __init__(self):
         pass
 
