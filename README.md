@@ -4,15 +4,15 @@
 [![PyPI version](https://img.shields.io/badge/pytorch--lit-0.1.0-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/dbuilder/)
 [![Telegram](https://img.shields.io/badge/Telegram-@d__builder-informational?style=flat-square&color=0088cc)](https://t.me/d_builder)
 
-dBuilder.py is smart contract development framework in Python for [TON (The Open Network)](https://ton.org). It's goal is to make the development, testing, and deployment processes a lot easier!
+dBuilder.py is smart contract development framework in Python for [TON (The Open Network)](https://ton.org). Its purpose is to make the development, testing, and deployment procedures much easier!
 
 ## Goals
-- Be an easy-to-use full-stack python framework for building on TON ecosystem
-- Provide standard contract implementations (similar to OpenZeppelin)
-- Utilize Python’s syntax capabilities to provide code reusing, readable and structured code that’s easy to test.
+- To be a simple full-stack Python framework for developing on the TON ecosystem
+- Make standard contract implementations available (similar to OpenZeppelin)
+- Utilize Python's syntax to provide code reuse, understandable, and organized code that is simple to test
 
 ## Overview
-dBuilder's main point is to simplify contract development for TON, bypassing the steep learning curve of `FunC`. In current version, one-to-one mapping of Python to FunC is implemented, which comes with no special simplifications. But, the higher layers over the base are in development. Currently, this is what [Simple wallet contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc) looks like with dBuilder:
+The major goal of dBuilder is to make contract development easier for TON by avoiding the steep learning curve of `FunC`. The present version implements a one-to-one mapping of Python to FunC with no special simplifications. However, the higher layers above the base are still under construction. Currently, [Simple wallet contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc) looks like this in dBuilder:
 
 ```python
 from dbuilder import method, method_id
@@ -72,7 +72,7 @@ class SimpleWallet(Contract):
         cs.load_uint_(32)
         return cs.preload_uint(256)
 ```
-Full documentation with details is under development and will be available soon!
+Full documentation with specifics is being worked on and will be published soon!
 
 ## Quick Start
 
@@ -97,7 +97,7 @@ dbuilder build
 ```
 
 ## Vision
-As mentioned, dBuilder's main advantage is the simplifications which will be available upon development of higher levels. If you're curious what it will look like, here is a future vision for Simple wallet contract implementation:
+As previously stated, the key advantage of dBuilder is the simplifications that will be available as higher layers are developed. If you're curious about how Simple wallet contract implementation may appear in the future, here's a look:
 
 ```python
 class SimpleWallet(Contract):
@@ -148,9 +148,7 @@ class SimpleWallet(Contract):
 - [ ] Testing framework for the contracts developed with dBuilder
 
 ## Contributing
-
-Please read the specifications and procedure at [CONTRIBUTING.md](https://github.com/decentralized-builder/dBuilder.py/blob/main/CONTRIBUTING.md) If you're interested in contributing to dBuilder.
+If you're interested in contributing to dBuilder, please see [CONTRIBUTING.md](https://github.com/decentralized-builder/dBuilder.py/blob/main/CONTRIBUTING.md) for the necessary specifications and procedure.
 
 ## Supporters
-
-Special Thanks to [TON Society](https://society.ton.org/) for supporting the project and providing the grant, which without it the project wouldn't be possible.
+Special thanks to the [TON Society](https://society.ton.org/) for their support and grant, without which the project would not be feasible.
