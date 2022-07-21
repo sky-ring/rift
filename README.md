@@ -89,8 +89,8 @@ pip install -e .
 ```bash
 dbuilder init <project-name>
 ```
-1. Start developing your contracts in `<project>/contracts/`
-2. Build contracts and get the `FunC` contracts in `<project>/build/`
+3. Start developing your contracts in `<project>/contracts/`
+4. Build contracts and get the `FunC` contracts in `<project>/build/`
 ```bash
 # in project folder
 dbuilder build
