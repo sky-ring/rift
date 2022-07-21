@@ -1,6 +1,8 @@
 <img align="left" width="64" height="64" src="./assets/dbuilder-icon.png">
 
 # dBuilder.py
+[![PyPI version](https://img.shields.io/badge/pytorch--lit-0.1.0-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/dbuilder/)
+[![Telegram](https://img.shields.io/badge/Telegram-@d__builder-informational?style=flat-square&color=0088cc)](https://t.me/d_builder)
 
 dBuilder.py is smart contract development framework in Python for TON. It's goal is to make the development, testing, and deployment processes a lot easier!
 
