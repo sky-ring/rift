@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="dBuilder-py",
-    version="0.0.1",
+    name="dbuilder",
+    version="0.1.0",
     description="",
     license="MIT",
     packages=find_packages(),
