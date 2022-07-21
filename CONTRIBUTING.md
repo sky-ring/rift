@@ -63,6 +63,10 @@ flake8 .
 5. Resolve the logged issues and rerun 4 again until there are no issues.
 6. You're ready to submit your PR.
 
+## Commits
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) guidelines for commit message and we'd encourage you to do so when contributing.
+
 ## How to contribute
 If the suggestion is accepted after discussion in the issues, proceed with the following procedure for contribution:
 
