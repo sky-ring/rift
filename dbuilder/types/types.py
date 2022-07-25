@@ -13,6 +13,12 @@ class Slice(Entity):
         return "slice"
 
 
+class Cont(Entity):
+    @classmethod
+    def type_name(cls) -> str:
+        return "cont"
+
+
 class String(Entity):
     @classmethod
     def type_name(cls) -> str:

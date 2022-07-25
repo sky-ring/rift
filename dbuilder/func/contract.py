@@ -10,7 +10,7 @@ class Contract(metaclass=ContractMeta):
         pass
 
     @impure
-    @method
+    @method()
     def recv_internal(
         self,
         balance: int,
@@ -21,7 +21,7 @@ class Contract(metaclass=ContractMeta):
         self.internal_receive(balance, msg_value, in_msg_full, in_msg_body)
 
     @impure
-    @method
+    @method()
     def recv_external(
         self,
         in_msg_body: Slice,
@@ -50,4 +50,5 @@ class Contract(metaclass=ContractMeta):
         mark(*t)
         if len(t) == 0:
             CallStacks.return_(None)
+            return
         return CallStacks.return_(*t)

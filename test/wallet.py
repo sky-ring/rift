@@ -46,12 +46,12 @@ class SimpleWallet(Contract):
         )
 
     @method_id
-    @method
+    @method()
     def seqno(self) -> int:
         return self.get_data().begin_parse().preload_uint(32)
 
     @method_id
-    @method
+    @method()
     def get_public_key(self) -> int:
         cs = self.get_data().begin_parse()
         cs.load_uint_(32)

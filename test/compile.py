@@ -6,11 +6,11 @@ from dbuilder.types import Cell, Slice
 
 
 class SimpleStorage(Contract):
-    @method
+    @method()
     def copy_num(self, val: int) -> tuple[int, int]:
         return val, val
 
-    @method
+    @method()
     def double_the_num(self, val: int) -> int:
         return val + 2 + 3
 

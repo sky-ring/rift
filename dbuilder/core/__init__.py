@@ -11,4 +11,5 @@ from dbuilder.core.annots import (
     inline_ref,
     impure,
     method_id,
+    is_asm,
 )

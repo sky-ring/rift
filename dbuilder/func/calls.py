@@ -1,4 +1,5 @@
 from dbuilder.ast import Contract, IfFlow, Method, Node, Statement
+from dbuilder.ast.asm_method import AsmMethod
 from dbuilder.ast.loop import WhileLoop
 
 
@@ -36,6 +37,15 @@ class CallStacks(object):
         CallStacks.current_contract.add_method(m)
 
     @staticmethod
+    def declare_asm(name, args, annotations, asm_annoations):
+        m = AsmMethod(name, args, annotations, asm_annoations)
+        CallStacks.current_contract.add_method(m)
+
+    @staticmethod
+    def add_raw_statement(raw):
+        CallStacks.current_contract.add_statement(raw)
+
+    @staticmethod
     def add_statement(type, *args):
         s = Statement(type, args)
         CallStacks.current_contract.add_statement(s)
@@ -44,6 +54,7 @@ class CallStacks(object):
     @staticmethod
     def return_(entity):
         CallStacks.add_statement(Statement.RETURN, entity)
+        return entity
 
     @staticmethod
     def end_method(method):

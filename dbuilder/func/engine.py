@@ -8,6 +8,7 @@ from dbuilder.core import (
     is_inline,
     is_inline_ref,
     is_impure,
+    is_asm,
 )
 from dbuilder.core.utils import init_abstract_type
 from dbuilder.func import CallStacks, patch, CompiledContract
@@ -50,6 +51,37 @@ class Engine(object):
                 )
                 value(inst, *args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)
+            elif is_asm(value):
+                func_args = value.__args__
+                names = value.__names__
+                annots = value.__annotations__
+                asm_annots = value.__asm_annotations__
+                annots = annots if annots else {}
+                args = (
+                    init_abstract_type(annots.get(arg, Entity), name=arg)
+                    for arg in names[1:]
+                )
+                annots["_method"] = {
+                    "impure": is_impure(value),
+                    "inline": is_inline(value),
+                    "inline_ref": is_inline_ref(value),
+                    "method_id": is_method_id(value),
+                    "method_id_v": getattr(value, "__method_id_val__", None),
+                }
+                CallStacks.declare_asm(
+                    name,
+                    [names[i + 1] for i in range(func_args - 1)],
+                    annots,
+                    asm_annots,
+                )
+                res = value(inst, *args, NO_INTERCEPT=1)
+                if isinstance(res, str):
+                    CallStacks.add_raw_statement(res)
+                elif isinstance(res, tuple):
+                    for i in res:
+                        CallStacks.add_raw_statement(i)
+                CallStacks.end_method(name)
+
         contract_ = CallStacks.get_contract(contract.__name__)
         return CompiledContract(contract_)
 
