@@ -5,3 +5,5 @@ from dbuilder.types.types import Cell
 from dbuilder.types.types import Builder
 from dbuilder.types.types import String
 from dbuilder.types.types import Dict
+from dbuilder.types.types import Cont
+from dbuilder.types.types import Tensor
