@@ -74,12 +74,7 @@ class Engine(object):
                     annots,
                     asm_annots,
                 )
-                res = value(inst, *args, NO_INTERCEPT=1)
-                if isinstance(res, str):
-                    CallStacks.add_raw_statement(res)
-                elif isinstance(res, tuple):
-                    for i in res:
-                        CallStacks.add_raw_statement(i)
+                value(inst, *args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)
 
         contract_ = CallStacks.get_contract(contract.__name__)
@@ -87,10 +82,14 @@ class Engine(object):
 
     @staticmethod
     def patch(contract, _globals):
+        lines, starting = inspect.findsource(contract)
+        needed_src = ''.join(lines[:starting])
+        x = ast.parse(needed_src)
+        m = {**_globals}
+        exec(compile(x, "func-imports", "exec"), m)
         src = inspect.getsource(contract)
         x = ast.parse(src)
         patched_ast = patch(x)
-        m = {**_globals}
         exec(compile(patched_ast, "func-patching", "exec"), m)
         return m[contract.__name__]
 
@@ -103,7 +102,6 @@ class Engine(object):
         if Engine.is_patched(contract):
             return contract
         t_globals = inspect.stack()[1][0].f_globals
-        t_globals["Engine"].patched = lambda c: c
         patched = Engine.patch(contract, t_globals)
         patched.__is_patched__ = True
         return patched

@@ -1,9 +1,7 @@
-import unittest
-
-from dbuilder import Engine
 from dbuilder.core.annots import asm, impure
 from dbuilder.func.library import Library
 from dbuilder.types import Slice, Cell
+from .util import compile
 
 
 class Asm(Library):
@@ -55,12 +53,5 @@ class Asm(Library):
         return "PFXDICTSET"
 
 
-class CompileTestCase(unittest.TestCase):
-    def test_compile(self):
-        t = Engine.patched(Asm)
-        compiled = Engine.compile(t)
-        print(compiled.to_func())
-
-
-if __name__ == "__main__":
-    unittest.main()
+def test_compile():
+    compile(Asm)
