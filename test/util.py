@@ -6,5 +6,7 @@ def compile(contract, print_=True):
     compiled = Engine.compile(t)
     code = compiled.to_func()
     if print_:
+        # line cleaner
+        print()
         print(code)
     return code

@@ -9,11 +9,13 @@ def mark(*args):
                 o.data.__hide__ = True
 
 
-class Invokable:
-    def __init__(self, name, entity):
+class InvokableBinder:
+    def __init__(self, name, method_annotations=None):
         self.name = name
+        self.method_annotations = method_annotations
+
+    def bind(self, entity):
         self.entity = entity
-        self.method_annotations = None
 
     def __call__(self, *args, **kwargs):
         mark(*args)
@@ -29,6 +31,19 @@ class Invokable:
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
         return e
+
+
+class Invokable(InvokableBinder):
+    def __init__(self, name, entity, method_annotations=None):
+        super().__init__(name, method_annotations=method_annotations)
+        self.bind(entity)
+
+
+class TypedInvokable(Invokable):
+    def __init__(self, name, entity, return_) -> None:
+        super().__init__(name, entity, method_annotations={
+            "return": return_,
+        })
 
 
 class Entity(Node):

@@ -1,4 +1,5 @@
 from dbuilder.core import Entity
+from dbuilder.core.entity import TypedInvokable
 
 
 class Int(Entity):
@@ -11,6 +12,9 @@ class Slice(Entity):
     @classmethod
     def type_name(cls) -> str:
         return "slice"
+
+    def uint(self, bits: int) -> int:
+        return TypedInvokable("load_uint_", self, return_=int)(bits)
 
 
 class Cont(Entity):
