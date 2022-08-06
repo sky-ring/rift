@@ -1,6 +1,7 @@
 from dbuilder.core.annots import asm, impure
 from dbuilder.func.library import Library
-from dbuilder.types import Slice, Cell
+from dbuilder.types import Cell, Slice
+
 from .util import compile
 
 

@@ -1,8 +1,9 @@
-from dbuilder.ast.types import Expr, Statement
-from dbuilder.core.utils import init_abstract_type
-from dbuilder.ast import CallStacks
-from dbuilder.core.factory import Factory
 from functools import partial
+
+from dbuilder.ast import CallStacks
+from dbuilder.ast.types import Expr, Statement
+from dbuilder.core.factory import Factory
+from dbuilder.core.utils import init_abstract_type
 
 
 def init_func(func):

@@ -8,7 +8,8 @@ def init_abstract_type(cls_, *args, **kwargs):
     filter_d = {int: entity_cls, None: entity_cls}
     cls_ = filter_d.get(cls_, cls_)
     if isinstance(cls_, GenericAlias) and cls_.__origin__ == tuple:
-        t = Factory.build("Tensor",
+        t = Factory.build(
+            "Tensor",
             *args,
             [init_abstract_type(c) for c in cls_.__args__],
             **kwargs,

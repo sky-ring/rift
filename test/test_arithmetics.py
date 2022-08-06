@@ -1,5 +1,6 @@
 from dbuilder.func.contract import Contract
 from dbuilder.types import Slice
+
 from .util import compile
 
 

@@ -1,4 +1,5 @@
 from functools import partial
+
 from dbuilder.ast import CallStacks
 from dbuilder.ast.types import Expr, Statement
 from dbuilder.core.factory import Factory
@@ -12,13 +13,14 @@ class InvokableFunc:
 
     def __call__(self, *args, **kwargs):
         mark(*args)
-        e = Factory.build("Entity",
-                          Expr.call_func(
-                              self.name,
-                              *args,
-                              annotations=self.method_annotations,
-                          ),
-                          )
+        e = Factory.build(
+            "Entity",
+            Expr.call_func(
+                self.name,
+                *args,
+                annotations=self.method_annotations,
+            ),
+        )
         setattr(e, "__unpackable", True)
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
@@ -35,14 +37,15 @@ class InvokableBinder:
 
     def __call__(self, *args, **kwargs):
         mark(*args)
-        e = Factory.build("Entity",
-                          Expr.call_expr(
-                              self.entity,
-                              self.name,
-                              *args,
-                              annotations=self.method_annotations,
-                          ),
-                          )
+        e = Factory.build(
+            "Entity",
+            Expr.call_expr(
+                self.entity,
+                self.name,
+                *args,
+                annotations=self.method_annotations,
+            ),
+        )
         setattr(e, "__unpackable", True)
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
@@ -57,9 +60,13 @@ class Invokable(InvokableBinder):
 
 class TypedInvokable(Invokable):
     def __init__(self, name, entity, return_) -> None:
-        super().__init__(name, entity, method_annotations={
-            "return": return_,
-        })
+        super().__init__(
+            name,
+            entity,
+            method_annotations={
+                "return": return_,
+            },
+        )
 
 
 def typed_invokable(name=None, return_=None):
@@ -79,4 +86,5 @@ def typed_invokable_(func, name=None, return_=None):
         if name is None:
             name = func.__name__
         return TypedInvokable(name, self, return_=return_)(*args, **kwargs)
+
     return new_f

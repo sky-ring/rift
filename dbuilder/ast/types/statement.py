@@ -1,5 +1,5 @@
-from dbuilder.ast.types.node import Node
 from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.node import Node
 from dbuilder.ast.utils import _type_name
 
 

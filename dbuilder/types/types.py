@@ -1,5 +1,5 @@
-from dbuilder.core.factory import Factory
 from dbuilder.core import Entity
+from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import TypedInvokable, typed_invokable
 
 

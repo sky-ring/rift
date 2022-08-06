@@ -1,17 +1,10 @@
 import ast
 import inspect
 
-from dbuilder.core import (
-    is_method,
-    Entity,
-    is_method_id,
-    is_inline,
-    is_inline_ref,
-    is_impure,
-    is_asm,
-)
+from dbuilder.ast import CallStacks, CompiledContract, patch
+from dbuilder.core import (Entity, is_asm, is_impure, is_inline, is_inline_ref,
+                           is_method, is_method_id)
 from dbuilder.core.utils import init_abstract_type
-from dbuilder.ast import CallStacks, patch, CompiledContract
 
 
 class Engine(object):
@@ -83,7 +76,7 @@ class Engine(object):
     @staticmethod
     def patch(contract, _globals):
         lines, starting = inspect.findsource(contract)
-        needed_src = ''.join(lines[:starting])
+        needed_src = "".join(lines[:starting])
         x = ast.parse(needed_src)
         m = {**_globals}
         exec(compile(x, "func-imports", "exec"), m)
