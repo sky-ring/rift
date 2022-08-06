@@ -118,15 +118,15 @@ class Transformer(ast.NodeTransformer):
             if isinstance(node.value, ast.Constant):
                 if isinstance(node.value.value, int):
                     node.value = ast.Call(
-                            func=ast.Attribute(
-                                value=ast.Name(id="self", ctx=ast.Load()),
-                                attr="factory_",
-                                ctx=ast.Load(),
-                            ),
-                            args=[ast.Constant("int"), node.value],
-                            keywords=[],
-                        )
-                    
+                        func=ast.Attribute(
+                            value=ast.Name(id="self", ctx=ast.Load()),
+                            attr="factory_",
+                            ctx=ast.Load(),
+                        ),
+                        args=[ast.Constant("int"), node.value],
+                        keywords=[],
+                    )
+
             c_expr = ast.Call(
                 func=ast.Attribute(
                     value=ast.Name(id=target, ctx=ast.Load()),
