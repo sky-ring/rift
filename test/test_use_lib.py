@@ -24,6 +24,7 @@ class Contract2(Contract):
         msg_seqno = cs.load_uint_(32)
         valid_until = cs.load_uint_(32)
         self.throw_if(35, valid_until <= std.now())
+        o = std.load_uint_(cs, 10)
         x = 10
         y = 15
         min, max = std.minmax(y, x)

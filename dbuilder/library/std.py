@@ -177,11 +177,11 @@ class Stdlib(Library):
         return "PLDREF"
 
     @asm(input_order=("s", "len_"), out_order=(1, 0), name="~load_int")
-    def load_int_(self, s: Slice, len_: int) -> tuple[int]:
+    def load_int_(self, s: Slice, len_: int) -> int:
         return "LDIX"
 
     @asm(out_order=(1, 0), name="~load_uint")
-    def load_uint_(self, s: Slice, len_: int) -> tuple[int]:
+    def load_uint_(self, s: Slice, len_: int) -> int:
         return "LDUX"
 
     @asm()
