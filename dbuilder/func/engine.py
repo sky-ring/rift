@@ -11,7 +11,7 @@ from dbuilder.core import (
     is_asm,
 )
 from dbuilder.core.utils import init_abstract_type
-from dbuilder.func import CallStacks, patch, CompiledContract
+from dbuilder.ast import CallStacks, patch, CompiledContract
 
 
 class Engine(object):

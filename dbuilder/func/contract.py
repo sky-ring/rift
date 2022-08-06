@@ -1,4 +1,5 @@
-from dbuilder import method, CallStacks, impure
+from dbuilder.ast import CallStacks
+from dbuilder.core.annots import method, impure
 from dbuilder.core.entity import mark
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.func.meta_contract import ContractMeta

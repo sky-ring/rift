@@ -1,8 +1,7 @@
-from dbuilder.ast import Expr, Statement
-from dbuilder.core import Entity
+from dbuilder.ast.types import Expr, Statement
 from dbuilder.core.utils import init_abstract_type
-from dbuilder.func import CallStacks
-from dbuilder.types.types import Tensor
+from dbuilder.ast import CallStacks
+from dbuilder.core.factory import Factory
 from functools import partial
 
 
@@ -31,7 +30,7 @@ def method_(func, name=None):
         ):
             annotations = func.__annotations__
             annotations = annotations if annotations else {}
-            ret = annotations.get("return", Entity)
+            ret = annotations.get("return", None)
             e = init_abstract_type(
                 ret,
                 data=Expr.call_func(
@@ -50,7 +49,7 @@ def method_(func, name=None):
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Tensor(list(ret))
+                ret = Factory.build("Tensor", list(ret))
             return ret
 
     nf = init_func(nf)
@@ -93,7 +92,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
         ):
             annotations = func.__annotations__
             annotations = annotations if annotations else {}
-            ret = annotations.get("return", Entity)
+            ret = annotations.get("return", None)
             e = init_abstract_type(
                 ret,
                 data=Expr.call_func(
@@ -112,7 +111,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Tensor(list(ret))
+                ret = Factory.build("Tensor", list(ret))
             return ret
 
     nf = init_func(nf)

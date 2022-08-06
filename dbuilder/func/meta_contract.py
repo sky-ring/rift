@@ -1,6 +1,3 @@
-from dbuilder import method
-
-
 class ContractMeta(type):
     contracts = set()
 

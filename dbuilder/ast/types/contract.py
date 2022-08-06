@@ -1,4 +1,6 @@
-from dbuilder.ast import Method, Node, Printer
+from dbuilder.ast.types.node import Node
+from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.method import Method
 
 
 class Contract(Node):

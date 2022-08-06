@@ -1,4 +1,6 @@
-from dbuilder.ast import Node, Printer, Statement
+from dbuilder.ast.types.node import Node
+from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.statement import Statement
 from dbuilder.ast.utils import _type_name
 
 

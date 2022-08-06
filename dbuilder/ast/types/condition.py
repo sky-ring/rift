@@ -1,4 +1,6 @@
-from dbuilder.ast import ControlFlow, Printer, Statement
+from dbuilder.ast.types.control_flow import ControlFlow
+from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.statement import Statement
 
 
 class IfFlow(ControlFlow):

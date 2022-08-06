@@ -1,52 +1,12 @@
-from dbuilder.ast import Node, Expr, Statement
-from dbuilder.func import CallStacks
-
-
-def mark(*args):
-    for o in args:
-        if isinstance(o, Entity):
-            if isinstance(o.data, Expr):
-                o.data.__hide__ = True
-
-
-class InvokableBinder:
-    def __init__(self, name, method_annotations=None):
-        self.name = name
-        self.method_annotations = method_annotations
-
-    def bind(self, entity):
-        self.entity = entity
-
-    def __call__(self, *args, **kwargs):
-        mark(*args)
-        e = Entity(
-            Expr.call_expr(
-                self.entity,
-                self.name,
-                *args,
-                annotations=self.method_annotations,
-            ),
-        )
-        setattr(e, "__unpackable", True)
-        setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
-        e.has_expr = True
-        return e
-
-
-class Invokable(InvokableBinder):
-    def __init__(self, name, entity, method_annotations=None):
-        super().__init__(name, method_annotations=method_annotations)
-        self.bind(entity)
-
-
-class TypedInvokable(Invokable):
-    def __init__(self, name, entity, return_) -> None:
-        super().__init__(name, entity, method_annotations={
-            "return": return_,
-        })
+from dbuilder.ast.types import Node, Expr, Statement
+from dbuilder.ast import CallStacks
+from dbuilder.core.factory import Factory
+from dbuilder.core.invokable import Invokable
+from dbuilder.core.mark import mark
 
 
 class Entity(Node):
+    __magic__ = 0x050794
     N_ID = 0
 
     def __init__(self, data=None, name=None) -> None:
@@ -197,3 +157,6 @@ class Entity(Node):
     @classmethod
     def abstract_init(cls, *args, **kwargs) -> "Entity":
         return cls(*args, **kwargs)
+
+
+Factory.register("Entity", Entity)
