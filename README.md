@@ -1,7 +1,7 @@
 <img align="left" width="64" height="64" src="./assets/dbuilder-icon.png">
 
 # dBuilder.py
-[![PyPI version](https://img.shields.io/badge/pytorch--lit-0.1.0-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/dbuilder/)
+[![PyPI version](https://img.shields.io/badge/dbuilder-0.1.0-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/dbuilder/)
 [![Telegram](https://img.shields.io/badge/Telegram-@d__builder-informational?style=flat-square&color=0088cc)](https://t.me/d_builder)
 
 dBuilder.py is smart contract development framework in Python for [TON (The Open Network)](https://ton.org). Its purpose is to make the development, testing, and deployment procedures much easier!
@@ -89,8 +89,8 @@ pip install -e .
 ```bash
 dbuilder init <project-name>
 ```
-1. Start developing your contracts in `<project>/contracts/`
-2. Build contracts and get the `FunC` contracts in `<project>/build/`
+3. Start developing your contracts in `<project>/contracts/`
+4. Build contracts and get the `FunC` contracts in `<project>/build/`
 ```bash
 # in project folder
 dbuilder build
