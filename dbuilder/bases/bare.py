@@ -1,5 +1,5 @@
 from dbuilder.func.contract import Contract
-from dbuilder.types import Slice, Cell
+from dbuilder.types import Cell, Slice
 
 
 class BaseContract(Contract):

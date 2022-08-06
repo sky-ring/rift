@@ -1,5 +1,6 @@
 from dbuilder.core import Entity
-from dbuilder.core.entity import TypedInvokable
+from dbuilder.core.factory import Factory
+from dbuilder.core.invokable import TypedInvokable, typed_invokable
 
 
 class Int(Entity):
@@ -12,6 +13,10 @@ class Slice(Entity):
     @classmethod
     def type_name(cls) -> str:
         return "slice"
+
+    @typed_invokable(name="load_coins_", return_=Int)
+    def coin(self) -> int:
+        pass
 
     def uint(self, bits: int) -> int:
         return TypedInvokable("load_uint_", self, return_=int)(bits)
@@ -61,3 +66,14 @@ class Tuple(Entity):
     @classmethod
     def type_name(cls) -> str:
         return "tuple"
+
+
+Factory.register("Tensor", Tensor)
+Factory.register("Tuple", Tuple)
+Factory.register("Builder", Builder)
+Factory.register("Dict", Dict)
+Factory.register("Slice", Slice)
+Factory.register("Cell", Cell)
+Factory.register("String", String)
+Factory.register("Cont", Cont)
+Factory.register("Int", Int)

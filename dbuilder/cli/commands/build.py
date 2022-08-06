@@ -1,7 +1,8 @@
 import re
 import sys
 from os import getcwd, listdir
-from os.path import join as p_join, exists as p_exists
+from os.path import exists as p_exists
+from os.path import join as p_join
 from types import ModuleType
 
 import click

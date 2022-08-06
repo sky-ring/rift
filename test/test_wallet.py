@@ -1,9 +1,10 @@
 from dbuilder import method, method_id
 from dbuilder.core.loop import while_
 from dbuilder.func.contract import Contract
-from dbuilder.types import Slice
-from .util import compile
 from dbuilder.library.std import Stdlib
+from dbuilder.types import Slice
+
+from .util import compile
 
 
 class SimpleWallet(Contract):
@@ -60,4 +61,3 @@ class SimpleWallet(Contract):
 
 def test_compile():
     compile(SimpleWallet)
-    compile(Stdlib)

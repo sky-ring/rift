@@ -1,5 +1,9 @@
-from dbuilder import Entity, Expr, Statement, CallStacks
-from dbuilder.core.entity import mark
+from functools import partial
+
+from dbuilder.ast import CallStacks
+from dbuilder.ast.types import Expr, Statement
+from dbuilder.core.factory import Factory
+from dbuilder.core.mark import mark
 
 
 class InvokableFunc:
@@ -9,7 +13,8 @@ class InvokableFunc:
 
     def __call__(self, *args, **kwargs):
         mark(*args)
-        e = Entity(
+        e = Factory.build(
+            "Entity",
             Expr.call_func(
                 self.name,
                 *args,
@@ -20,3 +25,66 @@ class InvokableFunc:
         setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
         e.has_expr = True
         return e
+
+
+class InvokableBinder:
+    def __init__(self, name, method_annotations=None):
+        self.name = name
+        self.method_annotations = method_annotations
+
+    def bind(self, entity):
+        self.entity = entity
+
+    def __call__(self, *args, **kwargs):
+        mark(*args)
+        e = Factory.build(
+            "Entity",
+            Expr.call_expr(
+                self.entity,
+                self.name,
+                *args,
+                annotations=self.method_annotations,
+            ),
+        )
+        setattr(e, "__unpackable", True)
+        setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
+        e.has_expr = True
+        return e
+
+
+class Invokable(InvokableBinder):
+    def __init__(self, name, entity, method_annotations=None):
+        super().__init__(name, method_annotations=method_annotations)
+        self.bind(entity)
+
+
+class TypedInvokable(Invokable):
+    def __init__(self, name, entity, return_) -> None:
+        super().__init__(
+            name,
+            entity,
+            method_annotations={
+                "return": return_,
+            },
+        )
+
+
+def typed_invokable(name=None, return_=None):
+    return partial(typed_invokable_, name=name, return_=return_)
+
+
+def typed_invokable_(func, name=None, return_=None):
+    def new_f(*args, **kwargs):
+        nonlocal name
+        nonlocal return_
+        self = args[0]
+        args = args[1:]
+        if return_ is None:
+            annotations = func.__annotations__
+            annotations = annotations if annotations else {}
+            return_ = annotations.get("return", None)
+        if name is None:
+            name = func.__name__
+        return TypedInvokable(name, self, return_=return_)(*args, **kwargs)
+
+    return new_f

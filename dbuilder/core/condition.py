@@ -1,5 +1,5 @@
+from dbuilder.ast.calls import CallStacks
 from dbuilder.core.entity import mark
-from dbuilder.func.calls import CallStacks
 
 
 class Cond:

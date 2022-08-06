@@ -1,6 +1,7 @@
-from dbuilder import method, Cond
+from dbuilder import Cond, method
 from dbuilder.func.contract import Contract
 from dbuilder.types import Cell, Slice
+
 from .util import compile
 
 

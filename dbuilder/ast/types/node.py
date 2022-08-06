@@ -1,6 +1,6 @@
 import uuid
 
-from dbuilder.ast import Printer
+from dbuilder.ast.printer import Printer
 
 
 class Node:

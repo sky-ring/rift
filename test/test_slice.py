@@ -1,5 +1,6 @@
 from dbuilder.func.contract import Contract
 from dbuilder.types import Cell, Slice
+
 from .util import compile
 
 
@@ -18,6 +19,7 @@ class Contract1(Contract):
             in_msg_body,
         )
         b = in_msg_body.uint(10)
+        c = in_msg_body.coin()
 
 
 def test_compile():

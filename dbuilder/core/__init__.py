@@ -1,15 +1,5 @@
-from dbuilder.core.entity import Entity
+from dbuilder.core.annots import (impure, inline, inline_ref, is_asm,
+                                  is_impure, is_inline, is_inline_ref,
+                                  is_method, is_method_id, method, method_id)
 from dbuilder.core.condition import Cond
-from dbuilder.core.annots import (
-    method,
-    is_method,
-    is_inline_ref,
-    is_inline,
-    is_method_id,
-    is_impure,
-    inline,
-    inline_ref,
-    impure,
-    method_id,
-    is_asm,
-)
+from dbuilder.core.entity import Entity

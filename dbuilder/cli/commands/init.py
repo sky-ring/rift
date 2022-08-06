@@ -1,6 +1,7 @@
 from os.path import join as pjoin
-from tomlkit import document, nl, comment
+
 import click
+from tomlkit import comment, document, nl
 
 from dbuilder.bases import write_contract
 from dbuilder.cli import entry
