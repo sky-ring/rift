@@ -4,6 +4,7 @@ class Expr:
     EXPR_FUNC = 2
     EXPR_AR1 = 3
     EXPR_VAR = 4
+    EXPR_CONST = 5
 
     def __init__(self, type, *args, annotations=None):
         self.type = type
@@ -41,6 +42,13 @@ class Expr:
         e = Expr(Expr.EXPR_VAR, x)
         return e
 
+    @staticmethod
+    def const(x):
+        e = Expr(Expr.EXPR_CONST, x)
+        if isinstance(x, int):
+            e.annotations = {"return": int}
+        return e
+
     def __repr__(self):
         def transform(x):
             if isinstance(x, str):
@@ -70,3 +78,5 @@ class Expr:
             )
         elif self.type == Expr.EXPR_VAR:
             return "{name}".format(name=self.args[0])
+        elif self.type == Expr.EXPR_CONST:
+            return "{value}".format(value=repr(self.args[0]))

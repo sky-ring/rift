@@ -1,4 +1,4 @@
-from dbuilder import Printer
+from dbuilder.ast.printer import Printer
 
 
 class CompiledContract(object):

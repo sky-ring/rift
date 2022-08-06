@@ -1,8 +1,9 @@
-from dbuilder.ast import Expr, Statement
-from dbuilder.core import Entity
+from functools import partial
+
+from dbuilder.ast import CallStacks
+from dbuilder.ast.types import Expr, Statement
+from dbuilder.core.factory import Factory
 from dbuilder.core.utils import init_abstract_type
-from dbuilder.func import CallStacks
-from dbuilder.types.types import Tensor
 
 
 def init_func(func):
@@ -11,7 +12,11 @@ def init_func(func):
     return func
 
 
-def method(func):
+def method(name=None):
+    return partial(method_, name=name)
+
+
+def method_(func, name=None):
     if is_method(func):
         return func
 
@@ -26,7 +31,7 @@ def method(func):
         ):
             annotations = func.__annotations__
             annotations = annotations if annotations else {}
-            ret = annotations.get("return", Entity)
+            ret = annotations.get("return", None)
             e = init_abstract_type(
                 ret,
                 data=Expr.call_func(
@@ -45,13 +50,86 @@ def method(func):
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Tensor(list(ret))
+                ret = Factory.build("Tensor", list(ret))
             return ret
 
     nf = init_func(nf)
     nf.__pyfunc__["type"] = ["method"]
     setattr(nf, "__args__", func.__code__.co_argcount)
-    setattr(nf, "__annotations__", func.__annotations__)
+    annotations = func.__annotations__
+    annotations = annotations or {}
+    annotations["_fname"] = name
+    setattr(nf, "__annotations__", annotations)
+    setattr(
+        nf,
+        "__names__",
+        func.__code__.co_varnames[: func.__code__.co_argcount],
+    )
+
+    return nf
+
+
+def asm(input_order=None, out_order=None, name=None):
+    return partial(
+        asm_,
+        input_order=input_order,
+        out_order=out_order,
+        name=name,
+    )
+
+
+def asm_(func, input_order=None, out_order=None, name=None):
+    if is_asm(func):
+        return func
+
+    def nf(*args, **kwargs):
+        slf = args[0]
+        if "NO_INTERCEPT" in kwargs:
+            kwargs.pop("NO_INTERCEPT")
+            return func(*args, **kwargs)
+        elif hasattr(slf, "__intercepted__") and getattr(
+            slf,
+            "__intercepted__",
+        ):
+            annotations = func.__annotations__
+            annotations = annotations if annotations else {}
+            ret = annotations.get("return", None)
+            e = init_abstract_type(
+                ret,
+                data=Expr.call_func(
+                    func.__name__,
+                    *args[1:],
+                    annotations=func.__annotations__,
+                ),
+            )
+            setattr(
+                e,
+                "__expr",
+                CallStacks.add_statement(Statement.EXPR, e.data),
+            )
+            e.has_expr = True
+            return e
+        else:
+            ret = func(*args, **kwargs)
+            if isinstance(ret, tuple):
+                ret = Factory.build("Tensor", list(ret))
+            return ret
+
+    nf = init_func(nf)
+    nf.__pyfunc__["type"] = ["asm"]
+    setattr(nf, "__args__", func.__code__.co_argcount)
+    annotations = func.__annotations__
+    annotations = annotations or {}
+    annotations["_fname"] = name
+    setattr(nf, "__annotations__", annotations)
+    setattr(
+        nf,
+        "__asm_annotations__",
+        {
+            "input_order": input_order,
+            "out_order": out_order,
+        },
+    )
     setattr(
         nf,
         "__names__",
@@ -85,7 +163,11 @@ def impure(f):
     return f
 
 
-def method_id(f, id=None):
+def method_id(id=None):
+    return partial(method_id_, id=id)
+
+
+def method_id_(f, id=None):
     if is_inline_ref(f):
         raise RuntimeError(
             "the function already has the inline_ref specifier",
@@ -118,3 +200,10 @@ def is_method(func):
         return False
     type_ = func.__pyfunc__.get("type", [])
     return "method" in type_
+
+
+def is_asm(func):
+    if not hasattr(func, "__pyfunc__"):
+        return False
+    type_ = func.__pyfunc__.get("type", [])
+    return "asm" in type_

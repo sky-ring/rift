@@ -1,8 +1,7 @@
-import unittest
-
-from dbuilder import Engine
 from dbuilder.func.contract import Contract
 from dbuilder.types import Slice
+
+from .util import compile
 
 
 class Arithmetics(Contract):
@@ -36,12 +35,5 @@ class Arithmetics(Contract):
         _ = 2 & v
 
 
-class CompileTestCase(unittest.TestCase):
-    def test_compile(self):
-        t = Engine.patched(Arithmetics)
-        compiled = Engine.compile(t)
-        print(compiled.to_func())
-
-
-if __name__ == "__main__":
-    unittest.main()
+def test_compile():
+    compile(Arithmetics)

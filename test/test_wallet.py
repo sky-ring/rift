@@ -1,9 +1,10 @@
-import unittest
-
-from dbuilder import Engine, method, method_id
+from dbuilder import method, method_id
 from dbuilder.core.loop import while_
 from dbuilder.func.contract import Contract
+from dbuilder.library.std import Stdlib
 from dbuilder.types import Slice
+
+from .util import compile
 
 
 class SimpleWallet(Contract):
@@ -46,24 +47,17 @@ class SimpleWallet(Contract):
         )
 
     @method_id
-    @method
+    @method()
     def seqno(self) -> int:
         return self.get_data().begin_parse().preload_uint(32)
 
     @method_id
-    @method
+    @method()
     def get_public_key(self) -> int:
         cs = self.get_data().begin_parse()
         cs.load_uint_(32)
         return cs.preload_uint(256)
 
 
-class CompileTestCase(unittest.TestCase):
-    def test_compile(self):
-        t = Engine.patched(SimpleWallet)
-        compiled = Engine.compile(t)
-        print(compiled.to_func())
-
-
-if __name__ == "__main__":
-    unittest.main()
+def test_compile():
+    compile(SimpleWallet)

@@ -1,5 +1,7 @@
-from dbuilder import method, CallStacks, impure
+from dbuilder.ast import CallStacks
+from dbuilder.core.annots import impure, method
 from dbuilder.core.entity import mark
+from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.func.meta_contract import ContractMeta
 from dbuilder.types import Cell, Slice
@@ -10,7 +12,7 @@ class Contract(metaclass=ContractMeta):
         pass
 
     @impure
-    @method
+    @method()
     def recv_internal(
         self,
         balance: int,
@@ -21,7 +23,7 @@ class Contract(metaclass=ContractMeta):
         self.internal_receive(balance, msg_value, in_msg_full, in_msg_body)
 
     @impure
-    @method
+    @method()
     def recv_external(
         self,
         in_msg_body: Slice,
@@ -50,4 +52,10 @@ class Contract(metaclass=ContractMeta):
         mark(*t)
         if len(t) == 0:
             CallStacks.return_(None)
+            return
         return CallStacks.return_(*t)
+
+    def factory_(self, type_, value):
+        n_map = {"int": "Int"}
+        name = n_map[type_]
+        return Factory.build(name, value)

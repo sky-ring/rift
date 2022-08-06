@@ -1,16 +1,16 @@
-import unittest
-
-from dbuilder import method, Cond, Engine
+from dbuilder import Cond, method
 from dbuilder.func.contract import Contract
 from dbuilder.types import Cell, Slice
 
+from .util import compile
+
 
 class SimpleStorage(Contract):
-    @method
+    @method()
     def copy_num(self, val: int) -> tuple[int, int]:
         return val, val
 
-    @method
+    @method()
     def double_the_num(self, val: int) -> int:
         return val + 2 + 3
 
@@ -50,12 +50,5 @@ class SimpleStorage(Contract):
         return
 
 
-class CompileTestCase(unittest.TestCase):
-    def test_compile(self):
-        t = Engine.patched(SimpleStorage)
-        compiled = Engine.compile(t)
-        print(compiled.to_func())
-
-
-if __name__ == "__main__":
-    unittest.main()
+def test_compile():
+    compile(SimpleStorage)

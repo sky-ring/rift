@@ -1,4 +1,4 @@
-from dbuilder.ast import Node
+from dbuilder.ast.types import Node
 
 
 class AST:
