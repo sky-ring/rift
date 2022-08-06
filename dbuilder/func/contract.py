@@ -4,6 +4,7 @@ from dbuilder.core.entity import mark
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.func.meta_contract import ContractMeta
 from dbuilder.types import Cell, Slice
+from dbuilder.core.factory import Factory
 
 
 class Contract(metaclass=ContractMeta):
@@ -53,3 +54,8 @@ class Contract(metaclass=ContractMeta):
             CallStacks.return_(None)
             return
         return CallStacks.return_(*t)
+
+    def factory_(self, type_, value):
+        n_map = {'int': "Int"}
+        name = n_map[type_]
+        return Factory.build(name, value)

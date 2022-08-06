@@ -1128,3 +1128,6 @@ class Stdlib(Library):
     @asm()
     def store_builder(self, to: Builder, from_: Builder) -> Builder:
         return "STBR"
+
+
+std = Stdlib()

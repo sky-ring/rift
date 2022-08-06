@@ -10,6 +10,9 @@ from dbuilder.core.utils import init_abstract_type
 class Engine(object):
     """Engine responsible for compiling contracts."""
 
+    VERBOSE = 0
+    _cache = {}
+
     @staticmethod
     def compile(contract):
         inst = contract()
@@ -83,6 +86,8 @@ class Engine(object):
         src = inspect.getsource(contract)
         x = ast.parse(src)
         patched_ast = patch(x)
+        if Engine.VERBOSE > 0:
+            Engine._cache[contract.__name__] = patched_ast
         exec(compile(patched_ast, "func-patching", "exec"), m)
         return m[contract.__name__]
 

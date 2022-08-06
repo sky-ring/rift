@@ -106,6 +106,9 @@ class Entity(Node):
     def __repr__(self):
         if self.NAMED:
             return self.name
+        return self._repr_()
+
+    def _repr_(self):
         return repr(self.data)
 
     def __assign__(self, v):

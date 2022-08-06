@@ -1,12 +1,25 @@
 from dbuilder.core import Entity
 from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import TypedInvokable, typed_invokable
+from dbuilder.ast.types import Expr
 
 
 class Int(Entity):
+    def __init__(self, value, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.value = value
+        self.data = Expr.const(value)
+
+    @classmethod
+    def abstract_init(cls, *args, **kwargs) -> "Int":
+        return cls(0, *args, **kwargs)
+
     @classmethod
     def type_name(cls) -> str:
         return "int"
+
+    def _repr_(self):
+        return str(self.value)
 
 
 class Slice(Entity):
