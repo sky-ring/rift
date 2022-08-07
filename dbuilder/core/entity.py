@@ -118,9 +118,8 @@ class Entity(Node):
                 v,
                 Expr.variable(self.name),
             )
-            return Entity(
-                name=v,
-            )
+            t = type(self)
+            return t.abstract_init(name=v)
         if self.has_expr:
             _x = getattr(self, "__expr")
             s: Statement = Node.find(_x)

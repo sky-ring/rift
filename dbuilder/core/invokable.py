@@ -4,6 +4,7 @@ from dbuilder.ast import CallStacks
 from dbuilder.ast.types import Expr, Statement
 from dbuilder.core.factory import Factory
 from dbuilder.core.mark import mark
+from dbuilder.core.utils import init_abstract_type
 
 
 class InvokableFunc:
@@ -37,9 +38,12 @@ class InvokableBinder:
 
     def __call__(self, *args, **kwargs):
         mark(*args)
-        e = Factory.build(
-            "Entity",
-            Expr.call_expr(
+        rt = None
+        if self.method_annotations is not None:
+            rt = self.method_annotations.get("return", None)
+        e = init_abstract_type(
+            rt,
+            data=Expr.call_expr(
                 self.entity,
                 self.name,
                 *args,
@@ -77,6 +81,7 @@ def typed_invokable_(func, name=None, return_=None):
     def new_f(*args, **kwargs):
         nonlocal name
         nonlocal return_
+        mark(*args)
         self = args[0]
         args = args[1:]
         if return_ is None:

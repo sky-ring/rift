@@ -1,7 +1,7 @@
 from dbuilder.ast.types import Expr
 from dbuilder.core import Entity
 from dbuilder.core.factory import Factory
-from dbuilder.core.invokable import TypedInvokable, typed_invokable
+from dbuilder.core.invokable import typed_invokable
 
 
 class Int(Entity):
@@ -31,8 +31,21 @@ class Slice(Entity):
     def coin(self) -> int:
         pass
 
+    @typed_invokable(name="load_uint_")
+    def uint_(self, bits: int) -> int:
+        pass
+
+    @typed_invokable(name="preload_uint")
     def uint(self, bits: int) -> int:
-        return TypedInvokable("load_uint_", self, return_=int)(bits)
+        pass
+
+    @typed_invokable(name="load_int_")
+    def int_(self, bits: int) -> int:
+        pass
+
+    @typed_invokable(name="preload_int")
+    def int(self, bits: int) -> int:
+        pass
 
 
 class Cont(Entity):
@@ -51,6 +64,10 @@ class Cell(Entity):
     @classmethod
     def type_name(cls) -> str:
         return "cell"
+
+    @typed_invokable(name="begin_parse")
+    def parse(self) -> Slice:
+        pass
 
 
 class Dict(Cell):

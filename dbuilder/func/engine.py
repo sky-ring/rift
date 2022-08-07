@@ -1,5 +1,8 @@
 import ast
 import inspect
+import textwrap
+
+import yaml
 
 from dbuilder.ast import CallStacks, CompiledContract, patch
 from dbuilder.core import (
@@ -20,8 +23,44 @@ class Engine(object):
     VERBOSE = 0
     _cache = {}
 
-    @staticmethod
-    def compile(contract):
+    @classmethod
+    def handle_docs(cls, contract, doc_string: str):
+        if doc_string is None or doc_string.lstrip() == "":
+            return
+        d = textwrap.dedent(doc_string)
+        lines = d.splitlines()
+        idx = lines.index("# config") if "# config" in lines else -1
+        if idx != -1:
+            config_lines = lines[idx + 1 :]
+            cfg = yaml.safe_load("\n".join(config_lines))
+            cls.handle_config(contract, cfg)
+
+    @classmethod
+    def handle_config(cls, contract, cfg):
+        for data_name in cfg["get-methods"]:
+            model = contract.data
+            annots = {
+                "return": model.annotations[data_name],
+            }
+            annots["_method"] = {
+                "impure": False,
+                "inline": False,
+                "inline_ref": False,
+                "method_id": True,
+                "method_id_v": None,
+            }
+            name = f"get_{data_name}"
+            CallStacks.declare_method(
+                name,
+                [],
+                annots,
+            )
+            r = model.get(data_name)
+            contract.ret_(None, r)
+            CallStacks.end_method(name)
+
+    @classmethod
+    def compile(cls, contract):
         inst = contract()
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
@@ -31,7 +70,7 @@ class Engine(object):
             if name == "__annotations__":
                 # TODO: Handle global and state variables
                 pass
-            if is_method(value):
+            elif is_method(value):
                 func_args = value.__args__
                 names = value.__names__
                 annots = value.__annotations__
@@ -79,6 +118,8 @@ class Engine(object):
                 )
                 value(inst, *args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)
+            elif name == "__doc__":
+                cls.handle_docs(contract, value)
 
         contract_ = CallStacks.get_contract(contract.__name__)
         return CompiledContract(contract_)

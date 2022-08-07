@@ -4,7 +4,7 @@ import traceback
 from dbuilder import Engine
 
 
-def compile(contract, print_=True, ast=True):
+def compile(contract, print_=True, ast=False):
     state, code, err = safe_compile(contract)
     if ast:
         print()

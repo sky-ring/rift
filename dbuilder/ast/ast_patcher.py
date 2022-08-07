@@ -18,6 +18,21 @@ class Transformer(ast.NodeTransformer):
         ast.NodeTransformer.generic_visit(self, node)
         return node
 
+    def visit_Assert(self, node: ast.Assert) -> Any:
+        u_node = ast.Expr(
+            value=ast.Call(
+                func=ast.Attribute(
+                    value=ast.Name(id="self", ctx=ast.Load()),
+                    attr="throw_unless",
+                    ctx=ast.Load(),
+                ),
+                args=[node.msg, node.test],
+                keywords=[],
+            ),
+        )
+        ast.fix_missing_locations(u_node)
+        return u_node
+
     def visit_Return(self, node: ast.Return) -> Any:
         v = node.value
         if v is None:
