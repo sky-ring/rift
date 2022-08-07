@@ -153,6 +153,11 @@ class Entity(Node):
             for _ in range(self._unpack_len):
                 yield Entity()
 
+    def __rem_name__(self):
+        if self.NAMED:
+            return self.name
+        return None
+
     @classmethod
     def type_name(cls) -> str:
         return ""

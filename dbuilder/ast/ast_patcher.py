@@ -7,6 +7,7 @@ https://gist.github.com/RyanKung/4830d6c8474e6bcefa4edd13f122b4df
 """
 
 import ast
+from copy import deepcopy
 from typing import Any
 
 
@@ -34,7 +35,6 @@ class Transformer(ast.NodeTransformer):
         )
         ast.fix_missing_locations(u_node)
         return u_node
-        pass
 
     def visit_Assign(self, node):
         tg = node.targets[0]
@@ -113,7 +113,11 @@ class Transformer(ast.NodeTransformer):
             )
             nodes = [node, p_expr, e_expr, a_expr]
         else:
-            target = node.targets[0].id
+            target = node.targets[0]
+            if hasattr(target, "id"):
+                tg = target.id
+            else:
+                tg = None
             nodes = [node]
             if isinstance(node.value, ast.Constant):
                 if isinstance(node.value.value, int):
@@ -126,19 +130,40 @@ class Transformer(ast.NodeTransformer):
                         args=[ast.Constant("int"), node.value],
                         keywords=[],
                     )
-
+            nt = deepcopy(target)
+            nt.ctx = ast.Load()
+            if isinstance(target, ast.Attribute):
+                rem_expr = ast.Call(
+                    func=ast.Attribute(
+                        value=nt,
+                        attr="__rem_name__",
+                        ctx=ast.Load(),
+                    ),
+                    args=[],
+                    keywords=[],
+                )
+                r_expr = ast.Assign(
+                    targets=[ast.Name(id="__rem__", ctx=ast.Store())],
+                    value=rem_expr,
+                )
+            elif isinstance(target, ast.Name):
+                r_expr = ast.Assign(
+                    targets=[ast.Name(id="__rem__", ctx=ast.Store())],
+                    value=ast.Constant(value=target.id, kind=None),
+                )
+            nodes.insert(0, r_expr)
             c_expr = ast.Call(
                 func=ast.Attribute(
-                    value=ast.Name(id=target, ctx=ast.Load()),
+                    value=nt,
                     attr="__assign__",
                     ctx=ast.Load(),
                 ),
-                args=[ast.Constant(value=str(target), kind=None)],
+                args=[ast.Name(id="__rem__", ctx=ast.Load())],
                 keywords=[],
             )
             if isinstance(node.value, ast.Name):
                 a_expr = ast.Assign(
-                    targets=[ast.Name(id=target, ctx=ast.Store())],
+                    targets=[target],
                     value=c_expr,
                 )
             else:

@@ -3,6 +3,7 @@ from functools import partial
 from dbuilder.ast import CallStacks
 from dbuilder.ast.types import Expr, Statement
 from dbuilder.core.factory import Factory
+from dbuilder.core.mark import mark
 from dbuilder.core.utils import init_abstract_type
 
 
@@ -21,6 +22,7 @@ def method_(func, name=None):
         return func
 
     def nf(*args, **kwargs):
+        mark(*args)
         slf = args[0]
         if "NO_INTERCEPT" in kwargs:
             kwargs.pop("NO_INTERCEPT")
@@ -83,6 +85,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
         return func
 
     def nf(*args, **kwargs):
+        mark(*args)
         slf = args[0]
         if "NO_INTERCEPT" in kwargs:
             kwargs.pop("NO_INTERCEPT")

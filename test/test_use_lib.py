@@ -27,6 +27,7 @@ class Contract2(Contract):
         o = std.load_uint_(cs, 10)
         x = 10
         y = 15
+        x = x + 1
         min, max = std.minmax(y, x)
 
 
