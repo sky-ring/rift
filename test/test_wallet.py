@@ -11,9 +11,6 @@ class SimpleWallet(Contract):
         self,
         in_msg: Slice,
     ) -> None:
-        super(SimpleWallet, self).external_receive(
-            in_msg,
-        )
         signature = in_msg.load_bits_(512)
         cs = in_msg
         msg_seqno = cs.load_uint_(32)

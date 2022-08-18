@@ -9,7 +9,7 @@ import click
 from tomlkit import parse
 
 from dbuilder import Engine
-from dbuilder.cli import entry
+from dbuilder.cli.entry import entry
 from dbuilder.func.meta_contract import ContractMeta
 
 
@@ -46,8 +46,16 @@ def build():
             t = Engine.patch(contract, module.__dict__)
             compiled = Engine.compile(t)
             fc = compiled.to_func()
-            name = contract.__name__
-            name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
+
+            name = None
+            c = doc.get("contracts")
+            if c is not None:
+                ct = c.get(contract.__name__)
+                if ct is not None:
+                    name = ct.get("name")
+            if name is None:
+                name = contract.__name__
+                name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
             f = open(p_join(b_dir, f"{name}.fc"), "w")
             f.write(fc)
             f.close()
