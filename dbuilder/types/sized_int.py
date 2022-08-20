@@ -1,8 +1,33 @@
-from dbuilder.types.types import Int
+from dbuilder.core import Entity
+from dbuilder.types.types import Builder, Int, Slice
 
 
 class SizedIntType(Int):
-    pass
+    @classmethod
+    def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        if cls.__signed__:
+            b = to.int(value, cls.__bits__)
+        else:
+            b = to.uint(value, cls.__bits__)
+        return b
+
+    @classmethod
+    def __deserialize__(
+        cls, from_: "Slice", name: str = None, inplace: bool = True,
+    ):
+        if cls.__signed__:
+            if inplace:
+                v = from_.int_(cls.__bits__)
+            else:
+                v = from_.int(cls.__bits__)
+        else:
+            if inplace:
+                v = from_.uint_(cls.__bits__)
+            else:
+                v = from_.uint(cls.__bits__)
+        if name is not None:
+            v.__assign__(name)
+        return v
 
 
 class _IntTypeBuilder(type):

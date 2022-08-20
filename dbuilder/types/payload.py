@@ -1,6 +1,5 @@
 from dbuilder.core.loop import while_
 from dbuilder.library.std import std
-from dbuilder.types.sized_int import SizedIntType
 from dbuilder.types.types import Slice
 
 
@@ -16,14 +15,9 @@ class Payload:
 
     def load(self):
         for k, v in self.annotations.items():
-            if issubclass(v, SizedIntType):
-                name = f"{self.f_name}_{k}"
-                if v.__signed__:
-                    v = self.data.int_(v.__bits__)
-                else:
-                    v = self.data.uint_(v.__bits__)
-                v.__assign__(name)
-                setattr(self, k, v)
+            name = f"{self.f_name}_{k}"
+            n = v.__deserialize__(self.data, name=name, inplace=True)
+            setattr(self, k, n)
 
     def __assign__(self, name):
         self.f_name = name
@@ -38,11 +32,7 @@ class Payload:
         if after is None:
             return std.slice_hash(self.cp)
         for k, v in self.annotations.items():
-            if issubclass(v, SizedIntType):
-                if v.__signed__:
-                    self.cp.int_(v.__bits__)
-                else:
-                    self.cp.uint_(v.__bits__)
+            v.__deserialize__(self.cp, inplace=True)
             if k == after:
                 break
         return std.slice_hash(self.cp)

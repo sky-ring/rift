@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 
-from dbuilder.core import Entity
-
 if TYPE_CHECKING:
-    from dbuilder.types.types import Slice, Cont, Cell, Tuple
+    from dbuilder.types.types import Slice
 
 from dbuilder.core.invokable import typed_invokable
+from dbuilder.types.bases.entity_base import _EntityBase
 
 
-class _CellBase(Entity):
+class _CellBase(_EntityBase):
     @typed_invokable(name="begin_parse")
     def parse(self) -> "Slice":
         pass

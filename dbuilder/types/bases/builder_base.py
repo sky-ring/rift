@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 
-from dbuilder.core import Entity
-
 if TYPE_CHECKING:
     from dbuilder.types.types import Slice, Cell, Builder
 
 from dbuilder.core.invokable import typed_invokable
+from dbuilder.types.bases.entity_base import _EntityBase
 
 
-class _BuilderBase(Entity):
+class _BuilderBase(_EntityBase):
     @typed_invokable(name="store_maybe_ref")
     def write_maybe(self, c: "Cell") -> "Builder":
         pass

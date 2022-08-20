@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 
-from dbuilder.core import Entity
-
 if TYPE_CHECKING:
     from dbuilder.types.types import Slice, Cont, Cell, Tuple
 
 from dbuilder.core.invokable import typed_invokable
+from dbuilder.types.bases.entity_base import _EntityBase
 
 
-class _SliceBase(Entity):
+class _SliceBase(_EntityBase):
     @typed_invokable(name="load_coins_")
     def coin(self) -> int:
         pass

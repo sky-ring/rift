@@ -1,5 +1,5 @@
-from dbuilder.core import Entity
+from dbuilder.types.bases.entity_base import _EntityBase
 
 
-class _IntBase(Entity):
+class _IntBase(_EntityBase):
     pass
