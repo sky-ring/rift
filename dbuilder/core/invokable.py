@@ -64,6 +64,8 @@ class Invokable(InvokableBinder):
 
 class TypedInvokable(Invokable):
     def __init__(self, name, entity, return_) -> None:
+        if return_ in Factory.engines:
+            return_ = Factory.engines[return_]
         super().__init__(
             name,
             entity,
