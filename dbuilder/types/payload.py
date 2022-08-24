@@ -48,6 +48,9 @@ class Payload:
 
     def as_builder(self):
         builder = std.begin_cell()
+        return self.to_builder(builder)
+
+    def to_builder(self, builder):
         for k, v in self.annotations.items():
             c_v = getattr(self, k)
             builder = v.__serialize__(builder, c_v)
@@ -60,8 +63,7 @@ class Payload:
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         p: "Payload" = value
-        c = p.as_cell()
-        b = to.ref(c)
+        b = p.to_builder(to)
         return b
 
     @classmethod
