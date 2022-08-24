@@ -1,6 +1,6 @@
 from dbuilder.core.loop import while_
 from dbuilder.library.std import std
-from dbuilder.types.types import Slice, Entity, Cell, Builder
+from dbuilder.types.types import Builder, Cell, Entity, Slice
 
 
 class Payload:
@@ -66,7 +66,10 @@ class Payload:
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         p: "Payload" = cls(from_, name=name)
         p.load()

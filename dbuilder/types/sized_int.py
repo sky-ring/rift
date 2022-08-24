@@ -13,7 +13,10 @@ class SizedIntType(Int):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         if cls.__signed__:
             if inplace:

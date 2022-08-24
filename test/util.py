@@ -1,10 +1,20 @@
 import ast
+import os
 import traceback
+from pathlib import Path
 
 from dbuilder import Engine
 
 
-def compile(contract, print_=True, ast=False):
+def write(target: str, content: str):
+    p = Path(target)
+    if not p.parent.exists():
+        os.makedirs(p.parent.absolute(), exist_ok=True)
+    with open(target, "w") as f:
+        f.write(content)
+
+
+def compile(contract, print_=True, ast=False, file_=True):
     state, code, err = safe_compile(contract)
     if ast:
         print()
@@ -13,6 +23,8 @@ def compile(contract, print_=True, ast=False):
         # line cleaner
         print()
         print(code)
+        if file_:
+            write(f".build/{contract.__name__.lower()}.fc", code)
     if state == 0:
         print(err)
     assert state == 1

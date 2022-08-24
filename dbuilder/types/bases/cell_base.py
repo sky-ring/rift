@@ -55,7 +55,10 @@ class _CellBase(_EntityBase):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         if inplace:
             return from_.ref_()

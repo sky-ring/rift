@@ -2,7 +2,6 @@ from collections.abc import MutableMapping
 
 
 class IntDict(MutableMapping):
-
     def __init__(self, default_=0, *args, **kwargs):
         self.store = {}
         self.default = default_

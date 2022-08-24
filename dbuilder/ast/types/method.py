@@ -17,7 +17,7 @@ class Method(Node):
         self.annotations = annotations
         self.statements = []
         self.active_statement = []
-        self.scope = {'defs': IntDict()}
+        self.scope = {"defs": IntDict()}
 
     def add_statement(self, statement):
         statement._inject_method(self)

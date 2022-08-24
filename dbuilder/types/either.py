@@ -1,10 +1,11 @@
-from dbuilder.core import Entity
-from dbuilder.types.types import Builder, Slice, Cell
-from dbuilder.types.bases.entity_base import _EntityBase
-from dbuilder.library.std import std
-from dbuilder.core.condition import Cond
-from dbuilder.types.ref import Ref
 from typing import TYPE_CHECKING
+
+from dbuilder.core import Entity
+from dbuilder.core.condition import Cond
+from dbuilder.library.std import std
+from dbuilder.types.bases.entity_base import _EntityBase
+from dbuilder.types.ref import Ref
+from dbuilder.types.types import Builder, Cell, Slice
 
 if TYPE_CHECKING:
     from dbuilder.types.payload import Payload
@@ -35,7 +36,10 @@ class EitherType(_EntityBase):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         base1 = cls.__base1__
         base2 = cls.__base2__
@@ -59,7 +63,9 @@ class EitherType(_EntityBase):
 
 
 class _EitherTypeBuilder(type):
-    def __new__(cls, base1: type = Cell, base2: type = Ref(Cell)):
+    def __new__(cls, base1: type = Cell, base2: type = None):
+        if base2 is None:
+            base2 = Ref(Cell)
         return super().__new__(
             cls,
             "Either_%s_%s" % (base1.__name__, base2.__name__),
@@ -71,5 +77,9 @@ class _EitherTypeBuilder(type):
         )
 
 
-def Either(base1: type = Cell, base2: type = Ref(Cell)):
-    return _EitherTypeBuilder.__new__(_EitherTypeBuilder, base1=base1, base2=base2)
+def Either(base1: type = Cell, base2: type = None):
+    return _EitherTypeBuilder.__new__(
+        _EitherTypeBuilder,
+        base1=base1,
+        base2=base2,
+    )

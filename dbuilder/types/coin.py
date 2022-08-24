@@ -10,7 +10,10 @@ class Coin(Int):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         # TODO: HANDLE INPLACE STUFF
         v = from_.coin()

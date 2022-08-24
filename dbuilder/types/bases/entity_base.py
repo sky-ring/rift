@@ -13,17 +13,22 @@ class _EntityBase(Entity):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         pass
 
     @classmethod
     def __predefine__(
-        cls, name: str = None,
+        cls,
+        name: str = None,
     ):
         if name is None:
             return
         from dbuilder.library.std import std
+
         v = std.null()
         v.__assign__(name)
         v.data.annotations["return"] = cls

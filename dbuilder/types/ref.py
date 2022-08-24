@@ -1,7 +1,8 @@
-from dbuilder.core import Entity
-from dbuilder.types.types import Builder, Slice, Cell
-from dbuilder.types.bases.entity_base import _EntityBase
 from typing import TYPE_CHECKING
+
+from dbuilder.core import Entity
+from dbuilder.types.bases.entity_base import _EntityBase
+from dbuilder.types.types import Builder, Cell, Slice
 
 if TYPE_CHECKING:
     from dbuilder.types.payload import Payload
@@ -21,7 +22,10 @@ class RefType(_EntityBase):
 
     @classmethod
     def __deserialize__(
-        cls, from_: "Slice", name: str = None, inplace: bool = True,
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
     ):
         base = cls.__basex__
         if inplace:
