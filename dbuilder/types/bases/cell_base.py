@@ -1,7 +1,9 @@
+import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from dbuilder.types.types import Slice
+    from dbuilder.core import Entity
+    from dbuilder.types.types import Slice, Builder
 
 from dbuilder.core.invokable import typed_invokable
 from dbuilder.types.bases.entity_base import _EntityBase
@@ -46,3 +48,15 @@ class _CellBase(_EntityBase):
     @typed_invokable(name="set_code")
     def set_code(self) -> None:
         pass
+
+    @classmethod
+    def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        return to.ref(value)
+
+    @classmethod
+    def __deserialize__(
+        cls, from_: "Slice", name: str = None, inplace: bool = True,
+    ):
+        if inplace:
+            return from_.ref_()
+        return from_.ref()
