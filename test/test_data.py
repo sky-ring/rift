@@ -24,6 +24,8 @@ class SimpleData(Contract):
         public_key: SizedInt(256)
         ref: Ref(Cell)
         key: Ref(KeyPair)
+        maybe_cell: Maybe(Ref(Cell))
+        maybe_key: Maybe(KeyPair)
 
     data: Data
 
@@ -32,6 +34,7 @@ class SimpleData(Contract):
         in_msg: Slice,
     ) -> None:
         self.data.load()
+        self.data.maybe_key.pub = 1
         pub_k = self.data.key.pub
         self.data.save()
 
