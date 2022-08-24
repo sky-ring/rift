@@ -10,6 +10,8 @@ class Expr:
         self.type = type
         self.args = args
         self.annotations = annotations
+        if self.annotations:
+            self.annotations = {**self.annotations}
 
     @staticmethod
     def call_expr(operand, method, *args, annotations=None):

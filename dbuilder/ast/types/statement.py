@@ -11,11 +11,28 @@ class Statement(Node):
     EXPR = 4
     ASSIGN = 5
     M_ASSIGN = 6
+    # local
+    __n_def = 0
 
     def __init__(self, type, args):
         super().__init__()
         self.type = type
         self.args = args
+        self.__n_def = 0
+
+    def _inject_method(self, mtd):
+        self.mtd = mtd
+        if self.type == Statement.ASSIGN:
+            self.__n_def = self.mtd.scope["defs"][self.args[0]]
+            self.mtd.scope["defs"][self.args[0]] += 1
+
+    def refresh(self):
+        if self.mtd and self.type == Statement.ASSIGN:
+            self.__n_def = self.mtd.scope["defs"][self.args[0]]
+            self.mtd.scope["defs"][self.args[0]] += 1
+
+    def _is_def(self):
+        return self.__n_def != 0
 
     def add_statement(self, statement):
         pass
@@ -61,8 +78,11 @@ class Statement(Node):
                 type_hint = _type_name(type_hint)
             else:
                 type_hint = "var"
+            type_hint += " "
+            if self._is_def():
+                type_hint = ""
             printer.print(
-                "{type_} {v} = {expr};",
+                "{type_}{v} = {expr};",
                 type_=type_hint,
                 v=self.args[0],
                 expr=expr,

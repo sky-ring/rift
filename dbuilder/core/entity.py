@@ -125,6 +125,7 @@ class Entity(Node):
             s: Statement = Node.find(_x)
             s.args = (v, s.args[0])
             s.type = Statement.ASSIGN
+            s.refresh()
         else:
             # TODO: Most likely this never occurs (cleanup)
             CallStacks.add_statement(Statement.ASSIGN, v, self.data)

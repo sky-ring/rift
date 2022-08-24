@@ -32,7 +32,7 @@ def method_(func, name=None):
             "__intercepted__",
         ):
             annotations = func.__annotations__
-            annotations = annotations if annotations else {}
+            annotations = {**annotations} if annotations else {}
             ret = annotations.get("return", None)
             e = init_abstract_type(
                 ret,
@@ -95,7 +95,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
             "__intercepted__",
         ):
             annotations = func.__annotations__
-            annotations = annotations if annotations else {}
+            annotations = {**annotations} if annotations else {}
             ret = annotations.get("return", None)
             e = init_abstract_type(
                 ret,
@@ -123,6 +123,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
     setattr(nf, "__args__", func.__code__.co_argcount)
     annotations = func.__annotations__
     annotations = annotations or {}
+    annotations = {**annotations}
     annotations["_fname"] = name
     setattr(nf, "__annotations__", annotations)
     setattr(

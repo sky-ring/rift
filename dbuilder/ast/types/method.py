@@ -1,3 +1,4 @@
+from dbuilder.ast.int_dict import IntDict
 from dbuilder.ast.printer import Printer
 from dbuilder.ast.types.node import Node
 from dbuilder.ast.types.statement import Statement
@@ -7,6 +8,7 @@ from dbuilder.ast.utils import _type_name
 class Method(Node):
     statements: list[Statement] = []
     active_statement: list[Statement] = []
+    scope: dict = {}
 
     def __init__(self, name, args, annotations):
         super().__init__()
@@ -15,8 +17,10 @@ class Method(Node):
         self.annotations = annotations
         self.statements = []
         self.active_statement = []
+        self.scope = {'defs': IntDict()}
 
     def add_statement(self, statement):
+        statement._inject_method(self)
         if len(self.active_statement) > 0:
             active = self.active_statement[0]
             active.add_statement(statement)

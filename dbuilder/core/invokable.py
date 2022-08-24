@@ -88,7 +88,7 @@ def typed_invokable_(func, name=None, return_=None):
         args = args[1:]
         if return_ is None:
             annotations = func.__annotations__
-            annotations = annotations if annotations else {}
+            annotations = {**annotations} if annotations else {}
             return_ = annotations.get("return", None)
         if name is None:
             name = func.__name__
