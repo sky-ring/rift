@@ -26,6 +26,7 @@ class SimpleData(Contract):
         key: Ref(KeyPair)
         maybe_cell: Maybe(Ref(Cell))
         maybe_key: Maybe(KeyPair)
+        some_either: Either(KeyPair, Ref(KeyPair))
 
     data: Data
 
