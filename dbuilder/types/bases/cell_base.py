@@ -61,5 +61,9 @@ class _CellBase(_EntityBase):
         inplace: bool = True,
     ):
         if inplace:
-            return from_.ref_()
-        return from_.ref()
+            v = from_.ref_()
+        else:
+            v = from_.ref()
+        if name is not None:
+            v.__assign__(name)
+        return v

@@ -1,11 +1,12 @@
 from dbuilder.func.contract import Contract
 from dbuilder.library.std import std
 from dbuilder.types import Cell, Slice
-from dbuilder.types.coin import Coin
 from dbuilder.types.addr import MsgAddress
+from dbuilder.types.bool import Bool
+from dbuilder.types.coin import Coin
+from dbuilder.types.constructor import Constructor
 from dbuilder.types.either import Either
 from dbuilder.types.maybe import Maybe
-from dbuilder.types.bool import Bool
 from dbuilder.types.model import Model
 from dbuilder.types.payload import Payload
 from dbuilder.types.ref import Ref
@@ -40,7 +41,7 @@ class CurrencyCollection(Payload):
 
 
 class InternalMsgInfo(Payload):
-    __tag__ = '$0'
+    __tag__ = "$0"
     ihr_disabled: Bool
     bounce: Bool
     bounced: Bool
@@ -54,25 +55,21 @@ class InternalMsgInfo(Payload):
 
 
 class InboundExtMsgInfo(Payload):
-    __tag__ = '$10'
+    __tag__ = "$10"
     src: MsgAddress
     dest: MsgAddress
     import_fee: Coin
 
 
 class OutboundExtMsgInfo(Payload):
-    __tag__ = '$11'
+    __tag__ = "$11"
     src: MsgAddress
     dest: MsgAddress
     created_lt: SizedInt(64)
     created_at: SizedInt(32)
 
 
-class CommonMsgInfo(Payload):
-    # TODO: Add Support of Multiple Constructors
-    int_msg: InternalMsgInfo
-    inbound_ext: InboundExtMsgInfo
-    pass
+CommonMsgInfo = Constructor(InternalMsgInfo, InboundExtMsgInfo)
 
 
 class Message(Payload):

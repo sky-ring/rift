@@ -52,6 +52,11 @@ class RefType(_EntityBase):
         elif hasattr(base, "__magic__") and base.__magic__ == 0xA935E5:
             base.__predefine__(name)
 
+    @classmethod
+    def type_name(cls) -> str:
+        base = cls.__basex__
+        return base.type_name()
+
 
 class _RefTypeBuilder(type):
     def __new__(cls, base_cls=Cell):

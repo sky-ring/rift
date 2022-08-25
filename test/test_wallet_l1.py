@@ -45,7 +45,7 @@ class SimpleWallet(Contract):
         ), 34
         std.accept_message()
         with msg.iter_refs():
-            mode = msg.data.uint_(8)
+            mode = msg.uint_(8)
             std.send_raw_message(msg.ref(), mode)
         self.data.seq_no = self.data.seq_no + 1
         self.data.save()

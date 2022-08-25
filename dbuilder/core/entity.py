@@ -131,6 +131,7 @@ class Entity(Node):
             CallStacks.add_statement(Statement.ASSIGN, v, self.data)
         self.NAMED = True
         self.name = v
+        return self
 
     def __massign__(self, vs, xs):
         if self.has_expr:

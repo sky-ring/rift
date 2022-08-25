@@ -1,13 +1,13 @@
+from dbuilder.core.condition import Cond
 from dbuilder.core.loop import while_
 from dbuilder.library.std import std
-from dbuilder.core.condition import Cond
 from dbuilder.types.types import Builder, Cell, Entity, Slice
 
 
 class Payload:
     __magic__ = 0xA935E5
-    __tag__ = '_'
-    data: Slice
+    __tag__ = "_"
+    __data__: Slice
 
     def __init__(self, data_slice: Slice = None, name=None):
         # TODO: Handle the inheritance of the annotatins
@@ -20,36 +20,36 @@ class Payload:
             self.data_init(data_slice)
 
     def data_init(self, data_slice: Slice):
-        self.data = data_slice
-        if not self.data.NAMED:
-            self.data.__assign__(f"{self.f_name}_orig")
-        self.cp = self.data.__assign__(f"{self.f_name}_cp")
+        self.__data__ = data_slice
+        if not self.__data__.NAMED:
+            self.__data__.__assign__(f"{self.f_name}_orig")
+        self.cp = self.__data__.__assign__(f"{self.f_name}_cp")
 
-    def load(self):
+    def load(self, proc_tag=True):
         tag_len, tag = self.tag_data()
-        if tag_len == 0:
+        if (not proc_tag) or tag_len == 0:
             self.load_body()
-            return 
-        read_tag = self.data.int(tag_len)
+            return
+        read_tag = self.__data__.int(tag_len)
         with Cond() as c:
             c.match(read_tag == tag)
-            self.skip_tag(self.data)
+            self.skip_tag(self.__data__)
             self.load_body()
 
     def load_body(self):
         for k, v in self.annotations.items():
             name = f"{self.f_name}_{k}"
-            n = v.__deserialize__(self.data, name=name, inplace=True)
+            n = v.__deserialize__(self.__data__, name=name, inplace=True)
             setattr(self, k, n)
 
     def __assign__(self, name):
         self.f_name = name
 
     def iter_refs(self):
-        return while_(self.data.slice_refs())
+        return while_(self.__data__.slice_refs())
 
     def ref(self):
-        return self.data.load_ref_()
+        return self.__data__.load_ref_()
 
     def hash(self, after=None):
         if after is None:
@@ -64,36 +64,39 @@ class Payload:
         builder = std.begin_cell()
         return self.to_builder(builder)
 
-    def write_tag(self, builder):
-        tag_len, tag = self.tag_data()
+    @classmethod
+    def write_tag(cls, builder):
+        tag_len, tag = cls.tag_data()
         if tag_len > 0:
             builder = builder.uint(tag, tag_len)
         return builder
 
-    def tag_data(self):
+    @classmethod
+    def tag_data(cls):
         _tag_len = 0
         tag = -1
-        if self.__tag__.startswith("#"):
+        if cls.__tag__.startswith("#"):
             # hex
-            t = self.__tag__.replace("#", "")
+            t = cls.__tag__.replace("#", "")
             _tag_len = len(t) * 4
             tag = int(t, 16)
-        elif self.__tag__.startswith("$"):
+        elif cls.__tag__.startswith("$"):
             # bin
-            t = self.__tag__.replace("$", "")
+            t = cls.__tag__.replace("$", "")
             _tag_len = len(t)
             tag = int(t, 2)
-        elif self.__tag__.startswith("|"):
+        elif cls.__tag__.startswith("|"):
             # this is the auto tag
             # would be better if we'd calculate
             # automatically
-            t = self.__tag__.replace("|", "")
+            t = cls.__tag__.replace("|", "")
             _tag_len = 32
             tag = int(t, 16)
         return _tag_len, tag
 
-    def skip_tag(self, from_):
-        tag_len, _ = self.tag_data()
+    @classmethod
+    def skip_tag(cls, from_):
+        tag_len, _ = cls.tag_data()
         from_.skip_bits_(tag_len)
 
     def to_builder(self, builder):
@@ -119,9 +122,13 @@ class Payload:
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        **kwargs,
     ):
         p: "Payload" = cls(from_, name=name)
-        p.load()
+        tag = True
+        if "tag" in kwargs:
+            tag = kwargs["tag"]
+        p.load(proc_tag=tag)
         return p
 
     @classmethod
@@ -131,3 +138,10 @@ class Payload:
         for k, v in cls.__annotations__.items():
             v_name = f"{name}_{k}"
             v.__predefine__(name=v_name)
+
+    def __getattr__(self, item):
+        return getattr(self.__data__, item)
+
+    @classmethod
+    def type_name(cls) -> str:
+        return "-"
