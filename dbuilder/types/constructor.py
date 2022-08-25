@@ -1,13 +1,8 @@
-from typing import TYPE_CHECKING
-
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
 from dbuilder.library.std import std
 from dbuilder.types.bases.entity_base import _EntityBase
-from dbuilder.types.types import Builder, Cell, Slice
-
-if TYPE_CHECKING:
-    from dbuilder.types.payload import Payload
+from dbuilder.types.types import Builder, Slice
 
 
 class ConstructorType(_EntityBase):
@@ -19,7 +14,9 @@ class ConstructorType(_EntityBase):
 
     @classmethod
     def __serialize__(
-        cls, to: "Builder", value: "ConstructorType",
+        cls,
+        to: "Builder",
+        value: "ConstructorType",
     ) -> "Builder":
         # TODO : Completion
         return to
@@ -33,8 +30,6 @@ class ConstructorType(_EntityBase):
     ):
         bases = cls.__x_bases__
         m = ConstructorType()
-        for base in bases:
-            base.__predefine__(name=name)
         tag = std.null()
         tag.__assign__(f"{name}_tag")
         with Cond() as c:
@@ -45,11 +40,23 @@ class ConstructorType(_EntityBase):
                 n_tag = from_.int_(tag_len)
                 n_tag.__assign__(f"{name}_tag")
                 d = base.__deserialize__(
-                    from_, name=name, inplace=inplace, tag=False,
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    tag=False,
                 )
                 m.bound = d
         m.which = tag
         return m
+
+    @classmethod
+    def __predefine__(
+        cls,
+        name: str = None,
+    ):
+        bases = cls.__x_bases__
+        for base in bases:
+            base.__predefine__(name=name)
 
 
 class _ConstructorTypeBuilder(type):

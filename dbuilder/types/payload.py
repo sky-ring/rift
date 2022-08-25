@@ -1,7 +1,7 @@
 from dbuilder.core.condition import Cond
 from dbuilder.core.loop import while_
 from dbuilder.library.std import std
-from dbuilder.types.types import Builder, Cell, Entity, Slice
+from dbuilder.types.types import Builder, Entity, Slice
 
 
 class Payload:
@@ -25,7 +25,9 @@ class Payload:
             self.__data__.__assign__(f"{self.f_name}_orig")
         self.cp = self.__data__.__assign__(f"{self.f_name}_cp")
 
-    def load(self, proc_tag=True):
+    def load(self, proc_tag=True, master=True):
+        if master:
+            self.__predefine__(name=self.f_name)
         tag_len, tag = self.tag_data()
         if (not proc_tag) or tag_len == 0:
             self.load_body()
@@ -128,7 +130,7 @@ class Payload:
         tag = True
         if "tag" in kwargs:
             tag = kwargs["tag"]
-        p.load(proc_tag=tag)
+        p.load(proc_tag=tag, master=False)
         return p
 
     @classmethod

@@ -161,7 +161,7 @@ class Entity(Node):
 
     @classmethod
     def type_name(cls) -> str:
-        return ""
+        return "var"
 
     @classmethod
     def abstract_init(cls, *args, **kwargs) -> "Entity":

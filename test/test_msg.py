@@ -1,5 +1,4 @@
 from dbuilder.func.contract import Contract
-from dbuilder.library.std import std
 from dbuilder.types import Cell, Slice
 from dbuilder.types.addr import MsgAddress
 from dbuilder.types.bool import Bool

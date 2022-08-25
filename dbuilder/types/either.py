@@ -1,14 +1,8 @@
-from typing import TYPE_CHECKING
-
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.library.std import std
 from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.ref import Ref
 from dbuilder.types.types import Builder, Cell, Slice
-
-if TYPE_CHECKING:
-    from dbuilder.types.payload import Payload
 
 
 class EitherType(_EntityBase):
@@ -50,8 +44,6 @@ class EitherType(_EntityBase):
         m = EitherType()
         m.which = i
         m.which.__assign__(f"{name}_which")
-        base1.__predefine__(name=name)
-        base2.__predefine__(name=name)
         with Cond() as c:
             c.match(i)
             d = base2.__deserialize__(from_, name=name, inplace=inplace)
@@ -60,6 +52,16 @@ class EitherType(_EntityBase):
             d = base1.__deserialize__(from_, name=name, inplace=inplace)
             m.bound = d
         return m
+
+    @classmethod
+    def __predefine__(
+        cls,
+        name: str = None,
+    ):
+        base1 = cls.__base1__
+        base2 = cls.__base2__
+        base1.__predefine__(name=name)
+        base2.__predefine__(name=name)
 
 
 class _EitherTypeBuilder(type):

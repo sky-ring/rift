@@ -1,13 +1,7 @@
-from typing import TYPE_CHECKING
-
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.library.std import std
 from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Cell, Slice
-
-if TYPE_CHECKING:
-    from dbuilder.types.payload import Payload
 
 
 class MaybeType(_EntityBase):
@@ -46,7 +40,6 @@ class MaybeType(_EntityBase):
         m = MaybeType()
         m.has = i
         m.has.__assign__(f"{name}_has")
-        base.__predefine__(name=name)
         with Cond() as c:
             c.match(i)
             d = base.__deserialize__(from_, name=name, inplace=inplace)
@@ -58,7 +51,8 @@ class MaybeType(_EntityBase):
         cls,
         name: str = None,
     ):
-        return
+        base = cls.__basex__
+        base.__predefine__(name=name)
 
     @classmethod
     def type_name(cls) -> str:
