@@ -4,6 +4,7 @@ from dbuilder.core.condition import Cond
 from dbuilder.core.entity import mark
 from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import InvokableFunc
+from dbuilder.core.loop import While
 from dbuilder.func.meta_contract import ContractMeta
 from dbuilder.types import Cell, Slice
 
@@ -63,3 +64,6 @@ class Contract(metaclass=ContractMeta):
 
     def _cond(self):
         return Cond()
+
+    def _while(self, cond):
+        return While(cond)

@@ -28,7 +28,8 @@ def compile(contract, print_=True, ast=False, file_=True):
             write(f".build/{contract.__name__.lower()}.fc", content)
             patched_src = err if state == 1 else code
             write(
-                f".build/{contract.__name__.lower()}.patched.py", patched_src,
+                f".build/{contract.__name__.lower()}.patched.py",
+                patched_src,
             )
     if state == 0:
         print(err)

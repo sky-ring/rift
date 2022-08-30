@@ -8,8 +8,14 @@ https://gist.github.com/RyanKung/4830d6c8474e6bcefa4edd13f122b4df
 
 import ast
 
-from dbuilder.ast.patchers import (AssertPatcher, AssignPatcher, IfPatcher,
-                                   RaisePatcher, ReturnPatcher, WhilePatcher)
+from dbuilder.ast.patchers import (
+    AssertPatcher,
+    AssignPatcher,
+    IfPatcher,
+    RaisePatcher,
+    ReturnPatcher,
+    WhilePatcher,
+)
 
 
 def patch(node):

@@ -8,6 +8,7 @@ class IfPatcher(ast.NodeTransformer):
 
     def visit_If(self, node: ast.If) -> Any:
         # Let's Process the F***ing If
+        # TODO: handle with names
         if_data = []
         current = node
         while current is not None:

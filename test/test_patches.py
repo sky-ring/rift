@@ -12,13 +12,15 @@ class PatchContract(Contract):
         in_msg_full: Cell,
         in_msg_body: Slice,
     ) -> None:
-        a = in_msg_body.int(8)
-        if a == 0:
-            v = a * 2
-        elif a == 2:
-            b = a * 4
-        else:
-            in_msg_body.coin()
+        i = 0
+        while i == 0:
+            a = in_msg_body.int(8)
+            if a == 0:
+                v = a * 2
+            elif a == 2:
+                b = a * 4
+            else:
+                in_msg_body.coin()
 
 
 def test_compile():

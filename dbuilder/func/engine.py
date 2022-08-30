@@ -5,8 +5,15 @@ import textwrap
 import yaml
 
 from dbuilder.ast import CallStacks, CompiledContract, patch
-from dbuilder.core import (Entity, is_asm, is_impure, is_inline, is_inline_ref,
-                           is_method, is_method_id)
+from dbuilder.core import (
+    Entity,
+    is_asm,
+    is_impure,
+    is_inline,
+    is_inline_ref,
+    is_method,
+    is_method_id,
+)
 from dbuilder.core.utils import init_abstract_type
 
 
