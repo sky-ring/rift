@@ -90,6 +90,7 @@ class AssignPatcher(ast.NodeTransformer):
                 tg = None
             nodes = [node]
             if isinstance(node.value, ast.Constant):
+                # TODO: Handle negative integers
                 if isinstance(node.value.value, int):
                     node.value = ast.Call(
                         func=ast.Attribute(

@@ -67,3 +67,6 @@ class Contract(metaclass=ContractMeta):
 
     def _while(self, cond):
         return While(cond)
+
+    def _throw(self, what):
+        return self.throw(what)

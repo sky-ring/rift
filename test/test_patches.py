@@ -21,6 +21,7 @@ class PatchContract(Contract):
                 b = a * 4
             else:
                 in_msg_body.coin()
+        raise 0xFFFF
 
 
 def test_compile():
