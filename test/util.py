@@ -24,7 +24,12 @@ def compile(contract, print_=True, ast=False, file_=True):
         print()
         print(code)
         if file_:
-            write(f".build/{contract.__name__.lower()}.fc", code)
+            content = code if state == 1 else err
+            write(f".build/{contract.__name__.lower()}.fc", content)
+            patched_src = err if state == 1 else code
+            write(
+                f".build/{contract.__name__.lower()}.patched.py", patched_src,
+            )
     if state == 0:
         print(err)
     assert state == 1

@@ -1,12 +1,5 @@
-from dbuilder.ast.types import (
-    AsmMethod,
-    Contract,
-    IfFlow,
-    Method,
-    Node,
-    Statement,
-    WhileLoop,
-)
+from dbuilder.ast.types import (AsmMethod, Contract, IfFlow, Method, Node,
+                                Statement, WhileLoop)
 
 
 class CallStacks(object):

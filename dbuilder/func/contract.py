@@ -1,5 +1,6 @@
 from dbuilder.ast import CallStacks
 from dbuilder.core.annots import impure, method
+from dbuilder.core.condition import Cond
 from dbuilder.core.entity import mark
 from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import InvokableFunc
@@ -59,3 +60,6 @@ class Contract(metaclass=ContractMeta):
         n_map = {"int": "Int"}
         name = n_map[type_]
         return Factory.build(name, value)
+
+    def _cond(self):
+        return Cond()
