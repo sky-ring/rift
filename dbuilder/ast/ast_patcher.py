@@ -14,12 +14,14 @@ from dbuilder.ast.patchers import (
     IfPatcher,
     RaisePatcher,
     ReturnPatcher,
+    UnaryPatcher,
     WhilePatcher,
 )
 
 
 def patch(node):
     transformers = [
+        UnaryPatcher(),
         AssertPatcher(),
         AssignPatcher(),
         IfPatcher(),

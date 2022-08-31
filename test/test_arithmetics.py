@@ -12,6 +12,7 @@ class Arithmetics(Contract):
         super(Arithmetics, self).external_receive(
             in_msg,
         )
+        const = -2
         v = in_msg.load_uint_(8)
         _ = v + 2
         _ = v / 2
