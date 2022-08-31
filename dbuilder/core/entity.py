@@ -118,12 +118,12 @@ class Entity(Node):
 
     def __assign__(self, v):
         if self.NAMED:
+            t = type(self)
             CallStacks.add_statement(
                 Statement.ASSIGN,
                 v,
-                Expr.variable(self.name),
+                Expr.variable(self.name, type_=t),
             )
-            t = type(self)
             return t.abstract_init(name=v)
         if self.has_expr:
             _x = getattr(self, "__expr")

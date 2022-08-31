@@ -40,8 +40,8 @@ class Expr:
         return e
 
     @staticmethod
-    def variable(x):
-        e = Expr(Expr.EXPR_VAR, x)
+    def variable(x, type_=None):
+        e = Expr(Expr.EXPR_VAR, x, annotations={"return": type_})
         return e
 
     @staticmethod

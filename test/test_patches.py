@@ -13,6 +13,8 @@ class PatchContract(Contract):
         in_msg_body: Slice,
     ) -> None:
         i = 0
+        body = in_msg_body
+        k = i
         while i == 0:
             a = in_msg_body.int(8)
             if a == 0:
