@@ -5,7 +5,7 @@ from dbuilder.core.factory import Factory
 
 def init_abstract_type(cls_, *args, **kwargs):
     entity_cls = Factory.engines["Entity"]
-    filter_d = {int: entity_cls, None: entity_cls}
+    filter_d = {int: Factory.engines["Int"], None: entity_cls}
     cls_ = filter_d.get(cls_, cls_)
     if isinstance(cls_, str):
         if cls_ in Factory.engines:

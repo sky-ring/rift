@@ -30,13 +30,13 @@ class Expr:
         return e
 
     @staticmethod
-    def binary_op(op, op1, op2):
-        e = Expr(Expr.EXPR_AR2, op, op1, op2)
+    def binary_op(op, op1, op2, type_):
+        e = Expr(Expr.EXPR_AR2, op, op1, op2, annotations={"return": type_})
         return e
 
     @staticmethod
-    def unary_op(op, operand):
-        e = Expr(Expr.EXPR_AR1, op, operand)
+    def unary_op(op, operand, type_):
+        e = Expr(Expr.EXPR_AR1, op, operand, annotations={"return": type_})
         return e
 
     @staticmethod

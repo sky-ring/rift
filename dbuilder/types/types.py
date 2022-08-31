@@ -17,7 +17,8 @@ class Int(_IntBase):
     def __init__(self, value, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.value = value
-        self.data = Expr.const(value)
+        if "data" not in kwargs:
+            self.data = Expr.const(value)
 
     @classmethod
     def abstract_init(cls, *args, **kwargs) -> "Int":
@@ -26,9 +27,6 @@ class Int(_IntBase):
     @classmethod
     def type_name(cls) -> str:
         return "int"
-
-    def _repr_(self):
-        return str(self.value)
 
 
 class Slice(_SliceBase):
