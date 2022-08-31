@@ -1,3 +1,4 @@
+from dbuilder.ast.int_dict import IntDict
 from dbuilder.ast.printer import Printer
 from dbuilder.ast.types.node import Node
 from dbuilder.ast.utils import _type_name
@@ -12,27 +13,33 @@ class Statement(Node):
     ASSIGN = 5
     M_ASSIGN = 6
     # local
-    __n_def = 0
+    # TODO: Fix scopes in __n_def
+    __n_def: IntDict
 
     def __init__(self, type, args):
         super().__init__()
         self.type = type
         self.args = args
-        self.__n_def = 0
+        self.__n_def = IntDict()
 
     def _inject_method(self, mtd):
         self.mtd = mtd
-        if self.type == Statement.ASSIGN:
-            self.__n_def = self.mtd.scope["defs"][self.args[0]]
-            self.mtd.scope["defs"][self.args[0]] += 1
+        self.refresh()
 
     def refresh(self):
-        if self.mtd and self.type == Statement.ASSIGN:
-            self.__n_def = self.mtd.scope["defs"][self.args[0]]
-            self.mtd.scope["defs"][self.args[0]] += 1
+        if not self.mtd:
+            return
+        targets = []
+        if self.type == Statement.ASSIGN:
+            targets.append(self.args[0])
+        elif self.type == Statement.M_ASSIGN:
+            targets.extend(self.args[0])
+        for arg in targets:
+            self.__n_def[arg] = self.mtd.scope["defs"][arg]
+            self.mtd.scope["defs"][arg] += 1
 
-    def _is_def(self):
-        return self.__n_def != 0
+    def _is_def(self, arg):
+        return self.__n_def[arg] != 0
 
     def add_statement(self, statement):
         pass
@@ -79,12 +86,13 @@ class Statement(Node):
             else:
                 type_hint = "var"
             type_hint += " "
-            if self._is_def():
+            name = self.args[0]
+            if self._is_def(name):
                 type_hint = ""
             printer.print(
                 "{type_}{v} = {expr};",
                 type_=type_hint,
-                v=self.args[0],
+                v=name,
                 expr=expr,
             )
         elif self.type == Statement.M_ASSIGN:
@@ -97,9 +105,13 @@ class Statement(Node):
                 args = ["var" for _ in v_list]
             if len(args) != len(v_list):
                 raise RuntimeError("non matching outputs")
+            type_hints = [_type_name(t) + " " for t in args]
             t_decl = [
-                "{type_} {v}".format(type_=_type_name(t), v=v)
-                for v, t in zip(v_list, args)
+                "{type_}{v}".format(
+                    type_=t if not self._is_def(v) else "",
+                    v=v,
+                )
+                for v, t in zip(v_list, type_hints)
             ]
             printer.print(
                 "({t_decl}) = {expr};",

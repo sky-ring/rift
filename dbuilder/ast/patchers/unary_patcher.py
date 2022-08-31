@@ -7,7 +7,8 @@ class UnaryPatcher(ast.NodeTransformer):
 
     def visit_UnaryOp(self, node: ast.UnaryOp) -> Any:
         if isinstance(node.op, ast.USub) and isinstance(
-            node.operand, ast.Constant,
+            node.operand,
+            ast.Constant,
         ):
             node.operand.value *= -1
             ast.fix_missing_locations(node.operand)

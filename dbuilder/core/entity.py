@@ -146,6 +146,7 @@ class Entity(Node):
             if s.type == s.EXPR:
                 s.args = (vs, s.args[0])
                 s.type = Statement.M_ASSIGN
+                s.refresh()
             else:
                 CallStacks.add_statement(Statement.M_ASSIGN, vs, self.data)
         for x, v in zip(xs, vs):

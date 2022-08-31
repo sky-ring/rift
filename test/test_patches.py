@@ -16,7 +16,7 @@ class PatchContract(Contract):
         body = in_msg_body
         k = i
         while i == 0:
-            a = in_msg_body.int(8)
+            a = in_msg_body.uint(8)
             if a == 0:
                 v = a * 2
                 if v & 5 == 0:
