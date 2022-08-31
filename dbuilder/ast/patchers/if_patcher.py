@@ -1,28 +1,26 @@
 import ast
-from copy import deepcopy
 from typing import Any
 
 
 class IfPatcher(ast.NodeTransformer):
+    _counter = 0
     """Transforms the AST to handle conditions."""
 
     def visit_If(self, node: ast.If) -> Any:
-        # Let's Process the F***ing If
-        # TODO: handle with names
+        # WHY?: This causes visitor to visit all children too,
+        # otherwise we had to visit manually
+        self.generic_visit(node)
+
         if_data = []
         current = node
-        while current is not None:
-            if_data.append((current.test, current.body))
-            el_ = current.orelse
-            if len(el_) == 0:
-                current = None
-                break
-            top = el_[0]
-            if isinstance(top, ast.If):
-                current = top
-            else:
-                if_data.append((None, el_))
-                current = None
+        if_data.append((current.test, current.body))
+        el_ = current.orelse
+        if len(el_) != 0:
+            if_data.append((None, el_))
+
+        head = IfPatcher._counter
+        IfPatcher._counter += 1
+
         with_item = ast.withitem(
             context_expr=ast.Call(
                 func=ast.Attribute(
@@ -33,7 +31,7 @@ class IfPatcher(ast.NodeTransformer):
                 args=[],
                 keywords=[],
             ),
-            optional_vars=ast.Name(id="c", ctx=ast.Store()),
+            optional_vars=ast.Name(id=f"c{head}", ctx=ast.Store()),
         )
         with_body = []
         for if_test, if_body in if_data:
@@ -41,7 +39,7 @@ class IfPatcher(ast.NodeTransformer):
                 expr = ast.Expr(
                     value=ast.Call(
                         func=ast.Attribute(
-                            value=ast.Name(id="c", ctx=ast.Load()),
+                            value=ast.Name(id=f"c{head}", ctx=ast.Load()),
                             attr="match",
                             ctx=ast.Load(),
                         ),
@@ -53,7 +51,7 @@ class IfPatcher(ast.NodeTransformer):
                 expr = ast.Expr(
                     value=ast.Call(
                         func=ast.Attribute(
-                            value=ast.Name(id="c", ctx=ast.Load()),
+                            value=ast.Name(id=f"c{head}", ctx=ast.Load()),
                             attr="otherwise",
                             ctx=ast.Load(),
                         ),

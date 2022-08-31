@@ -6,6 +6,8 @@ class WhilePatcher(ast.NodeTransformer):
     """Transforms the AST to handle while loops."""
 
     def visit_While(self, node: ast.While) -> Any:
+        self.generic_visit(node)
+
         with_item = ast.withitem(
             context_expr=ast.Call(
                 func=ast.Attribute(
