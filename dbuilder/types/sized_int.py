@@ -6,7 +6,7 @@ class SizedIntType(Int):
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         if cls.__signed__:
-            b = to.int(value, cls.__bits__)
+            b = to.sint(value, cls.__bits__)
         else:
             b = to.uint(value, cls.__bits__)
         return b
@@ -20,9 +20,9 @@ class SizedIntType(Int):
     ):
         if cls.__signed__:
             if inplace:
-                v = from_.int_(cls.__bits__)
+                v = from_.sint_(cls.__bits__)
             else:
-                v = from_.int(cls.__bits__)
+                v = from_.sint(cls.__bits__)
         else:
             if inplace:
                 v = from_.uint_(cls.__bits__)

@@ -32,7 +32,7 @@ class Payload:
         if (not proc_tag) or tag_len == 0:
             self.load_body()
             return
-        read_tag = self.__data__.int(tag_len)
+        read_tag = self.__data__.uint(tag_len)
         with Cond() as c:
             c.match(read_tag == tag)
             self.skip_tag(self.__data__)

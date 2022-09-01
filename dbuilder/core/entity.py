@@ -27,13 +27,18 @@ class Entity(Node):
     def _binary(self, op, other, r=False):
         mark(self, other)
         e = Entity(
-            Expr.binary_op(op, other if r else self, self if r else other),
+            Expr.binary_op(
+                op,
+                other if r else self,
+                self if r else other,
+                type(self),
+            ),
         )
         return e
 
     def _unary(self, op):
         mark(self)
-        e = Entity(Expr.unary_op(op, self))
+        e = Entity(Expr.unary_op(op, self, type(self)))
         return e
 
     def __eq__(self, other):
@@ -113,12 +118,12 @@ class Entity(Node):
 
     def __assign__(self, v):
         if self.NAMED:
+            t = type(self)
             CallStacks.add_statement(
                 Statement.ASSIGN,
                 v,
-                Expr.variable(self.name),
+                Expr.variable(self.name, type_=t),
             )
-            t = type(self)
             return t.abstract_init(name=v)
         if self.has_expr:
             _x = getattr(self, "__expr")
@@ -140,6 +145,7 @@ class Entity(Node):
             if s.type == s.EXPR:
                 s.args = (vs, s.args[0])
                 s.type = Statement.M_ASSIGN
+                s.refresh()
             else:
                 CallStacks.add_statement(Statement.M_ASSIGN, vs, self.data)
         for x, v in zip(xs, vs):

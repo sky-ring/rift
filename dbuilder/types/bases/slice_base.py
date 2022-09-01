@@ -21,11 +21,11 @@ class _SliceBase(_EntityBase):
         pass
 
     @typed_invokable(name="load_int_")
-    def int_(self, bits: int) -> int:
+    def sint_(self, bits: int) -> int:
         pass
 
     @typed_invokable(name="preload_int")
-    def int(self, bits: int) -> int:
+    def sint(self, bits: int) -> int:
         pass
 
     @typed_invokable(name="slice_hash")

@@ -69,8 +69,8 @@ class CallStacks(object):
     @staticmethod
     def begin_if(cond):
         nif = IfFlow()
-        nif.iff(cond)
         CallStacks.current_contract.add_statement(nif)
+        nif.iff(cond)
         return nif.node_id()
 
     @staticmethod

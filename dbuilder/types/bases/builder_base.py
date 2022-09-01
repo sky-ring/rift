@@ -37,7 +37,7 @@ class _BuilderBase(_EntityBase):
         pass
 
     @typed_invokable(name="store_int")
-    def int(self, x: int, len_: int) -> "Builder":
+    def sint(self, x: int, len_: int) -> "Builder":
         pass
 
     @typed_invokable(name="store_slice")

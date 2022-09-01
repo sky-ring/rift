@@ -1,4 +1,6 @@
+from dbuilder.ast.bool_dict import BoolDict
 from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.block import Block
 from dbuilder.ast.types.node import Node
 from dbuilder.ast.utils import _type_name
 
@@ -12,30 +14,45 @@ class Statement(Node):
     ASSIGN = 5
     M_ASSIGN = 6
     # local
-    __n_def = 0
+    # TODO: Fix scopes in __n_def
+    parent: "Block"
+    __n_def: BoolDict
 
     def __init__(self, type, args):
         super().__init__()
         self.type = type
         self.args = args
-        self.__n_def = 0
+        self.parent = None
+        self.__n_def = BoolDict()
 
     def _inject_method(self, mtd):
         self.mtd = mtd
-        if self.type == Statement.ASSIGN:
-            self.__n_def = self.mtd.scope["defs"][self.args[0]]
-            self.mtd.scope["defs"][self.args[0]] += 1
+        self.refresh()
+
+    def _accessible(self, name):
+        return self.parent._accessible(name)
+
+    def _define(self, name):
+        self.parent.define(name)
 
     def refresh(self):
-        if self.mtd and self.type == Statement.ASSIGN:
-            self.__n_def = self.mtd.scope["defs"][self.args[0]]
-            self.mtd.scope["defs"][self.args[0]] += 1
+        targets = []
+        if self.type == Statement.ASSIGN:
+            targets.append(self.args[0])
+        elif self.type == Statement.M_ASSIGN:
+            targets.extend(self.args[0])
+        else:
+            return
+        for arg in targets:
+            accessible = self._accessible(arg)
+            self._define(arg)
+            self.__n_def[arg] = accessible
 
-    def _is_def(self):
-        return self.__n_def != 0
+    def _is_def(self, arg):
+        return self.__n_def[arg]
 
     def add_statement(self, statement):
-        pass
+        statement.parent = self
 
     def activates(self):
         return False
@@ -79,12 +96,13 @@ class Statement(Node):
             else:
                 type_hint = "var"
             type_hint += " "
-            if self._is_def():
+            name = self.args[0]
+            if self._is_def(name):
                 type_hint = ""
             printer.print(
                 "{type_}{v} = {expr};",
                 type_=type_hint,
-                v=self.args[0],
+                v=name,
                 expr=expr,
             )
         elif self.type == Statement.M_ASSIGN:
@@ -97,9 +115,13 @@ class Statement(Node):
                 args = ["var" for _ in v_list]
             if len(args) != len(v_list):
                 raise RuntimeError("non matching outputs")
+            type_hints = [_type_name(t) + " " for t in args]
             t_decl = [
-                "{type_} {v}".format(type_=_type_name(t), v=v)
-                for v, t in zip(v_list, args)
+                "{type_}{v}".format(
+                    type_=t if not self._is_def(v) else "",
+                    v=v,
+                )
+                for v, t in zip(v_list, type_hints)
             ]
             printer.print(
                 "({t_decl}) = {expr};",

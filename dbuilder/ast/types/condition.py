@@ -1,30 +1,31 @@
 from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.block import Block
 from dbuilder.ast.types.control_flow import ControlFlow
 from dbuilder.ast.types.statement import Statement
 
 
 class IfFlow(ControlFlow):
-    states: dict[str, list[Statement]]
+    states: dict[str, Block]
 
     def __init__(self):
         super().__init__()
         self.conds = []
         self.cond_items = {}
-        self.states = {"def": []}
+        self.states = {"def": self._new_block()}
 
     def iff(self, cond):
         self.conds.append(cond.node_id())
         self.cond_items[cond.node_id()] = cond
         self.current_cond = cond.node_id()
-        self.states[self.current_cond] = []
+        self.states[self.current_cond] = self._new_block()
 
     def else_(self):
         self.current_cond = "def"
         self.conds.append("def")
-        self.states[self.current_cond] = []
+        self.states[self.current_cond] = self._new_block()
 
     def add_statement(self, statement):
-        self.states[self.current_cond].append(statement)
+        self.states[self.current_cond].add_statement(statement)
 
     def print_func(self, printer: Printer):
         class IfNode:
@@ -40,8 +41,7 @@ class IfFlow(ControlFlow):
                     cond=self.cond_items[c] if c != "def" else "",
                 )
                 printer.incr_indent()
-                for s in self.states[c]:
-                    s.print_func(printer)
+                self.states[c].print_func(printer)
                 printer.decr_indent()
                 printer.print("}}")
                 if node.next is not None:
@@ -51,8 +51,7 @@ class IfFlow(ControlFlow):
                     printer.decr_indent()
                     printer.print("}}")
             else:
-                for s in self.states[c]:
-                    s.print_func(printer)
+                self.states[c].print_func(printer)
 
         r = None
         for i in range(len(self.conds) - 1, -1, -1):

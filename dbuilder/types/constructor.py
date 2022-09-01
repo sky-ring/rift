@@ -35,9 +35,9 @@ class ConstructorType(_EntityBase):
         with Cond() as c:
             for base in bases:
                 tag_len, tag_ = base.tag_data()
-                read_tag = from_.int(tag_len)
+                read_tag = from_.uint(tag_len)
                 c.match(read_tag == tag_)
-                n_tag = from_.int_(tag_len)
+                n_tag = from_.uint_(tag_len)
                 n_tag.__assign__(f"{name}_tag")
                 d = base.__deserialize__(
                     from_,
