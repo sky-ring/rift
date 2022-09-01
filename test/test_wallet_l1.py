@@ -4,7 +4,7 @@ from dbuilder.types import Slice
 from dbuilder.types.int_aliases import uint32, uint256
 from dbuilder.types.model import Model
 from dbuilder.types.payload import Payload
-from dbuilder.types.sized_int import SizedInt
+from dbuilder.types.slice import slice
 
 from .util import compile
 
@@ -24,9 +24,9 @@ class SimpleWallet(Contract):
         public_key: uint256
 
     class ExternalBody(Payload):
-        signature: SizedInt(512)
-        seq_no: SizedInt(32)
-        valid_until: SizedInt(32)
+        signature: slice(512)
+        seq_no: uint32
+        valid_until: uint32
 
     data: Data
 
