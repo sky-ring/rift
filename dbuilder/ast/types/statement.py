@@ -1,5 +1,6 @@
-from dbuilder.ast.int_dict import IntDict
+from dbuilder.ast.bool_dict import BoolDict
 from dbuilder.ast.printer import Printer
+from dbuilder.ast.types.block import Block
 from dbuilder.ast.types.node import Node
 from dbuilder.ast.utils import _type_name
 
@@ -14,35 +15,44 @@ class Statement(Node):
     M_ASSIGN = 6
     # local
     # TODO: Fix scopes in __n_def
-    __n_def: IntDict
+    parent: "Block"
+    __n_def: BoolDict
 
     def __init__(self, type, args):
         super().__init__()
         self.type = type
         self.args = args
-        self.__n_def = IntDict()
+        self.parent = None
+        self.__n_def = BoolDict()
 
     def _inject_method(self, mtd):
         self.mtd = mtd
         self.refresh()
 
+    def _accessible(self, name):
+        return self.parent._accessible(name)
+
+    def _define(self, name):
+        self.parent.define(name)
+
     def refresh(self):
-        if not self.mtd:
-            return
         targets = []
         if self.type == Statement.ASSIGN:
             targets.append(self.args[0])
         elif self.type == Statement.M_ASSIGN:
             targets.extend(self.args[0])
+        else:
+            return
         for arg in targets:
-            self.__n_def[arg] = self.mtd.scope["defs"][arg]
-            self.mtd.scope["defs"][arg] += 1
+            accessible = self._accessible(arg)
+            self._define(arg)
+            self.__n_def[arg] = accessible
 
     def _is_def(self, arg):
-        return self.__n_def[arg] != 0
+        return self.__n_def[arg]
 
     def add_statement(self, statement):
-        pass
+        statement.parent = self
 
     def activates(self):
         return False

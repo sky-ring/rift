@@ -131,7 +131,6 @@ class Entity(Node):
             s.args = (v, s.args[0])
             s.type = Statement.ASSIGN
             s.refresh()
-            # TODO: Do this for the __massign__ guy too
         else:
             # TODO: Most likely this never occurs (cleanup)
             CallStacks.add_statement(Statement.ASSIGN, v, self.data)
