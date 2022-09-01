@@ -1,6 +1,7 @@
 from dbuilder.func.contract import Contract
 from dbuilder.library.std import std
 from dbuilder.types import Slice
+from dbuilder.types.int_aliases import uint32, uint256
 from dbuilder.types.model import Model
 from dbuilder.types.payload import Payload
 from dbuilder.types.sized_int import SizedInt
@@ -19,8 +20,8 @@ class SimpleWallet(Contract):
     """
 
     class Data(Model):
-        seq_no: SizedInt(32)
-        public_key: SizedInt(256)
+        seq_no: uint32
+        public_key: uint256
 
     class ExternalBody(Payload):
         signature: SizedInt(512)
