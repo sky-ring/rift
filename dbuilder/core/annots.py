@@ -34,11 +34,17 @@ def method_(func, name=None):
             annotations = func.__annotations__
             annotations = {**annotations} if annotations else {}
             ret = annotations.get("return", None)
+            args_ = list(args[1:])
+            # What we here do is pass the slice
+            for i in range(len(args_)):
+                d = args_[i]
+                if hasattr(d, "__magic__") and d.__magic__ == 0xA935E5:
+                    args_[i] = d.__data__
             e = init_abstract_type(
                 ret,
                 data=Expr.call_func(
                     func.__name__,
-                    *args[1:],
+                    *args_,
                     annotations=func.__annotations__,
                 ),
             )

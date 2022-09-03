@@ -14,6 +14,7 @@ from dbuilder.core import (
     is_method,
     is_method_id,
 )
+from dbuilder.core.factory import Factory
 from dbuilder.core.utils import init_abstract_type
 
 
@@ -72,13 +73,30 @@ class Engine(object):
                 pass
             elif is_method(value):
                 func_args = value.__args__
-                names = value.__names__
+                names = list(value.__names__)
                 annots = value.__annotations__
                 annots = annots if annots else {}
-                args = (
+                if "return" not in annots:
+                    annots["return"] = None
+                # TODO
+                # Here we should check if any of args are Payload type
+                # Why? -> To detect them and pass the slice instead
+                # Also -> defined type should be slice
+                data_classes = []
+                for k, cls_ in list(annots.items()):
+                    if (
+                        hasattr(cls_, "__magic__")
+                        and cls_.__magic__ == 0xA935E5
+                    ):
+                        annots.pop(k)
+                        idx = names.index(k)
+                        names[idx] = k + "_data"
+                        annots[k + "_data"] = Factory.engines["Slice"]
+                        data_classes.append((idx - 1, k + "_data", cls_))
+                args = [
                     init_abstract_type(annots.get(arg, Entity), name=arg)
                     for arg in names[1:]
-                )
+                ]
                 annots["_method"] = {
                     "impure": is_impure(value),
                     "inline": is_inline(value),
@@ -91,6 +109,10 @@ class Engine(object):
                     [names[i + 1] for i in range(func_args - 1)],
                     annots,
                 )
+                # here we gather _data args and reconstruct class from them
+                for _idx, _data, _cls in data_classes:
+                    d = _cls(data_slice=args[_idx])
+                    args[_idx] = d
                 value(inst, *args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)
             elif is_asm(value):
