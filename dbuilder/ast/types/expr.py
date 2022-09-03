@@ -48,7 +48,7 @@ class Expr:
 
     @staticmethod
     def variable(x, type_=None):
-        ReferenceTable.mark(x)
+        ReferenceTable.ref(x)
         e = Expr(Expr.EXPR_VAR, x, annotations={"return": type_})
         return e
 
