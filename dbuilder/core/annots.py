@@ -51,7 +51,7 @@ def method_(func, name=None):
             setattr(
                 e,
                 "__expr",
-                CallStacks.add_statement(Statement.EXPR, e.data),
+                CallStacks.expression(e.data),
             )
             e.has_expr = True
             return e
@@ -114,7 +114,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
             setattr(
                 e,
                 "__expr",
-                CallStacks.add_statement(Statement.EXPR, e.data),
+                CallStacks.expression(e.data),
             )
             e.has_expr = True
             return e

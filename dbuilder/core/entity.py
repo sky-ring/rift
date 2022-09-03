@@ -119,11 +119,7 @@ class Entity(Node):
     def __assign__(self, v):
         if self.NAMED:
             t = type(self)
-            CallStacks.add_statement(
-                Statement.ASSIGN,
-                v,
-                Expr.variable(self.name, type_=t),
-            )
+            CallStacks.assign(v, Expr.variable(self.name, type_=t))
             return t.abstract_init(name=v)
         if self.has_expr:
             _x = getattr(self, "__expr")
@@ -133,7 +129,7 @@ class Entity(Node):
             s.refresh()
         else:
             # TODO: Most likely this never occurs (cleanup)
-            CallStacks.add_statement(Statement.ASSIGN, v, self.data)
+            CallStacks.assign(v, self.data)
         self.NAMED = True
         self.name = v
         return self
@@ -147,7 +143,7 @@ class Entity(Node):
                 s.type = Statement.M_ASSIGN
                 s.refresh()
             else:
-                CallStacks.add_statement(Statement.M_ASSIGN, vs, self.data)
+                CallStacks.multi_assign(vs, self.data)
         for x, v in zip(xs, vs):
             x.NAMED = True
             x.name = v
@@ -158,6 +154,7 @@ class Entity(Node):
     def __iter__(self):
         if hasattr(self, "__unpackable") and self.__unpackable:
             for _ in range(self._unpack_len):
+                # TODO: Fix types or?
                 yield Entity()
 
     def __rem_name__(self):

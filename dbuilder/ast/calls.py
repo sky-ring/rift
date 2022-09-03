@@ -98,6 +98,18 @@ class CallStacks(object):
         CallStacks.current_contract.current_method.end_statement(nif)
 
     @staticmethod
+    def assign(name, value):
+        return CallStacks.add_statement(Statement.ASSIGN, name, value)
+
+    @staticmethod
+    def multi_assign(names, values):
+        return CallStacks.add_statement(Statement.M_ASSIGN, names, values)
+
+    @staticmethod
+    def expression(expr):
+        return CallStacks.add_statement(Statement.EXPR, expr)
+
+    @staticmethod
     def call_(name, *args, operand=None):
         if operand:
             CallStacks.add_statement(
