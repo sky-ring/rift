@@ -4,6 +4,7 @@ import traceback
 from pathlib import Path
 
 from dbuilder import Engine
+from dbuilder.ast.ref_table import ReferenceTable
 
 
 def write(target: str, content: str):
@@ -31,6 +32,11 @@ def compile(contract, print_=True, ast=False, file_=True):
                 f".build/{contract.__name__.lower()}.patched.py",
                 patched_src,
             )
+            write(
+                f".build/{contract.__name__.lower()}.ref.json",
+                ReferenceTable.dump(),
+            )
+
     if state == 0:
         print(err)
     assert state == 1

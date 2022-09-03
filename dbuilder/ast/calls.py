@@ -51,6 +51,7 @@ class CallStacks(object):
 
     @classmethod
     def return_(cls, entity):
+        ReferenceTable.mark(entity)
         cls.add_statement(Statement.RETURN, entity)
         return entity
 
@@ -60,6 +61,7 @@ class CallStacks(object):
 
     @classmethod
     def begin_if(cls, cond):
+        ReferenceTable.mark(cond)
         nif = IfFlow()
         cls.current_contract.add_statement(nif)
         nif.iff(cond)
@@ -67,6 +69,7 @@ class CallStacks(object):
 
     @classmethod
     def else_if(cls, node_id, cond=None):
+        ReferenceTable.mark(cond)
         nif: IfFlow = Node.find(node_id)
         if cond:
             nif.iff(cond)
@@ -80,6 +83,7 @@ class CallStacks(object):
 
     @classmethod
     def begin_while(cls, cond):
+        ReferenceTable.mark(cond)
         nif = WhileLoop(cond)
         cls.current_contract.add_statement(nif)
         return nif.node_id()
@@ -103,6 +107,7 @@ class CallStacks(object):
 
     @classmethod
     def call_(cls, name, *args, operand=None):
+        ReferenceTable.mark(*args)
         if operand:
             cls.add_statement(
                 Statement.METHOD_CALL,
