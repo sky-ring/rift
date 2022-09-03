@@ -46,6 +46,7 @@ class CallStacks(object):
     @classmethod
     def add_statement(cls, type, *args):
         s = Statement(type, args)
+        s._scope = ReferenceTable.current_scope
         cls.current_contract.add_statement(s)
         return s.node_id()
 

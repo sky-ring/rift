@@ -3,11 +3,13 @@ import json
 
 class ReferenceTable:
     refs: dict[str, dict[str, int]] = {}
+    eliminatables: dict[str, list[str]] = {}
     current_scope = ""
 
     @classmethod
     def init_scope(cls, scope):
         cls.refs[scope] = {}
+        cls.eliminatables[scope] = []
         cls.current_scope = scope
 
     @classmethod
@@ -29,3 +31,13 @@ class ReferenceTable:
     def dump(cls):
         o = json.dumps(cls.refs, indent=4)
         return o
+
+    @classmethod
+    def eliminatable(cls, name: str):
+        cls.eliminatables[cls.current_scope].append(name)
+
+    @classmethod
+    def is_eliminatable(cls, scope: str, name: str) -> bool:
+        eliminatable = name in cls.eliminatables[scope]
+        count = cls.refs[scope].get(name, 0)
+        return eliminatable and count == 0
