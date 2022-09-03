@@ -58,7 +58,11 @@ def method_(func, name=None):
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Factory.build("Tensor", list(ret))
+                a = func.__annotations__
+                type_ = None
+                if a and "return" in a:
+                    type_ = a["return"]
+                ret = Factory.build("Tensor", list(ret), type_=type_)
             return ret
 
     nf = init_func(nf)
@@ -121,7 +125,11 @@ def asm_(func, input_order=None, out_order=None, name=None):
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Factory.build("Tensor", list(ret))
+                a = func.__annotations__
+                type_ = None
+                if a and "return" in a:
+                    type_ = a["return"]
+                ret = Factory.build("Tensor", list(ret), type_=type_)
             return ret
 
     nf = init_func(nf)

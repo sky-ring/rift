@@ -14,6 +14,7 @@ class Assigns(Contract):
         y, z = in_msg.bits_refs_n()
         y = in_msg.sint(1)
         y, t = in_msg.bits_refs_n()
+        theta, beta = t, y
 
 
 def test_compile():

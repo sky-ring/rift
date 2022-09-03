@@ -17,6 +17,7 @@ def init_abstract_type(cls_, *args, **kwargs):
             "Tensor",
             *args,
             [init_abstract_type(c) for c in cls_.__args__],
+            type_=cls_,
             **kwargs,
         )
         return t

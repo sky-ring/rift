@@ -58,11 +58,12 @@ class AssignPatcher(ast.NodeTransformer):
             a_expr = ast.Expr(
                 value=ast.Call(
                     func=ast.Attribute(
-                        value=ast.Name(id="__tmp__", ctx=ast.Load()),
-                        attr="__massign__",
+                        value=ast.Name(id="self", ctx=ast.Load()),
+                        attr="_m_assign",
                         ctx=ast.Load(),
                     ),
                     args=[
+                        ast.Name(id="__tmp__", ctx=ast.Load()),
                         ast.List(
                             elts=[
                                 ast.Constant(value=str(v), kind=None)

@@ -1,6 +1,7 @@
 from dbuilder.ast.types import Expr
 from dbuilder.core import Entity
 from dbuilder.core.factory import Factory
+from dbuilder.core.utils import init_abstract_type
 from dbuilder.types.bases.builder_base import _BuilderBase
 from dbuilder.types.bases.cell_base import _CellBase
 from dbuilder.types.bases.cont_base import _ContBase
@@ -86,7 +87,15 @@ class Tensor(Entity, tuple):
     def __init__(self, *args, **kwargs):
         name = kwargs.pop("name", None)
         data = kwargs.pop("data", None)
+        self.type_ = kwargs.pop("type_", None)
         super().__init__(data=data, name=name)
+
+    def __iter__(self):
+        if not self.type_:
+            return super().__iter__()
+        if hasattr(self, "__unpackable") and self.__unpackable:
+            for _, tp in zip(range(self._unpack_len), self.type_.__args__):
+                yield init_abstract_type(tp)
 
 
 class Tuple(Entity):
