@@ -13,11 +13,11 @@ def init_func(func):
     return func
 
 
-def method(name=None):
-    return partial(method_, name=name)
+def method(name=None, static=False):
+    return partial(method_, name=name, static=static)
 
 
-def method_(func, name=None):
+def method_(func, name=None, static=False):
     if is_method(func):
         return func
 
@@ -34,29 +34,43 @@ def method_(func, name=None):
             annotations = func.__annotations__
             annotations = {**annotations} if annotations else {}
             ret = annotations.get("return", None)
+            if static:
+                args_ = list(args)
+            else:
+                args_ = list(args[1:])
+            # What we here do is pass the slice
+            for i in range(len(args_)):
+                d = args_[i]
+                if hasattr(d, "__magic__") and d.__magic__ == 0xA935E5:
+                    args_[i] = d.__data__
             e = init_abstract_type(
                 ret,
                 data=Expr.call_func(
                     func.__name__,
-                    *args[1:],
+                    *args_,
                     annotations=func.__annotations__,
                 ),
             )
             setattr(
                 e,
                 "__expr",
-                CallStacks.add_statement(Statement.EXPR, e.data),
+                CallStacks.expression(e.data),
             )
             e.has_expr = True
             return e
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Factory.build("Tensor", list(ret))
+                a = func.__annotations__
+                type_ = None
+                if a and "return" in a:
+                    type_ = a["return"]
+                ret = Factory.build("Tensor", list(ret), type_=type_)
             return ret
 
     nf = init_func(nf)
     nf.__pyfunc__["type"] = ["method"]
+    nf.__static__ = static
     setattr(nf, "__args__", func.__code__.co_argcount)
     annotations = func.__annotations__
     annotations = annotations or {}
@@ -108,14 +122,18 @@ def asm_(func, input_order=None, out_order=None, name=None):
             setattr(
                 e,
                 "__expr",
-                CallStacks.add_statement(Statement.EXPR, e.data),
+                CallStacks.expression(e.data),
             )
             e.has_expr = True
             return e
         else:
             ret = func(*args, **kwargs)
             if isinstance(ret, tuple):
-                ret = Factory.build("Tensor", list(ret))
+                a = func.__annotations__
+                type_ = None
+                if a and "return" in a:
+                    type_ = a["return"]
+                ret = Factory.build("Tensor", list(ret), type_=type_)
             return ret
 
     nf = init_func(nf)
@@ -202,6 +220,8 @@ def is_inline_ref(f):
 def is_method(func):
     if not hasattr(func, "__pyfunc__"):
         return False
+    if not func.__pyfunc__:
+        print(func)
     type_ = func.__pyfunc__.get("type", [])
     return "method" in type_
 

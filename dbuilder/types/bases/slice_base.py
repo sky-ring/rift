@@ -52,7 +52,7 @@ class _SliceBase(_EntityBase):
     def end_parse(self) -> None:
         pass
 
-    @typed_invokable(name="load_ref")
+    @typed_invokable(name="load_ref_")
     def ref_(self) -> "Cell":
         pass
 
@@ -60,7 +60,7 @@ class _SliceBase(_EntityBase):
     def ref(self) -> "Cell":
         pass
 
-    @typed_invokable(name="load_bits")
+    @typed_invokable(name="load_bits_")
     def bits_(self, len_: int) -> "Slice":
         pass
 
@@ -92,7 +92,7 @@ class _SliceBase(_EntityBase):
     def slice_last(self, len_: int) -> "Slice":
         pass
 
-    @typed_invokable(name="load_dict")
+    @typed_invokable(name="load_dict_")
     def ldict_(self) -> "Cell":
         pass
 
@@ -104,7 +104,7 @@ class _SliceBase(_EntityBase):
     def skip_dict(self) -> None:
         pass
 
-    @typed_invokable(name="load_maybe_ref")
+    @typed_invokable(name="load_maybe_ref_")
     def maybe_ref_(self) -> "Cell":
         pass
 
@@ -140,7 +140,7 @@ class _SliceBase(_EntityBase):
     def depth(self) -> int:
         pass
 
-    @typed_invokable(name="load_msg_addr")
+    @typed_invokable(name="load_msg_addr_")
     def addr_(self) -> "Slice":
         pass
 

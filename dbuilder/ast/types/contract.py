@@ -18,6 +18,8 @@ class Contract(Node):
         self.methods.append(method)
 
     def add_statement(self, statement):
+        if not self.current_method:
+            return
         self.current_method.add_statement(statement)
 
     def end_method(self, method):

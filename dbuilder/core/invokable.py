@@ -23,7 +23,7 @@ class InvokableFunc:
             ),
         )
         setattr(e, "__unpackable", True)
-        setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
+        setattr(e, "__expr", CallStacks.expression(e.data))
         e.has_expr = True
         return e
 
@@ -51,7 +51,7 @@ class InvokableBinder:
             ),
         )
         setattr(e, "__unpackable", True)
-        setattr(e, "__expr", CallStacks.add_statement(Statement.EXPR, e.data))
+        setattr(e, "__expr", CallStacks.expression(e.data))
         e.has_expr = True
         return e
 

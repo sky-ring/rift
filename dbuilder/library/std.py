@@ -6,6 +6,8 @@ from dbuilder.types import Builder, Cell, Cont, Slice, Tuple
 
 # noinspection PyTypeChecker,SpellCheckingInspection,PyUnusedLocal
 class Stdlib(Library):
+    __ignore__ = True
+
     @asm()
     def null(self) -> Entity:
         return "NULL"

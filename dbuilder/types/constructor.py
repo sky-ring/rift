@@ -1,22 +1,31 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
 from dbuilder.library.std import std
-from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
-class ConstructorType(_EntityBase):
+class Constructor(metaclass=CachingSubscriptable):
     which: Entity
-    bound: Entity
+    bounds: list[Entity]
+
+    def __init__(self) -> None:
+        self.bounds = []
 
     def __getattr__(self, item):
-        return getattr(self.bound, item)
+        # This is not standard way
+        # TODO: Fix this
+        for b in self.bounds:
+            if hasattr(b, item):
+                # if item in b.__dict__:
+                return getattr(b, item)
+        raise AttributeError()
 
     @classmethod
     def __serialize__(
         cls,
         to: "Builder",
-        value: "ConstructorType",
+        value: "Constructor",
     ) -> "Builder":
         # TODO : Completion
         return to
@@ -27,9 +36,11 @@ class ConstructorType(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         bases = cls.__x_bases__
-        m = ConstructorType()
+        m = Constructor()
         tag = std.null()
         tag.__assign__(f"{name}_tag")
         with Cond() as c:
@@ -44,8 +55,9 @@ class ConstructorType(_EntityBase):
                     name=name,
                     inplace=inplace,
                     tag=False,
+                    lazy=lazy,
                 )
-                m.bound = d
+                m.bounds.append(d)
         m.which = tag
         return m
 
@@ -53,25 +65,21 @@ class ConstructorType(_EntityBase):
     def __predefine__(
         cls,
         name: str = None,
+        lazy: bool = True,
+        **kwargs,
     ):
         bases = cls.__x_bases__
         for base in bases:
             base.__predefine__(name=name)
 
-
-class _ConstructorTypeBuilder(type):
-    def __new__(cls, *bases):
-        names = (base.__name__ for base in bases)
+    @classmethod
+    def __build_type__(cls, items):
+        names = (base.__name__ for base in items)
         joined = "_".join(names)
-        return super().__new__(
-            cls,
+        return type(
             "Constructor_%s" % joined,
-            (ConstructorType,),
+            (cls,),
             {
-                "__x_bases__": list(bases),
+                "__x_bases__": list(items),
             },
         )
-
-
-def Constructor(*bases):
-    return _ConstructorTypeBuilder.__new__(_ConstructorTypeBuilder, *bases)

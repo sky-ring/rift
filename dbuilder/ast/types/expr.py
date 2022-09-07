@@ -1,3 +1,6 @@
+from dbuilder.ast.ref_table import ReferenceTable
+
+
 class Expr:
     EXPR_AR2 = 0
     EXPR_CALL = 1
@@ -15,6 +18,7 @@ class Expr:
 
     @staticmethod
     def call_expr(operand, method, *args, annotations=None):
+        ReferenceTable.mark(operand, *args)
         e = Expr(
             Expr.EXPR_CALL,
             operand,
@@ -26,26 +30,31 @@ class Expr:
 
     @staticmethod
     def call_func(method, *args, annotations=None):
+        ReferenceTable.mark(*args)
         e = Expr(Expr.EXPR_FUNC, method, *args, annotations=annotations)
         return e
 
     @staticmethod
     def binary_op(op, op1, op2, type_):
+        ReferenceTable.mark(op1, op2)
         e = Expr(Expr.EXPR_AR2, op, op1, op2, annotations={"return": type_})
         return e
 
     @staticmethod
     def unary_op(op, operand, type_):
+        ReferenceTable.mark(operand)
         e = Expr(Expr.EXPR_AR1, op, operand, annotations={"return": type_})
         return e
 
     @staticmethod
     def variable(x, type_=None):
+        ReferenceTable.ref(x)
         e = Expr(Expr.EXPR_VAR, x, annotations={"return": type_})
         return e
 
     @staticmethod
     def const(x):
+        ReferenceTable.mark(x)
         e = Expr(Expr.EXPR_CONST, x)
         if isinstance(x, int):
             e.annotations = {"return": int}

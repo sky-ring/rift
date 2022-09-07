@@ -1,6 +1,7 @@
 from dbuilder.ast.types import Expr
 from dbuilder.core import Entity
 from dbuilder.core.factory import Factory
+from dbuilder.core.utils import init_abstract_type
 from dbuilder.types.bases.builder_base import _BuilderBase
 from dbuilder.types.bases.cell_base import _CellBase
 from dbuilder.types.bases.cont_base import _ContBase
@@ -23,6 +24,25 @@ class Int(_IntBase):
     @classmethod
     def abstract_init(cls, *args, **kwargs) -> "Int":
         return cls(0, *args, **kwargs)
+
+    @classmethod
+    def type_name(cls) -> str:
+        return "int"
+
+
+class HexInt(_IntBase):
+    def __init__(self, value, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.value = value
+        if "data" not in kwargs:
+            self.data = Expr.const(value)
+
+    @classmethod
+    def abstract_init(cls, *args, **kwargs) -> "Int":
+        return cls(0, *args, **kwargs)
+
+    def _repr_(self):
+        return hex(self.value)
 
     @classmethod
     def type_name(cls) -> str:
@@ -86,7 +106,15 @@ class Tensor(Entity, tuple):
     def __init__(self, *args, **kwargs):
         name = kwargs.pop("name", None)
         data = kwargs.pop("data", None)
+        self.type_ = kwargs.pop("type_", None)
         super().__init__(data=data, name=name)
+
+    def __iter__(self):
+        if not self.type_:
+            return super().__iter__()
+        if hasattr(self, "__unpackable") and self.__unpackable:
+            for _, tp in zip(range(self._unpack_len), self.type_.__args__):
+                yield init_abstract_type(tp)
 
 
 class Tuple(Entity):
@@ -107,3 +135,4 @@ Factory.register("Cell", Cell)
 Factory.register("String", String)
 Factory.register("Cont", Cont)
 Factory.register("Int", Int)
+Factory.register("HexInt", HexInt)

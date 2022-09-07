@@ -1,16 +1,30 @@
 from typing import TYPE_CHECKING
 
 from dbuilder.core import Entity
-from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Cell, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 if TYPE_CHECKING:
     from dbuilder.types.payload import Payload
 
 
-class RefType(_EntityBase):
+class Ref(metaclass=CachingSubscriptable):
+    bound: "Entity"
+
+    def __init__(self, bound) -> None:
+        self.bound = bound
+
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        if isinstance(value, Ref):
+            value = value.bound
+            if isinstance(value, Entity):
+                b = to.ref(value)
+            elif hasattr(value, "__magic__") and value.__magic__ == 0xA935E5:
+                p: "Payload" = value
+                c = p.as_cell()
+                b = to.ref(c)
+            return b
         base = cls.__basex__
         if base == Cell:
             b = to.ref(value)
@@ -26,6 +40,8 @@ class RefType(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         base = cls.__basex__
         if inplace:
@@ -43,7 +59,12 @@ class RefType(_EntityBase):
         return v
 
     @classmethod
-    def __predefine__(cls, name: str = None):
+    def __predefine__(
+        cls,
+        name: str = None,
+        lazy: bool = True,
+        **kwargs,
+    ):
         if name is None:
             return
         base = cls.__basex__
@@ -57,18 +78,12 @@ class RefType(_EntityBase):
         base = cls.__basex__
         return base.type_name()
 
-
-class _RefTypeBuilder(type):
-    def __new__(cls, base_cls=Cell):
-        return super().__new__(
-            cls,
-            "Ref_%s" % (base_cls.__name__,),
-            (RefType,),
+    @classmethod
+    def __build_type__(cls, item):
+        return type(
+            "Ref_%s" % item.__name__,
+            (cls,),
             {
-                "__basex__": base_cls,
+                "__basex__": item,
             },
         )
-
-
-def Ref(base: type = Cell):
-    return _RefTypeBuilder.__new__(_RefTypeBuilder, base_cls=base)

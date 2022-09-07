@@ -24,7 +24,7 @@ class SimpleWallet(Contract):
         public_key: uint256
 
     class ExternalBody(Payload):
-        signature: slice(512)
+        signature: slice[512]
         seq_no: uint32
         valid_until: uint32
 

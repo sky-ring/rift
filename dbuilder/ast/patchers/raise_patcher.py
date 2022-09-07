@@ -9,7 +9,7 @@ class RaisePatcher(ast.NodeTransformer):
         u_node = ast.Expr(
             value=ast.Call(
                 func=ast.Attribute(
-                    value=ast.Name(id="self", ctx=ast.Load()),
+                    value=ast.Name(id="helpers", ctx=ast.Load()),
                     attr="_throw",
                     ctx=ast.Load(),
                 ),

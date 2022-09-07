@@ -11,7 +11,7 @@ class WhilePatcher(ast.NodeTransformer):
         with_item = ast.withitem(
             context_expr=ast.Call(
                 func=ast.Attribute(
-                    value=ast.Name(id="self", ctx=ast.Load()),
+                    value=ast.Name(id="helpers", ctx=ast.Load()),
                     attr="_while",
                     ctx=ast.Load(),
                 ),

@@ -1,515 +1,515 @@
-from dbuilder.types.sized_int import SizedInt
+from dbuilder.types.sized_int import integer
 
-uint1 = SizedInt(1)
-uint2 = SizedInt(2)
-uint3 = SizedInt(3)
-uint4 = SizedInt(4)
-uint5 = SizedInt(5)
-uint6 = SizedInt(6)
-uint7 = SizedInt(7)
-uint8 = SizedInt(8)
-uint9 = SizedInt(9)
-uint10 = SizedInt(10)
-uint11 = SizedInt(11)
-uint12 = SizedInt(12)
-uint13 = SizedInt(13)
-uint14 = SizedInt(14)
-uint15 = SizedInt(15)
-uint16 = SizedInt(16)
-uint17 = SizedInt(17)
-uint18 = SizedInt(18)
-uint19 = SizedInt(19)
-uint20 = SizedInt(20)
-uint21 = SizedInt(21)
-uint22 = SizedInt(22)
-uint23 = SizedInt(23)
-uint24 = SizedInt(24)
-uint25 = SizedInt(25)
-uint26 = SizedInt(26)
-uint27 = SizedInt(27)
-uint28 = SizedInt(28)
-uint29 = SizedInt(29)
-uint30 = SizedInt(30)
-uint31 = SizedInt(31)
-uint32 = SizedInt(32)
-uint33 = SizedInt(33)
-uint34 = SizedInt(34)
-uint35 = SizedInt(35)
-uint36 = SizedInt(36)
-uint37 = SizedInt(37)
-uint38 = SizedInt(38)
-uint39 = SizedInt(39)
-uint40 = SizedInt(40)
-uint41 = SizedInt(41)
-uint42 = SizedInt(42)
-uint43 = SizedInt(43)
-uint44 = SizedInt(44)
-uint45 = SizedInt(45)
-uint46 = SizedInt(46)
-uint47 = SizedInt(47)
-uint48 = SizedInt(48)
-uint49 = SizedInt(49)
-uint50 = SizedInt(50)
-uint51 = SizedInt(51)
-uint52 = SizedInt(52)
-uint53 = SizedInt(53)
-uint54 = SizedInt(54)
-uint55 = SizedInt(55)
-uint56 = SizedInt(56)
-uint57 = SizedInt(57)
-uint58 = SizedInt(58)
-uint59 = SizedInt(59)
-uint60 = SizedInt(60)
-uint61 = SizedInt(61)
-uint62 = SizedInt(62)
-uint63 = SizedInt(63)
-uint64 = SizedInt(64)
-uint65 = SizedInt(65)
-uint66 = SizedInt(66)
-uint67 = SizedInt(67)
-uint68 = SizedInt(68)
-uint69 = SizedInt(69)
-uint70 = SizedInt(70)
-uint71 = SizedInt(71)
-uint72 = SizedInt(72)
-uint73 = SizedInt(73)
-uint74 = SizedInt(74)
-uint75 = SizedInt(75)
-uint76 = SizedInt(76)
-uint77 = SizedInt(77)
-uint78 = SizedInt(78)
-uint79 = SizedInt(79)
-uint80 = SizedInt(80)
-uint81 = SizedInt(81)
-uint82 = SizedInt(82)
-uint83 = SizedInt(83)
-uint84 = SizedInt(84)
-uint85 = SizedInt(85)
-uint86 = SizedInt(86)
-uint87 = SizedInt(87)
-uint88 = SizedInt(88)
-uint89 = SizedInt(89)
-uint90 = SizedInt(90)
-uint91 = SizedInt(91)
-uint92 = SizedInt(92)
-uint93 = SizedInt(93)
-uint94 = SizedInt(94)
-uint95 = SizedInt(95)
-uint96 = SizedInt(96)
-uint97 = SizedInt(97)
-uint98 = SizedInt(98)
-uint99 = SizedInt(99)
-uint100 = SizedInt(100)
-uint101 = SizedInt(101)
-uint102 = SizedInt(102)
-uint103 = SizedInt(103)
-uint104 = SizedInt(104)
-uint105 = SizedInt(105)
-uint106 = SizedInt(106)
-uint107 = SizedInt(107)
-uint108 = SizedInt(108)
-uint109 = SizedInt(109)
-uint110 = SizedInt(110)
-uint111 = SizedInt(111)
-uint112 = SizedInt(112)
-uint113 = SizedInt(113)
-uint114 = SizedInt(114)
-uint115 = SizedInt(115)
-uint116 = SizedInt(116)
-uint117 = SizedInt(117)
-uint118 = SizedInt(118)
-uint119 = SizedInt(119)
-uint120 = SizedInt(120)
-uint121 = SizedInt(121)
-uint122 = SizedInt(122)
-uint123 = SizedInt(123)
-uint124 = SizedInt(124)
-uint125 = SizedInt(125)
-uint126 = SizedInt(126)
-uint127 = SizedInt(127)
-uint128 = SizedInt(128)
-uint129 = SizedInt(129)
-uint130 = SizedInt(130)
-uint131 = SizedInt(131)
-uint132 = SizedInt(132)
-uint133 = SizedInt(133)
-uint134 = SizedInt(134)
-uint135 = SizedInt(135)
-uint136 = SizedInt(136)
-uint137 = SizedInt(137)
-uint138 = SizedInt(138)
-uint139 = SizedInt(139)
-uint140 = SizedInt(140)
-uint141 = SizedInt(141)
-uint142 = SizedInt(142)
-uint143 = SizedInt(143)
-uint144 = SizedInt(144)
-uint145 = SizedInt(145)
-uint146 = SizedInt(146)
-uint147 = SizedInt(147)
-uint148 = SizedInt(148)
-uint149 = SizedInt(149)
-uint150 = SizedInt(150)
-uint151 = SizedInt(151)
-uint152 = SizedInt(152)
-uint153 = SizedInt(153)
-uint154 = SizedInt(154)
-uint155 = SizedInt(155)
-uint156 = SizedInt(156)
-uint157 = SizedInt(157)
-uint158 = SizedInt(158)
-uint159 = SizedInt(159)
-uint160 = SizedInt(160)
-uint161 = SizedInt(161)
-uint162 = SizedInt(162)
-uint163 = SizedInt(163)
-uint164 = SizedInt(164)
-uint165 = SizedInt(165)
-uint166 = SizedInt(166)
-uint167 = SizedInt(167)
-uint168 = SizedInt(168)
-uint169 = SizedInt(169)
-uint170 = SizedInt(170)
-uint171 = SizedInt(171)
-uint172 = SizedInt(172)
-uint173 = SizedInt(173)
-uint174 = SizedInt(174)
-uint175 = SizedInt(175)
-uint176 = SizedInt(176)
-uint177 = SizedInt(177)
-uint178 = SizedInt(178)
-uint179 = SizedInt(179)
-uint180 = SizedInt(180)
-uint181 = SizedInt(181)
-uint182 = SizedInt(182)
-uint183 = SizedInt(183)
-uint184 = SizedInt(184)
-uint185 = SizedInt(185)
-uint186 = SizedInt(186)
-uint187 = SizedInt(187)
-uint188 = SizedInt(188)
-uint189 = SizedInt(189)
-uint190 = SizedInt(190)
-uint191 = SizedInt(191)
-uint192 = SizedInt(192)
-uint193 = SizedInt(193)
-uint194 = SizedInt(194)
-uint195 = SizedInt(195)
-uint196 = SizedInt(196)
-uint197 = SizedInt(197)
-uint198 = SizedInt(198)
-uint199 = SizedInt(199)
-uint200 = SizedInt(200)
-uint201 = SizedInt(201)
-uint202 = SizedInt(202)
-uint203 = SizedInt(203)
-uint204 = SizedInt(204)
-uint205 = SizedInt(205)
-uint206 = SizedInt(206)
-uint207 = SizedInt(207)
-uint208 = SizedInt(208)
-uint209 = SizedInt(209)
-uint210 = SizedInt(210)
-uint211 = SizedInt(211)
-uint212 = SizedInt(212)
-uint213 = SizedInt(213)
-uint214 = SizedInt(214)
-uint215 = SizedInt(215)
-uint216 = SizedInt(216)
-uint217 = SizedInt(217)
-uint218 = SizedInt(218)
-uint219 = SizedInt(219)
-uint220 = SizedInt(220)
-uint221 = SizedInt(221)
-uint222 = SizedInt(222)
-uint223 = SizedInt(223)
-uint224 = SizedInt(224)
-uint225 = SizedInt(225)
-uint226 = SizedInt(226)
-uint227 = SizedInt(227)
-uint228 = SizedInt(228)
-uint229 = SizedInt(229)
-uint230 = SizedInt(230)
-uint231 = SizedInt(231)
-uint232 = SizedInt(232)
-uint233 = SizedInt(233)
-uint234 = SizedInt(234)
-uint235 = SizedInt(235)
-uint236 = SizedInt(236)
-uint237 = SizedInt(237)
-uint238 = SizedInt(238)
-uint239 = SizedInt(239)
-uint240 = SizedInt(240)
-uint241 = SizedInt(241)
-uint242 = SizedInt(242)
-uint243 = SizedInt(243)
-uint244 = SizedInt(244)
-uint245 = SizedInt(245)
-uint246 = SizedInt(246)
-uint247 = SizedInt(247)
-uint248 = SizedInt(248)
-uint249 = SizedInt(249)
-uint250 = SizedInt(250)
-uint251 = SizedInt(251)
-uint252 = SizedInt(252)
-uint253 = SizedInt(253)
-uint254 = SizedInt(254)
-uint255 = SizedInt(255)
-uint256 = SizedInt(256)
+uint1 = integer[1]
+uint2 = integer[2]
+uint3 = integer[3]
+uint4 = integer[4]
+uint5 = integer[5]
+uint6 = integer[6]
+uint7 = integer[7]
+uint8 = integer[8]
+uint9 = integer[9]
+uint10 = integer[10]
+uint11 = integer[11]
+uint12 = integer[12]
+uint13 = integer[13]
+uint14 = integer[14]
+uint15 = integer[15]
+uint16 = integer[16]
+uint17 = integer[17]
+uint18 = integer[18]
+uint19 = integer[19]
+uint20 = integer[20]
+uint21 = integer[21]
+uint22 = integer[22]
+uint23 = integer[23]
+uint24 = integer[24]
+uint25 = integer[25]
+uint26 = integer[26]
+uint27 = integer[27]
+uint28 = integer[28]
+uint29 = integer[29]
+uint30 = integer[30]
+uint31 = integer[31]
+uint32 = integer[32]
+uint33 = integer[33]
+uint34 = integer[34]
+uint35 = integer[35]
+uint36 = integer[36]
+uint37 = integer[37]
+uint38 = integer[38]
+uint39 = integer[39]
+uint40 = integer[40]
+uint41 = integer[41]
+uint42 = integer[42]
+uint43 = integer[43]
+uint44 = integer[44]
+uint45 = integer[45]
+uint46 = integer[46]
+uint47 = integer[47]
+uint48 = integer[48]
+uint49 = integer[49]
+uint50 = integer[50]
+uint51 = integer[51]
+uint52 = integer[52]
+uint53 = integer[53]
+uint54 = integer[54]
+uint55 = integer[55]
+uint56 = integer[56]
+uint57 = integer[57]
+uint58 = integer[58]
+uint59 = integer[59]
+uint60 = integer[60]
+uint61 = integer[61]
+uint62 = integer[62]
+uint63 = integer[63]
+uint64 = integer[64]
+uint65 = integer[65]
+uint66 = integer[66]
+uint67 = integer[67]
+uint68 = integer[68]
+uint69 = integer[69]
+uint70 = integer[70]
+uint71 = integer[71]
+uint72 = integer[72]
+uint73 = integer[73]
+uint74 = integer[74]
+uint75 = integer[75]
+uint76 = integer[76]
+uint77 = integer[77]
+uint78 = integer[78]
+uint79 = integer[79]
+uint80 = integer[80]
+uint81 = integer[81]
+uint82 = integer[82]
+uint83 = integer[83]
+uint84 = integer[84]
+uint85 = integer[85]
+uint86 = integer[86]
+uint87 = integer[87]
+uint88 = integer[88]
+uint89 = integer[89]
+uint90 = integer[90]
+uint91 = integer[91]
+uint92 = integer[92]
+uint93 = integer[93]
+uint94 = integer[94]
+uint95 = integer[95]
+uint96 = integer[96]
+uint97 = integer[97]
+uint98 = integer[98]
+uint99 = integer[99]
+uint100 = integer[100]
+uint101 = integer[101]
+uint102 = integer[102]
+uint103 = integer[103]
+uint104 = integer[104]
+uint105 = integer[105]
+uint106 = integer[106]
+uint107 = integer[107]
+uint108 = integer[108]
+uint109 = integer[109]
+uint110 = integer[110]
+uint111 = integer[111]
+uint112 = integer[112]
+uint113 = integer[113]
+uint114 = integer[114]
+uint115 = integer[115]
+uint116 = integer[116]
+uint117 = integer[117]
+uint118 = integer[118]
+uint119 = integer[119]
+uint120 = integer[120]
+uint121 = integer[121]
+uint122 = integer[122]
+uint123 = integer[123]
+uint124 = integer[124]
+uint125 = integer[125]
+uint126 = integer[126]
+uint127 = integer[127]
+uint128 = integer[128]
+uint129 = integer[129]
+uint130 = integer[130]
+uint131 = integer[131]
+uint132 = integer[132]
+uint133 = integer[133]
+uint134 = integer[134]
+uint135 = integer[135]
+uint136 = integer[136]
+uint137 = integer[137]
+uint138 = integer[138]
+uint139 = integer[139]
+uint140 = integer[140]
+uint141 = integer[141]
+uint142 = integer[142]
+uint143 = integer[143]
+uint144 = integer[144]
+uint145 = integer[145]
+uint146 = integer[146]
+uint147 = integer[147]
+uint148 = integer[148]
+uint149 = integer[149]
+uint150 = integer[150]
+uint151 = integer[151]
+uint152 = integer[152]
+uint153 = integer[153]
+uint154 = integer[154]
+uint155 = integer[155]
+uint156 = integer[156]
+uint157 = integer[157]
+uint158 = integer[158]
+uint159 = integer[159]
+uint160 = integer[160]
+uint161 = integer[161]
+uint162 = integer[162]
+uint163 = integer[163]
+uint164 = integer[164]
+uint165 = integer[165]
+uint166 = integer[166]
+uint167 = integer[167]
+uint168 = integer[168]
+uint169 = integer[169]
+uint170 = integer[170]
+uint171 = integer[171]
+uint172 = integer[172]
+uint173 = integer[173]
+uint174 = integer[174]
+uint175 = integer[175]
+uint176 = integer[176]
+uint177 = integer[177]
+uint178 = integer[178]
+uint179 = integer[179]
+uint180 = integer[180]
+uint181 = integer[181]
+uint182 = integer[182]
+uint183 = integer[183]
+uint184 = integer[184]
+uint185 = integer[185]
+uint186 = integer[186]
+uint187 = integer[187]
+uint188 = integer[188]
+uint189 = integer[189]
+uint190 = integer[190]
+uint191 = integer[191]
+uint192 = integer[192]
+uint193 = integer[193]
+uint194 = integer[194]
+uint195 = integer[195]
+uint196 = integer[196]
+uint197 = integer[197]
+uint198 = integer[198]
+uint199 = integer[199]
+uint200 = integer[200]
+uint201 = integer[201]
+uint202 = integer[202]
+uint203 = integer[203]
+uint204 = integer[204]
+uint205 = integer[205]
+uint206 = integer[206]
+uint207 = integer[207]
+uint208 = integer[208]
+uint209 = integer[209]
+uint210 = integer[210]
+uint211 = integer[211]
+uint212 = integer[212]
+uint213 = integer[213]
+uint214 = integer[214]
+uint215 = integer[215]
+uint216 = integer[216]
+uint217 = integer[217]
+uint218 = integer[218]
+uint219 = integer[219]
+uint220 = integer[220]
+uint221 = integer[221]
+uint222 = integer[222]
+uint223 = integer[223]
+uint224 = integer[224]
+uint225 = integer[225]
+uint226 = integer[226]
+uint227 = integer[227]
+uint228 = integer[228]
+uint229 = integer[229]
+uint230 = integer[230]
+uint231 = integer[231]
+uint232 = integer[232]
+uint233 = integer[233]
+uint234 = integer[234]
+uint235 = integer[235]
+uint236 = integer[236]
+uint237 = integer[237]
+uint238 = integer[238]
+uint239 = integer[239]
+uint240 = integer[240]
+uint241 = integer[241]
+uint242 = integer[242]
+uint243 = integer[243]
+uint244 = integer[244]
+uint245 = integer[245]
+uint246 = integer[246]
+uint247 = integer[247]
+uint248 = integer[248]
+uint249 = integer[249]
+uint250 = integer[250]
+uint251 = integer[251]
+uint252 = integer[252]
+uint253 = integer[253]
+uint254 = integer[254]
+uint255 = integer[255]
+uint256 = integer[256]
 
-int1 = SizedInt(1, signed=True)
-int2 = SizedInt(2, signed=True)
-int3 = SizedInt(3, signed=True)
-int4 = SizedInt(4, signed=True)
-int5 = SizedInt(5, signed=True)
-int6 = SizedInt(6, signed=True)
-int7 = SizedInt(7, signed=True)
-int8 = SizedInt(8, signed=True)
-int9 = SizedInt(9, signed=True)
-int10 = SizedInt(10, signed=True)
-int11 = SizedInt(11, signed=True)
-int12 = SizedInt(12, signed=True)
-int13 = SizedInt(13, signed=True)
-int14 = SizedInt(14, signed=True)
-int15 = SizedInt(15, signed=True)
-int16 = SizedInt(16, signed=True)
-int17 = SizedInt(17, signed=True)
-int18 = SizedInt(18, signed=True)
-int19 = SizedInt(19, signed=True)
-int20 = SizedInt(20, signed=True)
-int21 = SizedInt(21, signed=True)
-int22 = SizedInt(22, signed=True)
-int23 = SizedInt(23, signed=True)
-int24 = SizedInt(24, signed=True)
-int25 = SizedInt(25, signed=True)
-int26 = SizedInt(26, signed=True)
-int27 = SizedInt(27, signed=True)
-int28 = SizedInt(28, signed=True)
-int29 = SizedInt(29, signed=True)
-int30 = SizedInt(30, signed=True)
-int31 = SizedInt(31, signed=True)
-int32 = SizedInt(32, signed=True)
-int33 = SizedInt(33, signed=True)
-int34 = SizedInt(34, signed=True)
-int35 = SizedInt(35, signed=True)
-int36 = SizedInt(36, signed=True)
-int37 = SizedInt(37, signed=True)
-int38 = SizedInt(38, signed=True)
-int39 = SizedInt(39, signed=True)
-int40 = SizedInt(40, signed=True)
-int41 = SizedInt(41, signed=True)
-int42 = SizedInt(42, signed=True)
-int43 = SizedInt(43, signed=True)
-int44 = SizedInt(44, signed=True)
-int45 = SizedInt(45, signed=True)
-int46 = SizedInt(46, signed=True)
-int47 = SizedInt(47, signed=True)
-int48 = SizedInt(48, signed=True)
-int49 = SizedInt(49, signed=True)
-int50 = SizedInt(50, signed=True)
-int51 = SizedInt(51, signed=True)
-int52 = SizedInt(52, signed=True)
-int53 = SizedInt(53, signed=True)
-int54 = SizedInt(54, signed=True)
-int55 = SizedInt(55, signed=True)
-int56 = SizedInt(56, signed=True)
-int57 = SizedInt(57, signed=True)
-int58 = SizedInt(58, signed=True)
-int59 = SizedInt(59, signed=True)
-int60 = SizedInt(60, signed=True)
-int61 = SizedInt(61, signed=True)
-int62 = SizedInt(62, signed=True)
-int63 = SizedInt(63, signed=True)
-int64 = SizedInt(64, signed=True)
-int65 = SizedInt(65, signed=True)
-int66 = SizedInt(66, signed=True)
-int67 = SizedInt(67, signed=True)
-int68 = SizedInt(68, signed=True)
-int69 = SizedInt(69, signed=True)
-int70 = SizedInt(70, signed=True)
-int71 = SizedInt(71, signed=True)
-int72 = SizedInt(72, signed=True)
-int73 = SizedInt(73, signed=True)
-int74 = SizedInt(74, signed=True)
-int75 = SizedInt(75, signed=True)
-int76 = SizedInt(76, signed=True)
-int77 = SizedInt(77, signed=True)
-int78 = SizedInt(78, signed=True)
-int79 = SizedInt(79, signed=True)
-int80 = SizedInt(80, signed=True)
-int81 = SizedInt(81, signed=True)
-int82 = SizedInt(82, signed=True)
-int83 = SizedInt(83, signed=True)
-int84 = SizedInt(84, signed=True)
-int85 = SizedInt(85, signed=True)
-int86 = SizedInt(86, signed=True)
-int87 = SizedInt(87, signed=True)
-int88 = SizedInt(88, signed=True)
-int89 = SizedInt(89, signed=True)
-int90 = SizedInt(90, signed=True)
-int91 = SizedInt(91, signed=True)
-int92 = SizedInt(92, signed=True)
-int93 = SizedInt(93, signed=True)
-int94 = SizedInt(94, signed=True)
-int95 = SizedInt(95, signed=True)
-int96 = SizedInt(96, signed=True)
-int97 = SizedInt(97, signed=True)
-int98 = SizedInt(98, signed=True)
-int99 = SizedInt(99, signed=True)
-int100 = SizedInt(100, signed=True)
-int101 = SizedInt(101, signed=True)
-int102 = SizedInt(102, signed=True)
-int103 = SizedInt(103, signed=True)
-int104 = SizedInt(104, signed=True)
-int105 = SizedInt(105, signed=True)
-int106 = SizedInt(106, signed=True)
-int107 = SizedInt(107, signed=True)
-int108 = SizedInt(108, signed=True)
-int109 = SizedInt(109, signed=True)
-int110 = SizedInt(110, signed=True)
-int111 = SizedInt(111, signed=True)
-int112 = SizedInt(112, signed=True)
-int113 = SizedInt(113, signed=True)
-int114 = SizedInt(114, signed=True)
-int115 = SizedInt(115, signed=True)
-int116 = SizedInt(116, signed=True)
-int117 = SizedInt(117, signed=True)
-int118 = SizedInt(118, signed=True)
-int119 = SizedInt(119, signed=True)
-int120 = SizedInt(120, signed=True)
-int121 = SizedInt(121, signed=True)
-int122 = SizedInt(122, signed=True)
-int123 = SizedInt(123, signed=True)
-int124 = SizedInt(124, signed=True)
-int125 = SizedInt(125, signed=True)
-int126 = SizedInt(126, signed=True)
-int127 = SizedInt(127, signed=True)
-int128 = SizedInt(128, signed=True)
-int129 = SizedInt(129, signed=True)
-int130 = SizedInt(130, signed=True)
-int131 = SizedInt(131, signed=True)
-int132 = SizedInt(132, signed=True)
-int133 = SizedInt(133, signed=True)
-int134 = SizedInt(134, signed=True)
-int135 = SizedInt(135, signed=True)
-int136 = SizedInt(136, signed=True)
-int137 = SizedInt(137, signed=True)
-int138 = SizedInt(138, signed=True)
-int139 = SizedInt(139, signed=True)
-int140 = SizedInt(140, signed=True)
-int141 = SizedInt(141, signed=True)
-int142 = SizedInt(142, signed=True)
-int143 = SizedInt(143, signed=True)
-int144 = SizedInt(144, signed=True)
-int145 = SizedInt(145, signed=True)
-int146 = SizedInt(146, signed=True)
-int147 = SizedInt(147, signed=True)
-int148 = SizedInt(148, signed=True)
-int149 = SizedInt(149, signed=True)
-int150 = SizedInt(150, signed=True)
-int151 = SizedInt(151, signed=True)
-int152 = SizedInt(152, signed=True)
-int153 = SizedInt(153, signed=True)
-int154 = SizedInt(154, signed=True)
-int155 = SizedInt(155, signed=True)
-int156 = SizedInt(156, signed=True)
-int157 = SizedInt(157, signed=True)
-int158 = SizedInt(158, signed=True)
-int159 = SizedInt(159, signed=True)
-int160 = SizedInt(160, signed=True)
-int161 = SizedInt(161, signed=True)
-int162 = SizedInt(162, signed=True)
-int163 = SizedInt(163, signed=True)
-int164 = SizedInt(164, signed=True)
-int165 = SizedInt(165, signed=True)
-int166 = SizedInt(166, signed=True)
-int167 = SizedInt(167, signed=True)
-int168 = SizedInt(168, signed=True)
-int169 = SizedInt(169, signed=True)
-int170 = SizedInt(170, signed=True)
-int171 = SizedInt(171, signed=True)
-int172 = SizedInt(172, signed=True)
-int173 = SizedInt(173, signed=True)
-int174 = SizedInt(174, signed=True)
-int175 = SizedInt(175, signed=True)
-int176 = SizedInt(176, signed=True)
-int177 = SizedInt(177, signed=True)
-int178 = SizedInt(178, signed=True)
-int179 = SizedInt(179, signed=True)
-int180 = SizedInt(180, signed=True)
-int181 = SizedInt(181, signed=True)
-int182 = SizedInt(182, signed=True)
-int183 = SizedInt(183, signed=True)
-int184 = SizedInt(184, signed=True)
-int185 = SizedInt(185, signed=True)
-int186 = SizedInt(186, signed=True)
-int187 = SizedInt(187, signed=True)
-int188 = SizedInt(188, signed=True)
-int189 = SizedInt(189, signed=True)
-int190 = SizedInt(190, signed=True)
-int191 = SizedInt(191, signed=True)
-int192 = SizedInt(192, signed=True)
-int193 = SizedInt(193, signed=True)
-int194 = SizedInt(194, signed=True)
-int195 = SizedInt(195, signed=True)
-int196 = SizedInt(196, signed=True)
-int197 = SizedInt(197, signed=True)
-int198 = SizedInt(198, signed=True)
-int199 = SizedInt(199, signed=True)
-int200 = SizedInt(200, signed=True)
-int201 = SizedInt(201, signed=True)
-int202 = SizedInt(202, signed=True)
-int203 = SizedInt(203, signed=True)
-int204 = SizedInt(204, signed=True)
-int205 = SizedInt(205, signed=True)
-int206 = SizedInt(206, signed=True)
-int207 = SizedInt(207, signed=True)
-int208 = SizedInt(208, signed=True)
-int209 = SizedInt(209, signed=True)
-int210 = SizedInt(210, signed=True)
-int211 = SizedInt(211, signed=True)
-int212 = SizedInt(212, signed=True)
-int213 = SizedInt(213, signed=True)
-int214 = SizedInt(214, signed=True)
-int215 = SizedInt(215, signed=True)
-int216 = SizedInt(216, signed=True)
-int217 = SizedInt(217, signed=True)
-int218 = SizedInt(218, signed=True)
-int219 = SizedInt(219, signed=True)
-int220 = SizedInt(220, signed=True)
-int221 = SizedInt(221, signed=True)
-int222 = SizedInt(222, signed=True)
-int223 = SizedInt(223, signed=True)
-int224 = SizedInt(224, signed=True)
-int225 = SizedInt(225, signed=True)
-int226 = SizedInt(226, signed=True)
-int227 = SizedInt(227, signed=True)
-int228 = SizedInt(228, signed=True)
-int229 = SizedInt(229, signed=True)
-int230 = SizedInt(230, signed=True)
-int231 = SizedInt(231, signed=True)
-int232 = SizedInt(232, signed=True)
-int233 = SizedInt(233, signed=True)
-int234 = SizedInt(234, signed=True)
-int235 = SizedInt(235, signed=True)
-int236 = SizedInt(236, signed=True)
-int237 = SizedInt(237, signed=True)
-int238 = SizedInt(238, signed=True)
-int239 = SizedInt(239, signed=True)
-int240 = SizedInt(240, signed=True)
-int241 = SizedInt(241, signed=True)
-int242 = SizedInt(242, signed=True)
-int243 = SizedInt(243, signed=True)
-int244 = SizedInt(244, signed=True)
-int245 = SizedInt(245, signed=True)
-int246 = SizedInt(246, signed=True)
-int247 = SizedInt(247, signed=True)
-int248 = SizedInt(248, signed=True)
-int249 = SizedInt(249, signed=True)
-int250 = SizedInt(250, signed=True)
-int251 = SizedInt(251, signed=True)
-int252 = SizedInt(252, signed=True)
-int253 = SizedInt(253, signed=True)
-int254 = SizedInt(254, signed=True)
-int255 = SizedInt(255, signed=True)
-int256 = SizedInt(256, signed=True)
+int1 = integer[1, True]
+int2 = integer[2, True]
+int3 = integer[3, True]
+int4 = integer[4, True]
+int5 = integer[5, True]
+int6 = integer[6, True]
+int7 = integer[7, True]
+int8 = integer[8, True]
+int9 = integer[9, True]
+int10 = integer[10, True]
+int11 = integer[11, True]
+int12 = integer[12, True]
+int13 = integer[13, True]
+int14 = integer[14, True]
+int15 = integer[15, True]
+int16 = integer[16, True]
+int17 = integer[17, True]
+int18 = integer[18, True]
+int19 = integer[19, True]
+int20 = integer[20, True]
+int21 = integer[21, True]
+int22 = integer[22, True]
+int23 = integer[23, True]
+int24 = integer[24, True]
+int25 = integer[25, True]
+int26 = integer[26, True]
+int27 = integer[27, True]
+int28 = integer[28, True]
+int29 = integer[29, True]
+int30 = integer[30, True]
+int31 = integer[31, True]
+int32 = integer[32, True]
+int33 = integer[33, True]
+int34 = integer[34, True]
+int35 = integer[35, True]
+int36 = integer[36, True]
+int37 = integer[37, True]
+int38 = integer[38, True]
+int39 = integer[39, True]
+int40 = integer[40, True]
+int41 = integer[41, True]
+int42 = integer[42, True]
+int43 = integer[43, True]
+int44 = integer[44, True]
+int45 = integer[45, True]
+int46 = integer[46, True]
+int47 = integer[47, True]
+int48 = integer[48, True]
+int49 = integer[49, True]
+int50 = integer[50, True]
+int51 = integer[51, True]
+int52 = integer[52, True]
+int53 = integer[53, True]
+int54 = integer[54, True]
+int55 = integer[55, True]
+int56 = integer[56, True]
+int57 = integer[57, True]
+int58 = integer[58, True]
+int59 = integer[59, True]
+int60 = integer[60, True]
+int61 = integer[61, True]
+int62 = integer[62, True]
+int63 = integer[63, True]
+int64 = integer[64, True]
+int65 = integer[65, True]
+int66 = integer[66, True]
+int67 = integer[67, True]
+int68 = integer[68, True]
+int69 = integer[69, True]
+int70 = integer[70, True]
+int71 = integer[71, True]
+int72 = integer[72, True]
+int73 = integer[73, True]
+int74 = integer[74, True]
+int75 = integer[75, True]
+int76 = integer[76, True]
+int77 = integer[77, True]
+int78 = integer[78, True]
+int79 = integer[79, True]
+int80 = integer[80, True]
+int81 = integer[81, True]
+int82 = integer[82, True]
+int83 = integer[83, True]
+int84 = integer[84, True]
+int85 = integer[85, True]
+int86 = integer[86, True]
+int87 = integer[87, True]
+int88 = integer[88, True]
+int89 = integer[89, True]
+int90 = integer[90, True]
+int91 = integer[91, True]
+int92 = integer[92, True]
+int93 = integer[93, True]
+int94 = integer[94, True]
+int95 = integer[95, True]
+int96 = integer[96, True]
+int97 = integer[97, True]
+int98 = integer[98, True]
+int99 = integer[99, True]
+int100 = integer[100, True]
+int101 = integer[101, True]
+int102 = integer[102, True]
+int103 = integer[103, True]
+int104 = integer[104, True]
+int105 = integer[105, True]
+int106 = integer[106, True]
+int107 = integer[107, True]
+int108 = integer[108, True]
+int109 = integer[109, True]
+int110 = integer[110, True]
+int111 = integer[111, True]
+int112 = integer[112, True]
+int113 = integer[113, True]
+int114 = integer[114, True]
+int115 = integer[115, True]
+int116 = integer[116, True]
+int117 = integer[117, True]
+int118 = integer[118, True]
+int119 = integer[119, True]
+int120 = integer[120, True]
+int121 = integer[121, True]
+int122 = integer[122, True]
+int123 = integer[123, True]
+int124 = integer[124, True]
+int125 = integer[125, True]
+int126 = integer[126, True]
+int127 = integer[127, True]
+int128 = integer[128, True]
+int129 = integer[129, True]
+int130 = integer[130, True]
+int131 = integer[131, True]
+int132 = integer[132, True]
+int133 = integer[133, True]
+int134 = integer[134, True]
+int135 = integer[135, True]
+int136 = integer[136, True]
+int137 = integer[137, True]
+int138 = integer[138, True]
+int139 = integer[139, True]
+int140 = integer[140, True]
+int141 = integer[141, True]
+int142 = integer[142, True]
+int143 = integer[143, True]
+int144 = integer[144, True]
+int145 = integer[145, True]
+int146 = integer[146, True]
+int147 = integer[147, True]
+int148 = integer[148, True]
+int149 = integer[149, True]
+int150 = integer[150, True]
+int151 = integer[151, True]
+int152 = integer[152, True]
+int153 = integer[153, True]
+int154 = integer[154, True]
+int155 = integer[155, True]
+int156 = integer[156, True]
+int157 = integer[157, True]
+int158 = integer[158, True]
+int159 = integer[159, True]
+int160 = integer[160, True]
+int161 = integer[161, True]
+int162 = integer[162, True]
+int163 = integer[163, True]
+int164 = integer[164, True]
+int165 = integer[165, True]
+int166 = integer[166, True]
+int167 = integer[167, True]
+int168 = integer[168, True]
+int169 = integer[169, True]
+int170 = integer[170, True]
+int171 = integer[171, True]
+int172 = integer[172, True]
+int173 = integer[173, True]
+int174 = integer[174, True]
+int175 = integer[175, True]
+int176 = integer[176, True]
+int177 = integer[177, True]
+int178 = integer[178, True]
+int179 = integer[179, True]
+int180 = integer[180, True]
+int181 = integer[181, True]
+int182 = integer[182, True]
+int183 = integer[183, True]
+int184 = integer[184, True]
+int185 = integer[185, True]
+int186 = integer[186, True]
+int187 = integer[187, True]
+int188 = integer[188, True]
+int189 = integer[189, True]
+int190 = integer[190, True]
+int191 = integer[191, True]
+int192 = integer[192, True]
+int193 = integer[193, True]
+int194 = integer[194, True]
+int195 = integer[195, True]
+int196 = integer[196, True]
+int197 = integer[197, True]
+int198 = integer[198, True]
+int199 = integer[199, True]
+int200 = integer[200, True]
+int201 = integer[201, True]
+int202 = integer[202, True]
+int203 = integer[203, True]
+int204 = integer[204, True]
+int205 = integer[205, True]
+int206 = integer[206, True]
+int207 = integer[207, True]
+int208 = integer[208, True]
+int209 = integer[209, True]
+int210 = integer[210, True]
+int211 = integer[211, True]
+int212 = integer[212, True]
+int213 = integer[213, True]
+int214 = integer[214, True]
+int215 = integer[215, True]
+int216 = integer[216, True]
+int217 = integer[217, True]
+int218 = integer[218, True]
+int219 = integer[219, True]
+int220 = integer[220, True]
+int221 = integer[221, True]
+int222 = integer[222, True]
+int223 = integer[223, True]
+int224 = integer[224, True]
+int225 = integer[225, True]
+int226 = integer[226, True]
+int227 = integer[227, True]
+int228 = integer[228, True]
+int229 = integer[229, True]
+int230 = integer[230, True]
+int231 = integer[231, True]
+int232 = integer[232, True]
+int233 = integer[233, True]
+int234 = integer[234, True]
+int235 = integer[235, True]
+int236 = integer[236, True]
+int237 = integer[237, True]
+int238 = integer[238, True]
+int239 = integer[239, True]
+int240 = integer[240, True]
+int241 = integer[241, True]
+int242 = integer[242, True]
+int243 = integer[243, True]
+int244 = integer[244, True]
+int245 = integer[245, True]
+int246 = integer[246, True]
+int247 = integer[247, True]
+int248 = integer[248, True]
+int249 = integer[249, True]
+int250 = integer[250, True]
+int251 = integer[251, True]
+int252 = integer[252, True]
+int253 = integer[253, True]
+int254 = integer[254, True]
+int255 = integer[255, True]
+int256 = integer[256, True]

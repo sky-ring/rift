@@ -1,3 +1,4 @@
+from dbuilder.ast.ref_table import ReferenceTable
 from dbuilder.ast.types import (
     AsmMethod,
     Contract,
@@ -13,98 +14,107 @@ class CallStacks(object):
     """Class responsible for tracking the calls."""
 
     contracts = {}
-    _instance = None
     current_contract: Contract = None
+    current_contract_name: str = None
 
-    def __init__(self):
-        if CallStacks._instance is not None:
-            raise RuntimeError("This class is a singleton!")
-        else:
-            CallStacks._instance = self
+    @classmethod
+    def declare_contract(cls, name):
+        cls.current_contract = Contract(name)
+        cls.current_contract_name = name
+        cls.contracts[name] = cls.current_contract
 
-    @staticmethod
-    def get_instance() -> "CallStacks":
-        if CallStacks._instance is None:
-            CallStacks()
-        return CallStacks._instance
+    @classmethod
+    def get_contract(cls, name):
+        return cls.contracts[name]
 
-    @staticmethod
-    def declare_contract(name):
-        CallStacks.current_contract = Contract(name)
-        CallStacks.contracts[name] = CallStacks.current_contract
-
-    @staticmethod
-    def get_contract(name):
-        return CallStacks.contracts[name]
-
-    @staticmethod
-    def declare_method(name, args, annotations):
+    @classmethod
+    def declare_method(cls, name, args, annotations):
         m = Method(name, args, annotations)
-        CallStacks.current_contract.add_method(m)
+        scope = f"{cls.current_contract_name}_{name}"
+        ReferenceTable.init_scope(scope)
+        cls.current_contract.add_method(m)
 
-    @staticmethod
-    def declare_asm(name, args, annotations, asm_annoations):
+    @classmethod
+    def declare_asm(cls, name, args, annotations, asm_annoations):
         m = AsmMethod(name, args, annotations, asm_annoations)
-        CallStacks.current_contract.add_method(m)
+        cls.current_contract.add_method(m)
 
-    @staticmethod
-    def add_raw_statement(raw):
-        CallStacks.current_contract.add_statement(raw)
+    @classmethod
+    def add_raw_statement(cls, raw):
+        cls.current_contract.add_statement(raw)
 
-    @staticmethod
-    def add_statement(type, *args):
+    @classmethod
+    def add_statement(cls, type, *args):
         s = Statement(type, args)
-        CallStacks.current_contract.add_statement(s)
+        s._scope = ReferenceTable.current_scope
+        cls.current_contract.add_statement(s)
         return s.node_id()
 
-    @staticmethod
-    def return_(entity):
-        CallStacks.add_statement(Statement.RETURN, entity)
+    @classmethod
+    def return_(cls, entity):
+        ReferenceTable.mark(entity)
+        cls.add_statement(Statement.RETURN, entity)
         return entity
 
-    @staticmethod
-    def end_method(method):
-        CallStacks.current_contract.end_method(method)
+    @classmethod
+    def end_method(cls, method):
+        cls.current_contract.end_method(method)
 
-    @staticmethod
-    def begin_if(cond):
+    @classmethod
+    def begin_if(cls, cond):
+        ReferenceTable.mark(cond)
         nif = IfFlow()
-        CallStacks.current_contract.add_statement(nif)
+        cls.current_contract.add_statement(nif)
         nif.iff(cond)
         return nif.node_id()
 
-    @staticmethod
-    def else_if(node_id, cond=None):
+    @classmethod
+    def else_if(cls, node_id, cond=None):
+        ReferenceTable.mark(cond)
         nif: IfFlow = Node.find(node_id)
         if cond:
             nif.iff(cond)
         else:
             nif.else_()
 
-    @staticmethod
-    def end_if(node_id):
+    @classmethod
+    def end_if(cls, node_id):
         nif: IfFlow = Node.find(node_id)
-        CallStacks.current_contract.current_method.end_statement(nif)
+        cls.current_contract.current_method.end_statement(nif)
 
-    @staticmethod
-    def begin_while(cond):
+    @classmethod
+    def begin_while(cls, cond):
+        ReferenceTable.mark(cond)
         nif = WhileLoop(cond)
-        CallStacks.current_contract.add_statement(nif)
+        cls.current_contract.add_statement(nif)
         return nif.node_id()
 
-    @staticmethod
-    def end_while(node_id):
+    @classmethod
+    def end_while(cls, node_id):
         nif: WhileLoop = Node.find(node_id)
-        CallStacks.current_contract.current_method.end_statement(nif)
+        cls.current_contract.current_method.end_statement(nif)
 
-    @staticmethod
-    def call_(name, *args, operand=None):
+    @classmethod
+    def assign(cls, name, value):
+        return cls.add_statement(Statement.ASSIGN, name, value)
+
+    @classmethod
+    def multi_assign(cls, names, values):
+        return cls.add_statement(Statement.M_ASSIGN, names, values)
+
+    @classmethod
+    def expression(cls, expr):
+        return cls.add_statement(Statement.EXPR, expr)
+
+    @classmethod
+    def call_(cls, name, *args, operand=None):
+        ReferenceTable.mark(*args)
         if operand:
-            CallStacks.add_statement(
+            cls.add_statement(
                 Statement.METHOD_CALL,
                 name,
                 operand,
                 *args,
             )
         else:
-            CallStacks.add_statement(Statement.FUNC_CALL, name, *args)
+            cls.add_statement(Statement.FUNC_CALL, name, *args)

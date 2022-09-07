@@ -1,29 +1,94 @@
+from dbuilder.ast.ref_table import ReferenceTable
 from dbuilder.core.condition import Cond
 from dbuilder.core.loop import while_
 from dbuilder.library.std import std
-from dbuilder.types.types import Builder, Entity, Slice
+from dbuilder.types.types import Builder, Cell, Entity, Int, Slice
+from dbuilder.types.utils import Subscriptable
 
 
-class Payload:
+class Payload(metaclass=Subscriptable):
     __magic__ = 0xA935E5
     __tag__ = "_"
     __data__: Slice
+    _pointer: int
+    _skipped_ones: dict[str, Entity]
 
-    def __init__(self, data_slice: Slice = None, name=None):
+    def __init__(
+        self,
+        data_slice: Slice = None,
+        name=None,
+        lazy=True,
+        **kwargs,
+    ):
         # TODO: Handle the inheritance of the annotatins
         self.annotations = self.__annotations__
+        self._items = list(self.annotations.keys())
+        self._lazy = lazy
+        self._pointer = 0
+        self._skipped_ones = {}
+        self.__data__ = None
         if name is None:
             self.f_name = type(self).__name__.lower()
         else:
             self.f_name = name
         if data_slice:
             self.data_init(data_slice)
+        if self.__data__ is None:
+            for k in kwargs:
+                if k in self.annotations:
+                    setattr(self, k, kwargs[k])
+
+    def __setattr__(self, __name: str, __value) -> None:
+        if isinstance(__value, int) and not __name.startswith("_"):
+            __value = Int(__value)
+        super().__setattr__(__name, __value)
+
+    def __getattr__(self, item):
+        # This gets called whenever item doesn't exist in payload
+        # So we'll check whether it's really from fields or not
+        # Purpose => Lazy Loading
+        if item in self._skipped_ones:
+            n = self._skipped_ones[item]
+            name = f"{self.f_name}_{item}"
+            return n.__assign__(name)
+
+        if self.__data__ is None:
+            name = f"{self.f_name}_{item}"
+            return Entity(name=name)
+        if not self._lazy or item not in self._items:
+            # Q: Is this a good idea?
+            return getattr(self.__data__, item)
+        if self._pointer == 0:
+            tag_len, _ = self.tag_data()
+            if tag_len != 0:
+                self.__data__.uint_(tag_len)
+        # Strategy => Skip if not present
+        targets = self._items[self._pointer :]
+        for t in targets:
+            self._pointer += 1
+            v = self.annotations[t]
+            is_ = t == item
+            name = None
+            if is_:
+                name = f"{self.f_name}_{t}"
+            n = v.__deserialize__(
+                self.__data__,
+                name=name,
+                inplace=True,
+                lazy=True,
+            )
+            if is_:
+                setattr(self, t, n)
+                return n
+            else:
+                self._skipped_ones[t] = n
 
     def data_init(self, data_slice: Slice):
         self.__data__ = data_slice
         if not self.__data__.NAMED:
             self.__data__.__assign__(f"{self.f_name}_orig")
         self.cp = self.__data__.__assign__(f"{self.f_name}_cp")
+        ReferenceTable.eliminatable(f"{self.f_name}_cp")
 
     def load(self, proc_tag=True, master=True):
         if master:
@@ -108,9 +173,15 @@ class Payload:
             builder = v.__serialize__(builder, c_v)
         return builder
 
-    def as_cell(self):
+    def as_cell(self) -> "Cell":
         b = self.as_builder()
         return b.end()
+
+    def as_ref(self):
+        from dbuilder.types.ref import Ref
+
+        type_ = Ref[type(self)]
+        return type_(self.as_cell())
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
@@ -124,25 +195,35 @@ class Payload:
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
         **kwargs,
     ):
         p: "Payload" = cls(from_, name=name)
         tag = True
         if "tag" in kwargs:
             tag = kwargs["tag"]
-        p.load(proc_tag=tag, master=False)
+        if not lazy:
+            p.load(proc_tag=tag, master=False)
         return p
 
     @classmethod
-    def __predefine__(cls, name: str = None):
+    def __predefine__(
+        cls,
+        name: str = None,
+        lazy: bool = True,
+        **kwargs,
+    ):
         if name is None:
             return
-        for k, v in cls.__annotations__.items():
-            v_name = f"{name}_{k}"
-            v.__predefine__(name=v_name)
+        if lazy and "target" in kwargs:
+            tg = kwargs["target"]
+            targets = {tg: cls.__annotations__[tg]}
+        else:
+            targets = cls.__annotations__
 
-    def __getattr__(self, item):
-        return getattr(self.__data__, item)
+        for k, v in targets.items():
+            v_name = f"{name}_{k}"
+            v.__predefine__(name=v_name, lazy=lazy, **kwargs)
 
     @classmethod
     def type_name(cls) -> str:

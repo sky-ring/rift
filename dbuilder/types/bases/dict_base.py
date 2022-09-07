@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from dbuilder.core import Entity
     from dbuilder.types.types import Slice, Dict, Builder
 
 from dbuilder.core.invokable import typed_invokable
@@ -70,3 +71,9 @@ class _DictBase(_CellBase):
     @typed_invokable(name="dict_empty?")
     def dict_empty_check(self) -> int:
         pass
+
+    @classmethod
+    def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        if value is None:
+            return to.uint(0, 1)
+        return to.dict(value)

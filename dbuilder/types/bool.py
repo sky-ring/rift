@@ -14,6 +14,8 @@ class Bool(Int):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         if inplace:
             v = from_.uint_(1)
