@@ -17,6 +17,7 @@ from dbuilder.core import (
 from dbuilder.core.factory import Factory
 from dbuilder.core.utils import init_abstract_type
 from dbuilder.cst.cst_patcher import patch as cst_patch
+from dbuilder.cst.cst_visitor import relative_imports
 
 
 class Engine(object):
@@ -158,10 +159,13 @@ class Engine(object):
         selected.insert(0, "from dbuilder.types import helpers\n")
         needed_src = "".join(selected)
         needed_src = cst_patch(needed_src)
+        rel_imported = relative_imports(needed_src)._imported_ones
         x = ast.parse(needed_src)
         m = {**_globals}
         exec(compile(x, "func-imports", "exec"), m)
-        m = {**m, **_globals}
+        # here we will need to select updated contracts from _globals
+        _selected = {k: v for k, v in _globals.items() if k in rel_imported}
+        m = {**m, **_selected}
         src = inspect.getsource(contract)
         src = cst_patch(src)
         x = ast.parse(src)

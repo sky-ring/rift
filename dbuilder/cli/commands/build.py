@@ -48,7 +48,7 @@ def build():
         mod.__file__ = fp
         sys.modules[mod_name] = mod
         # gather refs
-        imp_ = relative_imports(code)
+        imp_ = relative_imports(code)._relative_accesses
         for i in imp_:
             refs.append((mod_name, i))
         compiled = compile(code, fp, "exec")

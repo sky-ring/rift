@@ -8,8 +8,8 @@ import libcst as cst
 from dbuilder.cst.import_visitor import RelativeImportVisitor
 
 
-def relative_imports(source):
+def relative_imports(source) -> RelativeImportVisitor:
     tree = cst.parse_module(source)
     visitor = RelativeImportVisitor()
     tree.visit(visitor)
-    return visitor._relative_accesses
+    return visitor

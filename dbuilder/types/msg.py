@@ -95,7 +95,7 @@ class InternalMessage(Payload):
     @classmethod
     def __build_type__(cls, item) -> "InternalMessage":
         n_cls = deepcopy(cls)
-        n_cls.__annotations__["body"] = Either(item, Ref[item])
+        n_cls.__annotations__["body"] = Either[item, Ref[item]]
         return n_cls
 
     @classmethod

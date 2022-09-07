@@ -67,10 +67,16 @@ class Expr:
             return str(x)
 
         if self.type == Expr.EXPR_AR2:
-            return "{op1} {op} {op2}".format(
+            op = self.args[0]
+            wrap = False
+            if op == "&" or op == "|":
+                wrap = True
+            return "{wrap_s}{op1}{wrap_e} {op} {wrap_s}{op2}{wrap_e}".format(
                 op1=self.args[1],
                 op=self.args[0],
                 op2=self.args[2],
+                wrap_s="(" if wrap else "",
+                wrap_e=")" if wrap else "",
             )
         elif self.type == Expr.EXPR_AR1:
             return "{op} {ope}".format(op=self.args[0], ope=self.args[1])
