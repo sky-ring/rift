@@ -40,7 +40,6 @@ class Model:
             name = None
             if is_:
                 name = f"data_{t}"
-                # self.__predefine__(name=name, lazy=True, target=t)
             n = v.__deserialize__(
                 self.__data__,
                 name=name,

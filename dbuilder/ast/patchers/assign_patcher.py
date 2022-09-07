@@ -87,11 +87,16 @@ class AssignPatcher(ast.NodeTransformer):
             target = node.targets[0]
             if hasattr(target, "id"):
                 tg = target.id
+                # Let's not patch some specific vars
+                if tg.startswith("__") and tg.endswith("__"):
+                    return node
             else:
                 tg = None
             nodes = [node]
             if isinstance(node.value, ast.Constant):
-                if isinstance(node.value.value, int):
+                if isinstance(node.value.value, int) and type(
+                    node.value.value,
+                ) != type(False):
                     node.value = ast.Call(
                         func=ast.Attribute(
                             value=ast.Name(id="helpers", ctx=ast.Load()),

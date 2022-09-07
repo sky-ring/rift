@@ -1,9 +1,10 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.types.types import Builder, Cell, Slice
+from dbuilder.types.types import Builder, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
-class MaybeType:
+class Maybe(metaclass=CachingSubscriptable):
     has: Entity
     bound: Entity
 
@@ -11,7 +12,7 @@ class MaybeType:
         return getattr(self.bound, item)
 
     @classmethod
-    def __serialize__(cls, to: "Builder", value: "MaybeType") -> "Builder":
+    def __serialize__(cls, to: "Builder", value: "Maybe") -> "Builder":
         if value is None:
             b = to.uint(0, 1)
             return b
@@ -41,7 +42,7 @@ class MaybeType:
             i = from_.uint_(1)
         else:
             i = from_.uint(1)
-        m = MaybeType()
+        m = Maybe()
         m.has = i
         m.has.__assign__(f"{name}_has")
         with Cond() as c:
@@ -65,18 +66,12 @@ class MaybeType:
         base = cls.__basex__
         return base.type_name()
 
-
-class _MaybeTypeBuilder(type):
-    def __new__(cls, base_cls=Cell):
-        return super().__new__(
-            cls,
-            "Maybe_%s" % (base_cls.__name__,),
-            (MaybeType,),
+    @classmethod
+    def __build_type__(cls, item):
+        return type(
+            "Maybe_%s" % item.__name__,
+            (cls,),
             {
-                "__basex__": base_cls,
+                "__basex__": item,
             },
         )
-
-
-def Maybe(base: type = Cell):
-    return _MaybeTypeBuilder.__new__(_MaybeTypeBuilder, base_cls=base)

@@ -2,9 +2,10 @@ from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
 from dbuilder.library.std import std
 from dbuilder.types.types import Builder, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
-class ConstructorType:
+class Constructor(metaclass=CachingSubscriptable):
     which: Entity
     bounds: list[Entity]
 
@@ -24,7 +25,7 @@ class ConstructorType:
     def __serialize__(
         cls,
         to: "Builder",
-        value: "ConstructorType",
+        value: "Constructor",
     ) -> "Builder":
         # TODO : Completion
         return to
@@ -39,7 +40,7 @@ class ConstructorType:
         **kwargs,
     ):
         bases = cls.__x_bases__
-        m = ConstructorType()
+        m = Constructor()
         tag = std.null()
         tag.__assign__(f"{name}_tag")
         with Cond() as c:
@@ -71,20 +72,14 @@ class ConstructorType:
         for base in bases:
             base.__predefine__(name=name)
 
-
-class _ConstructorTypeBuilder(type):
-    def __new__(cls, *bases):
-        names = (base.__name__ for base in bases)
+    @classmethod
+    def __build_type__(cls, items):
+        names = (base.__name__ for base in items)
         joined = "_".join(names)
-        return super().__new__(
-            cls,
+        return type(
             "Constructor_%s" % joined,
-            (ConstructorType,),
+            (cls,),
             {
-                "__x_bases__": list(bases),
+                "__x_bases__": list(items),
             },
         )
-
-
-def Constructor(*bases):
-    return _ConstructorTypeBuilder.__new__(_ConstructorTypeBuilder, *bases)

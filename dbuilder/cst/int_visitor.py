@@ -3,7 +3,9 @@ import libcst as cst
 
 class HexTransformer(cst.CSTTransformer):
     def leave_Integer(
-        self, original_node: "cst.Integer", updated_node: "cst.Integer",
+        self,
+        original_node: "cst.Integer",
+        updated_node: "cst.Integer",
     ) -> "cst.BaseExpression":
         if updated_node.value.startswith("0x"):
             # detected hex constant

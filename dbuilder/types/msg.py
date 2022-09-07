@@ -1,19 +1,14 @@
 from copy import deepcopy
 
-from dbuilder.core.annots import method
-from dbuilder.func.contract import Contract
-from dbuilder.library.std import std
-from dbuilder.types import Cell, Dict, Slice
+from dbuilder.types import Cell, Dict
 from dbuilder.types.addr import MsgAddress
 from dbuilder.types.bool import Bool
 from dbuilder.types.coin import Coin
 from dbuilder.types.either import Either
-from dbuilder.types.int_aliases import uint2, uint5, uint32, uint64
+from dbuilder.types.int_aliases import uint5, uint32, uint64
 from dbuilder.types.maybe import Maybe
-from dbuilder.types.model import Model
 from dbuilder.types.payload import Payload
 from dbuilder.types.ref import Ref
-from dbuilder.types.slice import slice
 
 
 class TickTock(Payload):
@@ -28,10 +23,10 @@ class SimpleLib(Payload):
 
 
 class StateInit(Payload):
-    split_depth: Maybe(uint5)
-    special: Maybe(TickTock)
-    code: Maybe(Ref[Cell])
-    data: Maybe(Ref[Cell])
+    split_depth: Maybe[uint5]
+    special: Maybe[TickTock]
+    code: Maybe[Ref[Cell]]
+    data: Maybe[Ref[Cell]]
     library: Dict
     pass
 
@@ -94,8 +89,8 @@ class InboundExtMsgInfo(Payload):
 
 class InternalMessage(Payload):
     info: InternalMsgInfo
-    init: Maybe(Either(StateInit, Ref[StateInit]))
-    body: Either(Cell, Ref[Cell])
+    init: Maybe[Either[StateInit, Ref[StateInit]]]
+    body: Either[Cell, Ref[Cell]]
 
     @classmethod
     def __build_type__(cls, item) -> "InternalMessage":
@@ -107,8 +102,8 @@ class InternalMessage(Payload):
     def build(
         cls,
         dest: MsgAddress,
-        state_init: Maybe(Either(StateInit, Ref[StateInit])) = None,
-        body: Either(Cell, Ref[Cell]) = None,
+        state_init: Maybe[Either[StateInit, Ref[StateInit]]] = None,
+        body: Either[Cell, Ref[Cell]] = None,
         ihr_disabled: Bool = 1,
         bounce: Bool = 1,
         bounced: Bool = 0,

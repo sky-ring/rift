@@ -220,6 +220,8 @@ def is_inline_ref(f):
 def is_method(func):
     if not hasattr(func, "__pyfunc__"):
         return False
+    if not func.__pyfunc__:
+        print(func)
     type_ = func.__pyfunc__.get("type", [])
     return "method" in type_
 

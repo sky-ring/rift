@@ -1,8 +1,9 @@
 from dbuilder.core import Entity
 from dbuilder.types.types import Builder, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
-class SizedSlice(Slice):
+class slice(Slice, metaclass=CachingSubscriptable):
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         b = to.slice(value)
@@ -25,18 +26,12 @@ class SizedSlice(Slice):
             v.__assign__(name)
         return v
 
-
-class _SliceTypeBuilder(type):
-    def __new__(cls, bits=32):
-        return super().__new__(
-            cls,
-            "Slice%d" % (bits,),
-            (SizedSlice,),
+    @classmethod
+    def __build_type__(cls, size):
+        return type(
+            "Slice%d" % (size,),
+            (cls,),
             {
-                "__bits__": bits,
+                "__bits__": size,
             },
         )
-
-
-def slice(bits: int = 32):
-    return _SliceTypeBuilder.__new__(_SliceTypeBuilder, bits=bits)

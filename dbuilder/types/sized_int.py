@@ -1,8 +1,9 @@
 from dbuilder.core import Entity
 from dbuilder.types.types import Builder, Int, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
-class SizedIntType(Int):
+class integer(Int, metaclass=CachingSubscriptable):
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         if cls.__signed__:
@@ -34,19 +35,16 @@ class SizedIntType(Int):
             v.__assign__(name)
         return v
 
-
-class _IntTypeBuilder(type):
-    def __new__(cls, bits=32, signed=False):
-        return super().__new__(
-            cls,
+    @classmethod
+    def __build_type__(cls, items):
+        if not isinstance(items, tuple):
+            items = (items, True)
+        bits, signed = items
+        return type(
             "%sInt%d" % ("" if signed else "U", bits),
-            (SizedIntType,),
+            (cls,),
             {
                 "__bits__": bits,
                 "__signed__": signed,
             },
         )
-
-
-def SizedInt(bits: int = 32, signed: bool = False):
-    return _IntTypeBuilder.__new__(_IntTypeBuilder, bits=bits, signed=signed)

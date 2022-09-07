@@ -1,12 +1,7 @@
 from dbuilder.func.contract import Contract
-from dbuilder.library.std import std
 from dbuilder.types import Cell, Slice
-from dbuilder.types.int_aliases import uint32, uint256
-from dbuilder.types.model import Model
-from dbuilder.types.payload import Payload
-from dbuilder.types.slice import slice
+from dbuilder.types.msg import InternalMessage
 
-from .lazy_types import InternalMessage
 from .util import compile
 
 
