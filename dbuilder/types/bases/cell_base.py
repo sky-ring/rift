@@ -51,6 +51,8 @@ class _CellBase(_EntityBase):
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        if value is None:
+            return to
         return to.ref(value)
 
     @classmethod
@@ -59,6 +61,8 @@ class _CellBase(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         if inplace:
             v = from_.ref_()

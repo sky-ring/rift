@@ -152,10 +152,8 @@ class Entity(Node):
         self._unpack_len = l_
 
     def __iter__(self):
-        print(type(self))
         if hasattr(self, "__unpackable") and self.__unpackable:
             for _ in range(self._unpack_len):
-                # TODO: Fix types or?
                 yield Entity()
 
     def __rem_name__(self):

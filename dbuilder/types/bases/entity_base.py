@@ -17,6 +17,8 @@ class _EntityBase(Entity):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         pass
 
@@ -24,6 +26,8 @@ class _EntityBase(Entity):
     def __predefine__(
         cls,
         name: str = None,
+        lazy: bool = True,
+        **kwargs,
     ):
         if name is None:
             return

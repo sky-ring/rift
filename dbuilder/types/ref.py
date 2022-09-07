@@ -8,9 +8,22 @@ if TYPE_CHECKING:
     from dbuilder.types.payload import Payload
 
 
-class RefType(_EntityBase):
+    bound: "Entity"
+
+    def __init__(self, bound) -> None:
+        self.bound = bound
+
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
+        if isinstance(value, Ref):
+            value = value.bound
+            if isinstance(value, Entity):
+                b = to.ref(value)
+            elif hasattr(value, "__magic__") and value.__magic__ == 0xA935E5:
+                p: "Payload" = value
+                c = p.as_cell()
+                b = to.ref(c)
+            return b
         base = cls.__basex__
         if base == Cell:
             b = to.ref(value)
@@ -26,6 +39,8 @@ class RefType(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         base = cls.__basex__
         if inplace:
@@ -43,7 +58,12 @@ class RefType(_EntityBase):
         return v
 
     @classmethod
-    def __predefine__(cls, name: str = None):
+    def __predefine__(
+        cls,
+        name: str = None,
+        lazy: bool = True,
+        **kwargs,
+    ):
         if name is None:
             return
         base = cls.__basex__

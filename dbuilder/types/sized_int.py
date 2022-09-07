@@ -17,6 +17,8 @@ class SizedIntType(Int):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         if cls.__signed__:
             if inplace:

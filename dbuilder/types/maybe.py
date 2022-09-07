@@ -1,10 +1,9 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Cell, Slice
 
 
-class MaybeType(_EntityBase):
+class MaybeType:
     has: Entity
     bound: Entity
 
@@ -13,15 +12,18 @@ class MaybeType(_EntityBase):
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "MaybeType") -> "Builder":
+        if value is None:
+            b = to.uint(0, 1)
+            return b
         base = cls.__basex__
         to.__assign__("_b_tmp_")
         with Cond() as c:
             c.match(value.has)
-            b = to.uint(1)
+            b = to.uint(1, 1)
             b = base.__serialize__(b, value.bound)
             b.__assign__("_b_tmp_")
             c.otherwise()
-            b = to.uint(0)
+            b = to.uint(0, 1)
             b.__assign__("_b_tmp_")
         return b
 
@@ -31,6 +33,8 @@ class MaybeType(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         base = cls.__basex__
         if inplace:
@@ -50,6 +54,8 @@ class MaybeType(_EntityBase):
     def __predefine__(
         cls,
         name: str = None,
+        lazy: bool = True,
+        **kwargs,
     ):
         base = cls.__basex__
         base.__predefine__(name=name)

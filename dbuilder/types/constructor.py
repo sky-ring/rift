@@ -1,16 +1,24 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
 from dbuilder.library.std import std
-from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Slice
 
 
-class ConstructorType(_EntityBase):
+class ConstructorType:
     which: Entity
-    bound: Entity
+    bounds: list[Entity]
+
+    def __init__(self) -> None:
+        self.bounds = []
 
     def __getattr__(self, item):
-        return getattr(self.bound, item)
+        # This is not standard way
+        # TODO: Fix this
+        for b in self.bounds:
+            if hasattr(b, item):
+                # if item in b.__dict__:
+                return getattr(b, item)
+        raise AttributeError()
 
     @classmethod
     def __serialize__(
@@ -27,6 +35,8 @@ class ConstructorType(_EntityBase):
         from_: "Slice",
         name: str = None,
         inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
     ):
         bases = cls.__x_bases__
         m = ConstructorType()
@@ -44,8 +54,9 @@ class ConstructorType(_EntityBase):
                     name=name,
                     inplace=inplace,
                     tag=False,
+                    lazy=lazy,
                 )
-                m.bound = d
+                m.bounds.append(d)
         m.which = tag
         return m
 
@@ -53,6 +64,8 @@ class ConstructorType(_EntityBase):
     def __predefine__(
         cls,
         name: str = None,
+        lazy: bool = True,
+        **kwargs,
     ):
         bases = cls.__x_bases__
         for base in bases:
