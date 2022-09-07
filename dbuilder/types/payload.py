@@ -14,7 +14,11 @@ class Payload(metaclass=Subscriptable):
     _skipped_ones: dict[str, Entity]
 
     def __init__(
-        self, data_slice: Slice = None, name=None, lazy=True, **kwargs
+        self,
+        data_slice: Slice = None,
+        name=None,
+        lazy=True,
+        **kwargs,
     ):
         # TODO: Handle the inheritance of the annotatins
         self.annotations = self.__annotations__
@@ -50,7 +54,6 @@ class Payload(metaclass=Subscriptable):
 
         if self.__data__ is None:
             name = f"{self.f_name}_{item}"
-            # self.annotations[item].__predefine__(name=name, lazy=True)
             return Entity(name=name)
         if not self._lazy or item not in self._items:
             # Q: Is this a good idea?
@@ -68,7 +71,6 @@ class Payload(metaclass=Subscriptable):
             name = None
             if is_:
                 name = f"{self.f_name}_{t}"
-                # self.__predefine__(name=name, lazy=True, target=t)
             n = v.__deserialize__(
                 self.__data__,
                 name=name,

@@ -19,9 +19,7 @@ class BurnNotification(Payload):
 
 
 class UnorderedLazyPayloads(Contract):
-    """
-    UnorderedLazyPayloads Contract.
-    """
+    """UnorderedLazyPayloads Contract."""
 
     def internal_receive(
         self,

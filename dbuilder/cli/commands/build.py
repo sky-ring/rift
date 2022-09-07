@@ -38,7 +38,9 @@ def build():
         mod_name = cf.replace(".py", "")
         fp = p_join(c_dir, cf)
         spec = spec_from_file_location(
-            mod_name, fp, submodule_search_locations=[],
+            mod_name,
+            fp,
+            submodule_search_locations=[],
         )
         mod = module_from_spec(spec)
         f = open(fp, "r")
@@ -59,10 +61,12 @@ def build():
     c_order = {v: i for i, v in enumerate(t_order)}
     # we filter the contracts and sort them as in order
     contracts = filter(
-        lambda x: x.__bases__ != (object,), ContractMeta.contracts,
+        lambda x: x.__bases__ != (object,),
+        ContractMeta.contracts,
     )
     contracts = filter(
-        lambda x: x.__module__ in allowed_modules, ContractMeta.contracts,
+        lambda x: x.__module__ in allowed_modules,
+        ContractMeta.contracts,
     )
     contracts = list(contracts)
     contracts = sorted(contracts, key=lambda c: c_order[c.__module__])
@@ -71,7 +75,8 @@ def build():
         module = sys.modules.get(contract.__module__)
         tg_dict = {**module.__dict__}
         for p in patched_ones:
-            # what we do is provide new patched instances instead of old ones (imported)
+            # what we do is provide new patched instances
+            # instead of old ones (imported)
             tg_dict[p.__name__] = p
         t = Engine.patch(contract, tg_dict)
         patched_ones.append(t)

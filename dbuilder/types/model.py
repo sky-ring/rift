@@ -19,9 +19,6 @@ class Model:
         # This gets called whenever item doesn't exist in data model
         # So we'll check whether it's really from fields or not
         # Purpose => Lazy Loading
-        # if not self._lazy or item not in self._items:
-        #     # Q: Is this a good idea?
-        #     return getattr(self.__data__, item)
         if item in self._skipped_ones:
             n = self._skipped_ones[item]
             name = f"data_{item}"

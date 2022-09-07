@@ -17,9 +17,7 @@ class BurnBody(Payload):
 
 
 class BuildPayload(Contract):
-    """
-    Build Payload Contract.
-    """
+    """Build Payload Contract."""
 
     def internal_receive(
         self,
