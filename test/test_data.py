@@ -21,11 +21,11 @@ class SimpleData(Contract):
 
         seq_no: SizedInt(32)
         public_key: SizedInt(256)
-        ref: Ref(Cell)
-        key: Ref(KeyPair)
-        maybe_cell: Maybe(Ref(Cell))
+        ref: Ref[Cell]
+        key: Ref[KeyPair]
+        maybe_cell: Maybe(Ref[Cell])
         maybe_key: Maybe(KeyPair)
-        some_either: Either(KeyPair, Ref(KeyPair))
+        some_either: Either(KeyPair, Ref[KeyPair])
 
     data: Data
 

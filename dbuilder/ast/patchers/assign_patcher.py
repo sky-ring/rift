@@ -58,7 +58,7 @@ class AssignPatcher(ast.NodeTransformer):
             a_expr = ast.Expr(
                 value=ast.Call(
                     func=ast.Attribute(
-                        value=ast.Name(id="self", ctx=ast.Load()),
+                        value=ast.Name(id="helpers", ctx=ast.Load()),
                         attr="_m_assign",
                         ctx=ast.Load(),
                     ),
@@ -94,7 +94,7 @@ class AssignPatcher(ast.NodeTransformer):
                 if isinstance(node.value.value, int):
                     node.value = ast.Call(
                         func=ast.Attribute(
-                            value=ast.Name(id="self", ctx=ast.Load()),
+                            value=ast.Name(id="helpers", ctx=ast.Load()),
                             attr="factory_",
                             ctx=ast.Load(),
                         ),

@@ -13,11 +13,11 @@ def init_func(func):
     return func
 
 
-def method(name=None):
-    return partial(method_, name=name)
+def method(name=None, static=False):
+    return partial(method_, name=name, static=static)
 
 
-def method_(func, name=None):
+def method_(func, name=None, static=False):
     if is_method(func):
         return func
 
@@ -34,7 +34,10 @@ def method_(func, name=None):
             annotations = func.__annotations__
             annotations = {**annotations} if annotations else {}
             ret = annotations.get("return", None)
-            args_ = list(args[1:])
+            if static:
+                args_ = list(args)
+            else:
+                args_ = list(args[1:])
             # What we here do is pass the slice
             for i in range(len(args_)):
                 d = args_[i]
@@ -67,6 +70,7 @@ def method_(func, name=None):
 
     nf = init_func(nf)
     nf.__pyfunc__["type"] = ["method"]
+    nf.__static__ = static
     setattr(nf, "__args__", func.__code__.co_argcount)
     annotations = func.__annotations__
     annotations = annotations or {}

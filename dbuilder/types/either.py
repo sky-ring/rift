@@ -83,7 +83,7 @@ class EitherType(_EntityBase):
 class _EitherTypeBuilder(type):
     def __new__(cls, base1: type = Cell, base2: type = None):
         if base2 is None:
-            base2 = Ref(Cell)
+            base2 = Ref[Cell]
         return super().__new__(
             cls,
             "Either_%s_%s" % (base1.__name__, base2.__name__),

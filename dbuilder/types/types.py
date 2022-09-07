@@ -30,6 +30,25 @@ class Int(_IntBase):
         return "int"
 
 
+class HexInt(_IntBase):
+    def __init__(self, value, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.value = value
+        if "data" not in kwargs:
+            self.data = Expr.const(value)
+
+    @classmethod
+    def abstract_init(cls, *args, **kwargs) -> "Int":
+        return cls(0, *args, **kwargs)
+
+    def _repr_(self):
+        return hex(self.value)
+
+    @classmethod
+    def type_name(cls) -> str:
+        return "int"
+
+
 class Slice(_SliceBase):
     @classmethod
     def type_name(cls) -> str:
@@ -116,3 +135,4 @@ Factory.register("Cell", Cell)
 Factory.register("String", String)
 Factory.register("Cont", Cont)
 Factory.register("Int", Int)
+Factory.register("HexInt", HexInt)

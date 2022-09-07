@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 
 from dbuilder.core import Entity
-from dbuilder.types.bases.entity_base import _EntityBase
 from dbuilder.types.types import Builder, Cell, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 if TYPE_CHECKING:
     from dbuilder.types.payload import Payload
 
 
+class Ref(metaclass=CachingSubscriptable):
     bound: "Entity"
 
     def __init__(self, bound) -> None:
@@ -77,18 +78,12 @@ if TYPE_CHECKING:
         base = cls.__basex__
         return base.type_name()
 
-
-class _RefTypeBuilder(type):
-    def __new__(cls, base_cls=Cell):
-        return super().__new__(
-            cls,
-            "Ref_%s" % (base_cls.__name__,),
-            (RefType,),
+    @classmethod
+    def __build_type__(cls, item):
+        return type(
+            "Ref_%s" % item.__name__,
+            (cls,),
             {
-                "__basex__": base_cls,
+                "__basex__": item,
             },
         )
-
-
-def Ref(base: type = Cell):
-    return _RefTypeBuilder.__new__(_RefTypeBuilder, base_cls=base)

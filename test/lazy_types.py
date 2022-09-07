@@ -68,40 +68,7 @@ class OutboundExtMsgInfo(Payload):
     created_at: SizedInt(32)
 
 
-CommonMsgInfo = Constructor(InternalMsgInfo, InboundExtMsgInfo)
-
-
-class Message(Payload):
-    info: CommonMsgInfo
+class InternalMessage(Payload):
+    info: InternalMsgInfo
     init: Maybe(Either(StateInit, Ref[StateInit]))
     # TODO: body: X
-
-
-class SimpleMsg(Contract):
-    """Simple Msg Sender Contract."""
-
-    class Data(Model):
-        class KeyPair(Payload):
-            pub: SizedInt(32)
-            priv: SizedInt(32)
-
-        seq_no: SizedInt(32)
-        public_key: SizedInt(256)
-        ref: Ref[Cell]
-        key: Ref[KeyPair]
-        maybe_cell: Maybe(Ref[Cell])
-        maybe_key: Maybe(KeyPair)
-        some_either: Either(KeyPair, Ref[KeyPair])
-
-    data: Data
-
-    def external_receive(
-        self,
-        in_msg: Slice,
-    ) -> None:
-        payload = Message(in_msg)
-        payload.load()
-
-
-def test_compile():
-    compile(SimpleMsg)
