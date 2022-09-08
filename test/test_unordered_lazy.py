@@ -6,6 +6,8 @@ from dbuilder.types.coin import Coin
 from dbuilder.types.int_aliases import uint32, uint64
 from dbuilder.types.payload import Payload
 from dbuilder.types.slice import slice
+from dbuilder.types.ref import Ref
+
 
 from .util import compile
 
@@ -16,6 +18,7 @@ class BurnNotification(Payload):
     amount: Coin
     owner: MsgAddress
     response: MsgAddress
+    x: Ref[Cell]
 
 
 class UnorderedLazyPayloads(Contract):
@@ -31,6 +34,7 @@ class UnorderedLazyPayloads(Contract):
         msg = BurnNotification(in_msg_body)
         q_id = msg.query_id
         amount = msg.op
+        j = msg.x
 
 
 def test_compile():

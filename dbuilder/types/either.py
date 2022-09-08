@@ -1,11 +1,11 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.types.bases.entity_base import _EntityBase
-from dbuilder.types.types import Builder, Slice
+from dbuilder.types.types import Builder, Slice, Cell
 from dbuilder.types.utils import CachingSubscriptable
+from dbuilder.types.ref import Ref
 
 
-class Either(_EntityBase, metaclass=CachingSubscriptable):
+class Either(metaclass=CachingSubscriptable):
     which: Entity
     bound: Entity
 
@@ -19,13 +19,21 @@ class Either(_EntityBase, metaclass=CachingSubscriptable):
         if value is None:
             b = to.uint(0, 1)
             return b
+        if isinstance(value, Slice):
+            b = to.slice(value)
+            return b
+        if isinstance(value, Cell):
+            b = to.ref(value)
+            return b
         if not isinstance(value, Either):
             if type(value) == base1:
                 v = 0
             elif type(value) == base2:
                 v = 1
             else:
-                raise RuntimeError("Couldn't match either types")
+                msg = 'got {current} expected {e1} or {e2}'
+                msg = msg.format(current=type(value), e1=base1, e2=base2)
+                raise RuntimeError("Couldn't match either types; " + msg)
             to = to.uint(v, 1)
             return type(value).__serialize__(to, value)
         to.__assign__("_b_tmp_")

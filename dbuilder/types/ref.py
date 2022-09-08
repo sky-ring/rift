@@ -53,9 +53,7 @@ class Ref(metaclass=CachingSubscriptable):
                 v.__assign__(name)
         if hasattr(base, "__magic__") and base.__magic__ == 0xA935E5:
             v = v.parse()
-            p: "Payload" = base(v, name=name)
-            p.load()
-            v = p
+            v = base.__deserialize__(v, name=name, lazy=lazy)
         return v
 
     @classmethod

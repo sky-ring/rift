@@ -34,6 +34,8 @@ class Payload(metaclass=Subscriptable):
         if data_slice:
             self.data_init(data_slice)
         if self.__data__ is None:
+            for k in self.annotations:
+                setattr(self, k, None)
             for k in kwargs:
                 if k in self.annotations:
                     setattr(self, k, kwargs[k])

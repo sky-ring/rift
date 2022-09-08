@@ -54,6 +54,9 @@ class Slice(_SliceBase):
     def type_name(cls) -> str:
         return "slice"
 
+    def __rshift__(self, other):
+        return other.__deserialize__(self)
+
 
 class Cont(_ContBase):
     @classmethod
