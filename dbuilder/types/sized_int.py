@@ -38,7 +38,7 @@ class integer(Int, metaclass=CachingSubscriptable):
     @classmethod
     def __build_type__(cls, items):
         if not isinstance(items, tuple):
-            items = (items, True)
+            items = (items, False)
         bits, signed = items
         return type(
             "%sInt%d" % ("" if signed else "U", bits),

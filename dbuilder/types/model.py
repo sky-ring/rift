@@ -8,12 +8,19 @@ class Model:
     _pointer: int
     _skipped_ones: dict[str, Entity]
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.annotations = self.__annotations__
         self._items = list(self.annotations.keys())
         self._lazy = True
         self._skipped_ones = {}
         self._pointer = 0
+        if len(kwargs) != 0:
+            self._build = True
+            for k in self.annotations:
+                setattr(self, k, None)
+            for k in kwargs:
+                if k in self.annotations:
+                    setattr(self, k, kwargs[k])
 
     def __getattr__(self, item):
         # This gets called whenever item doesn't exist in data model
@@ -60,12 +67,16 @@ class Model:
             n = v.__deserialize__(data, name=name, inplace=True)
             setattr(self, k, n)
 
-    def save(self):
+    def as_cell(self):
         builder = std.begin_cell()
         for k, v in self.annotations.items():
             c_v = getattr(self, k)
             builder = v.__serialize__(builder, c_v)
         cell = builder.end()
+        return cell
+
+    def save(self):
+        cell = self.as_cell()
         cell.set_data()
 
     def get(self, key):

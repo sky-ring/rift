@@ -93,7 +93,7 @@ class InternalMessage(Payload):
     body: Either[Cell, Ref[Cell]]
 
     @classmethod
-    def __build_type__(cls, item) -> "InternalMessage":
+    def __build_type__(cls, item):
         n_cls = deepcopy(cls)
         n_cls.__annotations__["body"] = Either[item, Ref[item]]
         return n_cls
