@@ -7,8 +7,11 @@ class CachingSubscriptable(type):
     _build_cache = {}
 
     def __getitem__(cls, item):
-        if item in cls._build_cache:
-            return cls._build_cache[item]
+        if cls not in cls._build_cache:
+            cls._build_cache[cls] = {}
+        bc = cls._build_cache[cls]
+        if item in bc:
+            return bc[item]
         v = cls.__build_type__(item)
-        cls._build_cache[item] = v
+        bc[item] = v
         return v
