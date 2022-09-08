@@ -5,6 +5,7 @@ from os import getcwd, listdir
 from os.path import exists as p_exists
 from os.path import join as p_join
 
+import ast
 import click
 from tomlkit import parse
 
@@ -32,6 +33,8 @@ def build():
     # we want to extract references and go in DAG topological order
     refs = []
     allowed_modules = []
+    module_globals = {}
+    module_rel_imps = {}
     for cf in listdir(c_dir):
         if not cf.endswith(".py"):
             continue
@@ -45,14 +48,17 @@ def build():
         mod = module_from_spec(spec)
         f = open(fp, "r")
         code = f.read()
+        code = Engine.cst_patch(code)
         mod.__file__ = fp
         sys.modules[mod_name] = mod
         # gather refs
-        imp_ = relative_imports(code)._relative_accesses
-        for i in imp_:
+        imp_ = relative_imports(code)
+        module_rel_imps[mod_name] = imp_._detailed_imports
+        for i in imp_._relative_accesses:
             refs.append((mod_name, i))
         compiled = compile(code, fp, "exec")
         exec(compiled, mod.__dict__)
+        module_globals[mod_name] = mod.__dict__
         allowed_modules.append(mod_name)
         click.echo(f"compiling {cf}")
     b_dir = p_join(cwd, "build")
@@ -74,14 +80,15 @@ def build():
     for contract in contracts:
         module = sys.modules.get(contract.__module__)
         tg_dict = {**module.__dict__}
+        for m, imps in module_rel_imps[contract.__module__].items():
+            # here we have any relative import this contract has
+            # imp_d is a dict imported_module -> [imported_classses]
+            for i in imps:
+                tg_dict[i] = module_globals[m][i]
         for p in patched_ones:
             # what we do is provide new patched instances
             # instead of old ones (imported)
             tg_dict[p.__name__] = p
-        t = Engine.patch(contract, tg_dict)
-        patched_ones.append(t)
-        compiled = Engine.compile(t)
-        fc = compiled.to_func()
 
         name = None
         c = doc.get("contracts")
@@ -92,6 +99,20 @@ def build():
         if name is None:
             name = contract.__name__
             name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
+
+        def save_patch(src):
+            nonlocal name
+            src = ast.unparse(src)
+            f_x = open(p_join(b_dir, f"{name}.patched.py"), "w")
+            f_x.write(src)
+            f_x.close()
+            click.echo(f"Patched {contract.__name__} -> build/{name}.patched.py")
+
+        t = Engine.patch(contract, tg_dict, src_callback=save_patch)
+        patched_ones.append(t)
+        compiled = Engine.compile(t)
+        fc = compiled.to_func()
+
         f = open(p_join(b_dir, f"{name}.fc"), "w")
         f.write(fc)
         f.close()

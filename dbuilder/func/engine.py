@@ -153,7 +153,13 @@ class Engine(object):
         return CompiledContract(contract_)
 
     @staticmethod
-    def patch(contract, _globals):
+    def cst_patch(src):
+        src = "from dbuilder.types import helpers\n" + src
+        src = cst_patch(src)
+        return src
+
+    @staticmethod
+    def patch(contract, _globals, src_callback=None):
         lines, starting = inspect.findsource(contract)
         selected = lines[:starting]
         selected.insert(0, "from dbuilder.types import helpers\n")
@@ -170,6 +176,8 @@ class Engine(object):
         src = cst_patch(src)
         x = ast.parse(src)
         patched_ast = patch(x)
+        if src_callback:
+            src_callback(patched_ast)
         if Engine.VERBOSE > 0:
             Engine._cache[contract.__name__] = patched_ast
         exec(compile(patched_ast, "func-patching", "exec"), m)
