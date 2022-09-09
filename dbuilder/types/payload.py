@@ -92,7 +92,7 @@ class Payload(metaclass=Subscriptable):
         self.__data__ = data_slice
         if not self.__data__.NAMED:
             self.__data__.__assign__(f"{self.f_name}_orig")
-        self.cp = self.__data__.__assign__(f"{self.f_name}_cp")
+        self.__origin__ = self.__data__.__assign__(f"{self.f_name}_cp")
         ReferenceTable.eliminatable(f"{self.f_name}_cp")
 
     def load(self, proc_tag=True, master=True):
@@ -125,12 +125,12 @@ class Payload(metaclass=Subscriptable):
 
     def hash(self, after=None):
         if after is None:
-            return std.slice_hash(self.cp)
+            return std.slice_hash(self.__origin__)
         for k, v in self.annotations.items():
-            v.__deserialize__(self.cp, inplace=True)
+            v.__deserialize__(self.__origin__, inplace=True)
             if k == after:
                 break
-        return std.slice_hash(self.cp)
+        return std.slice_hash(self.__origin__)
 
     def as_builder(self):
         builder = std.begin_cell()
@@ -177,6 +177,12 @@ class Payload(metaclass=Subscriptable):
             c_v = getattr(self, k)
             builder = v.__serialize__(builder, c_v)
         return builder
+
+    def origin_slice(self):
+        return self.__origin__
+
+    def rest(self):
+        return self.__data__
 
     def as_cell(self) -> "Cell":
         b = self.as_builder()
