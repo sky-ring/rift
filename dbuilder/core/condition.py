@@ -1,5 +1,6 @@
 from dbuilder.ast.calls import CallStacks
 from dbuilder.core.entity import mark
+from dbuilder.meta.utils import caller_locals
 
 
 class Cond:
@@ -12,6 +13,9 @@ class Cond:
         self.conds = []
 
     def match(self, cond):
+        ctx = caller_locals(back=2)
+        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+            ctx["ctx"].__refresh__()
         mark(cond)
         self.index += 1
         self.conds.append(cond)
@@ -21,10 +25,16 @@ class Cond:
             CallStacks.else_if(self.id, cond)
 
     def otherwise(self):
+        ctx = caller_locals(back=2)
+        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+            ctx["ctx"].__refresh__()
         CallStacks.else_if(self.id)
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        ctx = caller_locals(back=2)
+        if "ctx" in ctx and hasattr(ctx["ctx"], "__restrain__"):
+            ctx["ctx"].__restrain__()
         CallStacks.end_if(self.id)
