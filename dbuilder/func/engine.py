@@ -116,8 +116,10 @@ class Engine(object):
                     d = _cls(data_slice=args[_idx])
                     args[_idx] = d
                 if not value.__static__:
+                    inst.__refresh__(reset=True)
                     args = (inst, *args)
                 else:
+                    contract.__refresh__(contract, reset=True)
                     args = (contract, *args)
                 value(*args, NO_INTERCEPT=1)
                 CallStacks.end_method(name)

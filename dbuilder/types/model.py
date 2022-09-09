@@ -26,13 +26,14 @@ class Model:
         # This gets called whenever item doesn't exist in data model
         # So we'll check whether it's really from fields or not
         # Purpose => Lazy Loading
+
+        if item not in self.annotations:
+            raise AttributeError()
+
         if item in self._skipped_ones:
             n = self._skipped_ones[item]
             name = f"data_{item}"
             return n.__assign__(name)
-
-        if item not in self.annotations:
-            raise AttributeError()
 
         if self._pointer == 0:
             self.__data__ = std.get_data().parse()
@@ -88,3 +89,9 @@ class Model:
             if target:
                 break
         return res
+
+    def copy(self, reset=False):
+        cp = type(self)()
+        if not reset:
+            cp.__dict__ = {**self.__dict__}
+        return cp
