@@ -12,12 +12,25 @@ from tomlkit import parse
 from dbuilder import Engine
 from dbuilder.cli.entry import entry
 from dbuilder.cli.util.dag import topological
+from dbuilder.cli.util.dir_util import clear_contents
 from dbuilder.cst.cst_visitor import relative_imports
 from dbuilder.func.meta_contract import ContractMeta
 
 
 @entry.command(help="Builds the project")
-def build():
+@click.option(
+    "--log-patches",
+    default=False,
+    help="generated patched sources [for debug purposes]",
+    is_flag=True,
+)
+@click.option(
+    "--keep",
+    default=False,
+    help="keep contents of build/ directory",
+    is_flag=True,
+)
+def build(log_patches, keep):
     cwd = getcwd()
     config_file = p_join(cwd, "project.toml")
     if not p_exists(config_file):
@@ -62,6 +75,8 @@ def build():
         allowed_modules.append(mod_name)
         click.echo(f"compiling {cf}")
     b_dir = p_join(cwd, "build")
+    if not keep:
+        clear_contents(b_dir)
     # we maintain the order
     t_order = topological(refs)
     c_order = {v: i for i, v in enumerate(t_order)}
@@ -101,6 +116,8 @@ def build():
             name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
 
         def save_patch(src):
+            if not log_patches:
+                return
             nonlocal name
             src = ast.unparse(src)
             f_x = open(p_join(b_dir, f"{name}.patched.py"), "w")

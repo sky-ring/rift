@@ -1,6 +1,7 @@
 def caller_locals(back=1):
     """Returns the local variables in the caller's frame."""
     import inspect
+
     frame = inspect.currentframe()
     try:
         t_frame = frame
