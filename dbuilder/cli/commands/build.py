@@ -1,3 +1,4 @@
+import ast
 import re
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
@@ -5,7 +6,6 @@ from os import getcwd, listdir
 from os.path import exists as p_exists
 from os.path import join as p_join
 
-import ast
 import click
 from tomlkit import parse
 
@@ -106,7 +106,9 @@ def build():
             f_x = open(p_join(b_dir, f"{name}.patched.py"), "w")
             f_x.write(src)
             f_x.close()
-            click.echo(f"Patched {contract.__name__} -> build/{name}.patched.py")
+            click.echo(
+                f"Patched {contract.__name__} -> build/{name}.patched.py",
+            )
 
         t = Engine.patch(contract, tg_dict, src_callback=save_patch)
         patched_ones.append(t)

@@ -1,28 +1,26 @@
-from dbuilder.types.msg import StateInit
 from dbuilder.types.addr import MsgAddress
+from dbuilder.types.msg import StateInit
 from dbuilder.types.utils import CachingSubscriptable
 
 
-class ContractAddr(metaclass=CachingSubscriptable):
+class ContractDeployer(metaclass=CachingSubscriptable):
     def __init__(self, code, **kwargs):
         base = self.__basex__
         if isinstance(code, str):
             code = kwargs[code]
         dt = base.Data(**kwargs)
-        self._init = StateInit(
+        self.state_init = StateInit(
             split_depth=None,
             special=None,
             code=code,
             data=dt.as_cell(),
             library=None,
         ).as_cell()
-        self._addr = MsgAddress.std(0, self._init.hash())
-
-    def get(self):
-        return self._addr
+        self.address = MsgAddress.std(0, self.state_init.hash())
 
     def __assign__(self, v):
-        pass
+        self.state_init.__assign__(f"{v}_state_init")
+        self.address.__assign__(f"{v}_address")
 
     @classmethod
     def __build_type__(cls, item):

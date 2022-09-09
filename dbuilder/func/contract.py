@@ -6,7 +6,7 @@ from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import InvokableFunc
 from dbuilder.core.loop import While
 from dbuilder.func.meta_contract import ContractMeta
-from dbuilder.types import Cell, Slice
+from dbuilder.types.types import Cell, Slice
 
 
 class Contract(metaclass=ContractMeta):

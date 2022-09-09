@@ -5,9 +5,8 @@ from dbuilder.types.addr import MsgAddress
 from dbuilder.types.coin import Coin
 from dbuilder.types.int_aliases import uint32, uint64
 from dbuilder.types.payload import Payload
-from dbuilder.types.slice import slice
 from dbuilder.types.ref import Ref
-
+from dbuilder.types.slice import slice
 
 from .util import compile
 

@@ -98,6 +98,30 @@ class Entity(Node):
     def __rand__(self, other):
         return self._binary("&", other, r=True)
 
+    def __iadd__(self, other):
+        x = self._binary("+", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __isub__(self, other):
+        x = self._binary("-", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __imul__(self, other):
+        x = self._binary("*", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __idiv__(self, other):
+        x = self._binary("/", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
     def __invert__(self):
         return self._unary("~")
 

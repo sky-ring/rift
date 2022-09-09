@@ -1,6 +1,5 @@
 from copy import deepcopy
 
-from dbuilder.types import Cell, Dict
 from dbuilder.types.addr import MsgAddress
 from dbuilder.types.bool import Bool
 from dbuilder.types.coin import Coin
@@ -9,6 +8,7 @@ from dbuilder.types.int_aliases import uint5, uint32, uint64
 from dbuilder.types.maybe import Maybe
 from dbuilder.types.payload import Payload
 from dbuilder.types.ref import Ref
+from dbuilder.types.types import Cell, Dict
 
 
 class TickTock(Payload):

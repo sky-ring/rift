@@ -1,8 +1,8 @@
 from dbuilder.core import Entity
 from dbuilder.core.condition import Cond
-from dbuilder.types.types import Builder, Slice, Cell
-from dbuilder.types.utils import CachingSubscriptable
 from dbuilder.types.ref import Ref
+from dbuilder.types.types import Builder, Cell, Slice
+from dbuilder.types.utils import CachingSubscriptable
 
 
 class Either(metaclass=CachingSubscriptable):
@@ -31,7 +31,7 @@ class Either(metaclass=CachingSubscriptable):
             elif type(value) == base2:
                 v = 1
             else:
-                msg = 'got {current} expected {e1} or {e2}'
+                msg = "got {current} expected {e1} or {e2}"
                 msg = msg.format(current=type(value), e1=base1, e2=base2)
                 raise RuntimeError("Couldn't match either types; " + msg)
             to = to.uint(v, 1)

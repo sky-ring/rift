@@ -1,7 +1,7 @@
 from dbuilder.core.annots import asm, impure
 from dbuilder.core.entity import Entity
 from dbuilder.func.library import Library
-from dbuilder.types import Builder, Cell, Cont, Slice, Tuple
+from dbuilder.types.types import Builder, Cell, Cont, Slice, Tuple
 
 
 # noinspection PyTypeChecker,SpellCheckingInspection,PyUnusedLocal

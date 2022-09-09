@@ -1,15 +1,15 @@
 from dbuilder.core import Entity
-from dbuilder.types.int_aliases import uint2, int8, uint256
-from dbuilder.types.types import Builder, Cell, Int, Slice
+from dbuilder.types.int_aliases import int8, uint2, uint256
 from dbuilder.types.maybe import Maybe
 from dbuilder.types.payload import Payload
+from dbuilder.types.types import Builder, Cell, Int, Slice
 
 
 class MsgAddress(Slice):
     Empty = uint2(0b00)
 
     class Std(Payload):
-        __tag__ = "10"
+        __tag__ = "$10"
         anycast: Maybe[Cell]
         workchain: int8
         address: uint256
@@ -39,8 +39,12 @@ class MsgAddress(Slice):
 
     @classmethod
     def std(cls, workchain: int, addr: uint256) -> Slice:
-        return cls.Std(
-            anycast=None,
-            workchain=workchain,
-            address=addr,
-        ).as_cell().parse()
+        return (
+            cls.Std(
+                anycast=None,
+                workchain=workchain,
+                address=addr,
+            )
+            .as_cell()
+            .parse()
+        )

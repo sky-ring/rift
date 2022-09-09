@@ -34,8 +34,11 @@ class Payload(metaclass=Subscriptable):
         if data_slice:
             self.data_init(data_slice)
         if self.__data__ is None:
-            for k in self.annotations:
-                setattr(self, k, None)
+            # TODO: Fix [Probably replace it with special NoneEntity]
+            # This snippet was used to ease building
+            # But it causes problem with lazy access (for set)
+            # for k in self.annotations:
+            #     setattr(self, k, None)
             for k in kwargs:
                 if k in self.annotations:
                     setattr(self, k, kwargs[k])
