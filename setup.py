@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="dbuilder",
-    version="0.2.0",
+    version="0.7.0",
     description="",
     license="MIT",
     packages=find_packages(),

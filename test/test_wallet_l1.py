@@ -1,10 +1,4 @@
-from dbuilder.func.contract import Contract
-from dbuilder.library.std import std
-from dbuilder.types import Slice
-from dbuilder.types.int_aliases import uint32, uint256
-from dbuilder.types.model import Model
-from dbuilder.types.payload import Payload
-from dbuilder.types.slice import slice
+from dbuilder import *
 
 from .util import compile
 
@@ -31,25 +25,23 @@ class SimpleWallet(Contract):
     data: Data
 
     def external_receive(
-        self,
+        ctx,
         in_msg: Slice,
     ) -> None:
-        self.data.load()
-        msg = self.ExternalBody(in_msg)
-        msg.load()
+        msg = ctx.ExternalBody(in_msg)
         assert msg.valid_until > std.now(), 35
-        assert msg.seq_no == self.data.seq_no, 33
+        assert msg.seq_no == ctx.data.seq_no, 33
         assert std.check_signature(
             msg.hash(after="signature"),
             msg.signature,
-            self.data.public_key,
+            ctx.data.public_key,
         ), 34
         std.accept_message()
-        with msg.iter_refs():
-            mode = msg.uint_(8)
-            std.send_raw_message(msg.ref(), mode)
-        self.data.seq_no = self.data.seq_no + 1
-        self.data.save()
+        while msg.refs():
+            mode = msg >> uint8
+            std.send_raw_message(msg >> Ref[Cell], mode)
+        ctx.data.seq_no += 1
+        ctx.data.save()
 
 
 def test_compile():

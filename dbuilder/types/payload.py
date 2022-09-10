@@ -117,6 +117,12 @@ class Payload(metaclass=Subscriptable):
     def __assign__(self, name):
         self.f_name = name
 
+    def __rshift__(self, other):
+        return other.__deserialize__(self.__data__)
+
+    def refs(self):
+        return self.__data__.slice_refs()
+
     def iter_refs(self):
         return while_(self.__data__.slice_refs())
 
