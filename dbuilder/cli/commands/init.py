@@ -4,7 +4,7 @@ import click
 from tomlkit import comment, document, nl
 
 from dbuilder.bases import write_contract
-from dbuilder.cli import entry
+from dbuilder.cli.entry import entry
 from dbuilder.cli.util import DirectoryStructure
 
 

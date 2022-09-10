@@ -1,5 +1,6 @@
 from dbuilder.ast.calls import CallStacks
 from dbuilder.core.entity import mark
+from dbuilder.meta.utils import caller_locals
 
 
 class While:
@@ -7,6 +8,9 @@ class While:
         self.cond = cond
 
     def __enter__(self):
+        ctx = caller_locals(back=2)
+        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+            ctx["ctx"].__refresh__()
         mark(self.cond)
         self.id = CallStacks.begin_while(self.cond)
         return self

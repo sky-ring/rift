@@ -27,13 +27,18 @@ class Entity(Node):
     def _binary(self, op, other, r=False):
         mark(self, other)
         e = Entity(
-            Expr.binary_op(op, other if r else self, self if r else other),
+            Expr.binary_op(
+                op,
+                other if r else self,
+                self if r else other,
+                type(self),
+            ),
         )
         return e
 
     def _unary(self, op):
         mark(self)
-        e = Entity(Expr.unary_op(op, self))
+        e = Entity(Expr.unary_op(op, self, type(self)))
         return e
 
     def __eq__(self, other):
@@ -93,6 +98,30 @@ class Entity(Node):
     def __rand__(self, other):
         return self._binary("&", other, r=True)
 
+    def __iadd__(self, other):
+        x = self._binary("+", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __isub__(self, other):
+        x = self._binary("-", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __imul__(self, other):
+        x = self._binary("*", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
+    def __idiv__(self, other):
+        x = self._binary("/", other)
+        if self.NAMED:
+            x.__assign__(self.name)
+        return x
+
     def __invert__(self):
         return self._unary("~")
 
@@ -113,24 +142,21 @@ class Entity(Node):
 
     def __assign__(self, v):
         if self.NAMED:
-            CallStacks.add_statement(
-                Statement.ASSIGN,
-                v,
-                Expr.variable(self.name),
-            )
-            return Entity(
-                name=v,
-            )
+            t = type(self)
+            CallStacks.assign(v, Expr.variable(self.name, type_=t))
+            return t.abstract_init(name=v)
         if self.has_expr:
             _x = getattr(self, "__expr")
             s: Statement = Node.find(_x)
             s.args = (v, s.args[0])
             s.type = Statement.ASSIGN
+            s.refresh()
         else:
             # TODO: Most likely this never occurs (cleanup)
-            CallStacks.add_statement(Statement.ASSIGN, v, self.data)
+            CallStacks.assign(v, self.data)
         self.NAMED = True
         self.name = v
+        return self
 
     def __massign__(self, vs, xs):
         if self.has_expr:
@@ -139,8 +165,9 @@ class Entity(Node):
             if s.type == s.EXPR:
                 s.args = (vs, s.args[0])
                 s.type = Statement.M_ASSIGN
+                s.refresh()
             else:
-                CallStacks.add_statement(Statement.M_ASSIGN, vs, self.data)
+                CallStacks.multi_assign(vs, self.data)
         for x, v in zip(xs, vs):
             x.NAMED = True
             x.name = v
@@ -153,9 +180,14 @@ class Entity(Node):
             for _ in range(self._unpack_len):
                 yield Entity()
 
+    def __rem_name__(self):
+        if self.NAMED:
+            return self.name
+        return None
+
     @classmethod
     def type_name(cls) -> str:
-        return ""
+        return "var"
 
     @classmethod
     def abstract_init(cls, *args, **kwargs) -> "Entity":

@@ -1,4 +1,7 @@
+from dbuilder.ast.bool_dict import BoolDict
 from dbuilder.ast.printer import Printer
+from dbuilder.ast.ref_table import ReferenceTable
+from dbuilder.ast.types.block import Block
 from dbuilder.ast.types.node import Node
 from dbuilder.ast.utils import _type_name
 
@@ -11,14 +14,48 @@ class Statement(Node):
     EXPR = 4
     ASSIGN = 5
     M_ASSIGN = 6
+    # local
+    # TODO: Fix scopes in __n_def
+    parent: "Block"
+    __n_def: BoolDict
+    _scope: str
 
     def __init__(self, type, args):
         super().__init__()
         self.type = type
         self.args = args
+        self.parent = None
+        self._scope = ""
+        self.__n_def = BoolDict()
+
+    def _inject_method(self, mtd):
+        self.mtd = mtd
+        self.refresh()
+
+    def _accessible(self, name):
+        return self.parent._accessible(name)
+
+    def _define(self, name):
+        self.parent.define(name)
+
+    def refresh(self):
+        targets = []
+        if self.type == Statement.ASSIGN:
+            targets.append(self.args[0])
+        elif self.type == Statement.M_ASSIGN:
+            targets.extend(self.args[0])
+        else:
+            return
+        for arg in targets:
+            accessible = self._accessible(arg)
+            self._define(arg)
+            self.__n_def[arg] = accessible
+
+    def _is_def(self, arg):
+        return self.__n_def[arg]
 
     def add_statement(self, statement):
-        pass
+        statement.parent = self
 
     def activates(self):
         return False
@@ -54,6 +91,9 @@ class Statement(Node):
             if not (hasattr(expr, "__hide__") and expr.__hide__):
                 printer.print("{expr};", expr=expr)
         elif self.type == Statement.ASSIGN:
+            name = self.args[0]
+            if ReferenceTable.is_eliminatable(self._scope, name):
+                return
             expr = self.args[1]
             annotations = getattr(expr, "annotations")
             if annotations:
@@ -61,10 +101,13 @@ class Statement(Node):
                 type_hint = _type_name(type_hint)
             else:
                 type_hint = "var"
+            type_hint += " "
+            if self._is_def(name):
+                type_hint = ""
             printer.print(
-                "{type_} {v} = {expr};",
+                "{type_}{v} = {expr};",
                 type_=type_hint,
-                v=self.args[0],
+                v=name,
                 expr=expr,
             )
         elif self.type == Statement.M_ASSIGN:
@@ -77,9 +120,13 @@ class Statement(Node):
                 args = ["var" for _ in v_list]
             if len(args) != len(v_list):
                 raise RuntimeError("non matching outputs")
+            type_hints = [_type_name(t) + " " for t in args]
             t_decl = [
-                "{type_} {v}".format(type_=_type_name(t), v=v)
-                for v, t in zip(v_list, args)
+                "{type_}{v}".format(
+                    type_=t if not self._is_def(v) else "",
+                    v=v,
+                )
+                for v, t in zip(v_list, type_hints)
             ]
             printer.print(
                 "({t_decl}) = {expr};",

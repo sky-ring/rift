@@ -1,3 +1,6 @@
+from dbuilder.ast.ref_table import ReferenceTable
+
+
 class Expr:
     EXPR_AR2 = 0
     EXPR_CALL = 1
@@ -10,9 +13,12 @@ class Expr:
         self.type = type
         self.args = args
         self.annotations = annotations
+        if self.annotations:
+            self.annotations = {**self.annotations}
 
     @staticmethod
     def call_expr(operand, method, *args, annotations=None):
+        ReferenceTable.mark(operand, *args)
         e = Expr(
             Expr.EXPR_CALL,
             operand,
@@ -24,26 +30,31 @@ class Expr:
 
     @staticmethod
     def call_func(method, *args, annotations=None):
+        ReferenceTable.mark(*args)
         e = Expr(Expr.EXPR_FUNC, method, *args, annotations=annotations)
         return e
 
     @staticmethod
-    def binary_op(op, op1, op2):
-        e = Expr(Expr.EXPR_AR2, op, op1, op2)
+    def binary_op(op, op1, op2, type_):
+        ReferenceTable.mark(op1, op2)
+        e = Expr(Expr.EXPR_AR2, op, op1, op2, annotations={"return": type_})
         return e
 
     @staticmethod
-    def unary_op(op, operand):
-        e = Expr(Expr.EXPR_AR1, op, operand)
+    def unary_op(op, operand, type_):
+        ReferenceTable.mark(operand)
+        e = Expr(Expr.EXPR_AR1, op, operand, annotations={"return": type_})
         return e
 
     @staticmethod
-    def variable(x):
-        e = Expr(Expr.EXPR_VAR, x)
+    def variable(x, type_=None):
+        ReferenceTable.ref(x)
+        e = Expr(Expr.EXPR_VAR, x, annotations={"return": type_})
         return e
 
     @staticmethod
     def const(x):
+        ReferenceTable.mark(x)
         e = Expr(Expr.EXPR_CONST, x)
         if isinstance(x, int):
             e.annotations = {"return": int}
@@ -56,10 +67,16 @@ class Expr:
             return str(x)
 
         if self.type == Expr.EXPR_AR2:
-            return "{op1} {op} {op2}".format(
+            op = self.args[0]
+            wrap = False
+            if op == "&" or op == "|":
+                wrap = True
+            return "{wrap_s}{op1}{wrap_e} {op} {wrap_s}{op2}{wrap_e}".format(
                 op1=self.args[1],
                 op=self.args[0],
                 op2=self.args[2],
+                wrap_s="(" if wrap else "",
+                wrap_e=")" if wrap else "",
             )
         elif self.type == Expr.EXPR_AR1:
             return "{op} {ope}".format(op=self.args[0], ope=self.args[1])

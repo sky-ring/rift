@@ -1,10 +1,12 @@
 from dbuilder.ast import CallStacks
 from dbuilder.core.annots import impure, method
+from dbuilder.core.condition import Cond
 from dbuilder.core.entity import mark
 from dbuilder.core.factory import Factory
 from dbuilder.core.invokable import InvokableFunc
+from dbuilder.core.loop import While
 from dbuilder.func.meta_contract import ContractMeta
-from dbuilder.types import Cell, Slice
+from dbuilder.types.types import Cell, Slice
 
 
 class Contract(metaclass=ContractMeta):
@@ -59,3 +61,19 @@ class Contract(metaclass=ContractMeta):
         n_map = {"int": "Int"}
         name = n_map[type_]
         return Factory.build(name, value)
+
+    def _cond(self):
+        return Cond()
+
+    def _while(self, cond):
+        return While(cond)
+
+    def _throw(self, what):
+        return self.throw(what)
+
+    def _m_assign(self, tmp, names, values):
+        if hasattr(tmp, "__magic__") and tmp.__magic__ == 0x050794:
+            tmp.__massign__(names, values)
+        elif isinstance(tmp, tuple):
+            for n, v in zip(names, values):
+                v.__assign__(n)
