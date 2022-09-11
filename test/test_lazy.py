@@ -1,6 +1,6 @@
-from dbuilder.func.contract import Contract
-from dbuilder.types import Cell, Slice
-from dbuilder.types.msg import InternalMessage
+from rift.func.contract import Contract
+from rift.types import Cell, Slice
+from rift.types.msg import InternalMessage
 
 from .util import compile
 

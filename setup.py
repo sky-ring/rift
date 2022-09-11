@@ -1,9 +1,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="dbuilder",
+    name="rift-framework",
     version="0.7.0",
-    description="",
+    description="A magical Python3 -> FunC portal",
     license="MIT",
     packages=find_packages(),
     author="Amin Rezaei",
@@ -11,10 +11,10 @@ setup(
     keywords=[],
     entry_points={
         "console_scripts": [
-            "dbuilder = dbuilder.cli.entry:entry",
+            "rift = rift.cli.entry:entry",
         ],
     },
-    url="https://github.com/decentralized-builder/dBuilder.py",
+    url="https://github.com/decentralized-builder/rift",
     install_requires=[],
     extras_require={},
 )

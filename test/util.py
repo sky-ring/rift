@@ -3,8 +3,8 @@ import os
 import traceback
 from pathlib import Path
 
-from dbuilder import Engine
-from dbuilder.ast.ref_table import ReferenceTable
+from rift import Engine
+from rift.ast.ref_table import ReferenceTable
 
 
 def write(target: str, content: str):

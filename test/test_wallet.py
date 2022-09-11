@@ -1,7 +1,7 @@
-from dbuilder import method, method_id
-from dbuilder.core.loop import while_
-from dbuilder.func.contract import Contract
-from dbuilder.types import Slice
+from rift import method, method_id
+from rift.core.loop import while_
+from rift.func.contract import Contract
+from rift.types import Slice
 
 from .util import compile
 

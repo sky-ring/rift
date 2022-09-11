@@ -1,6 +1,6 @@
-from dbuilder import Cond, method
-from dbuilder.func.contract import Contract
-from dbuilder.types import Cell, Slice
+from rift import Cond, method
+from rift.func.contract import Contract
+from rift.types import Cell, Slice
 
 from .util import compile
 

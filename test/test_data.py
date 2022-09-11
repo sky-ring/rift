@@ -1,11 +1,11 @@
-from dbuilder.func.contract import Contract
-from dbuilder.types import Cell, Slice
-from dbuilder.types.either import Either
-from dbuilder.types.int_aliases import uint32, uint256
-from dbuilder.types.maybe import Maybe
-from dbuilder.types.model import Model
-from dbuilder.types.payload import Payload
-from dbuilder.types.ref import Ref
+from rift.func.contract import Contract
+from rift.types import Cell, Slice
+from rift.types.either import Either
+from rift.types.int_aliases import uint32, uint256
+from rift.types.maybe import Maybe
+from rift.types.model import Model
+from rift.types.payload import Payload
+from rift.types.ref import Ref
 
 from .util import compile
 

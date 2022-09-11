@@ -1,12 +1,8 @@
-from dbuilder.func.contract import Contract
-from dbuilder.types import Cell, Slice
-from dbuilder.types.addr import MsgAddress
-from dbuilder.types.coin import Coin
-from dbuilder.types.int_aliases import uint64
-from dbuilder.types.maybe import Maybe
-from dbuilder.types.payload import Payload
-from dbuilder.types.ref import Ref
-from dbuilder.types.slice import slice
+from rift.func.contract import Contract
+from rift.types import Cell, Slice
+from rift.types.coin import Coin
+from rift.types.int_aliases import uint64
+from rift.types.payload import Payload
 
 from .util import compile
 
