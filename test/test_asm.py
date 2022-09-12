@@ -1,6 +1,6 @@
-from dbuilder.core.annots import asm, impure
-from dbuilder.func.library import Library
-from dbuilder.types import Cell, Slice
+from rift.core.annots import asm, impure
+from rift.func.library import Library
+from rift.types import Cell, Slice
 
 from .util import compile
 

@@ -1,6 +1,6 @@
-from dbuilder.func.contract import Contract
-from dbuilder.library.std import std
-from dbuilder.types import Cell, Slice
+from rift.func.contract import Contract
+from rift.library.std import std
+from rift.types import Cell, Slice
 
 from .util import compile
 
