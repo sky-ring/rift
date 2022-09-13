@@ -14,7 +14,7 @@ setup(
             "rift = rift.cli.entry:entry",
         ],
     },
-    url="https://github.com/decentralized-builder/rift",
+    url="https://github.com/sky-ring/rift",
     install_requires=[],
     extras_require={},
 )

@@ -1,12 +1,12 @@
-# Contributing to dBuilder
+# Contributing to Rift
 
 🎉 First off, thanks for taking the time to contribute! 🎉
 
 Following these standards shows that you value the time of the developers that created and are developing this open source project.
 In response, they should show you respect by addressing your issue, reviewing adjustments, and assisting you in finalizing your pull requests.
 
-dBuilder is an open source framework, and we welcome community contributions!
-Writing tutorials or blog entries, enhancing the documentation, submitting bug reports and feature requests, or writing code that can be incorporated into dBuilder itself are all ways to contribute.
+Rift is an open source framework, and we welcome community contributions!
+Writing tutorials or blog entries, enhancing the documentation, submitting bug reports and feature requests, or writing code that can be incorporated into rift itself are all ways to contribute.
 
 ## Prerequisite
 When contributing to this repository, please first discuss the change you wish to make by issue,
@@ -14,14 +14,14 @@ email, or any other method with the owners of this repository before making a ch
 
 If you find a security vulnerability, do NOT open an issue.
 Any security issues should be submitted directly to 
-security@dbuilder.tech In order to determine whether 
+security@skyring.io In order to determine whether 
 you are dealing with a security issue, ask yourself this question:
 
 Does the framework's base implementations lead to a generated FunC Smart Contract that has security vulnerabilities?
 
 If the answer is "yes", then you're probably dealing with a security issue.
 Note that even if you answer "no" to the question,
-you may still be dealing with a security issue, so if you're unsure, just email us at security@dbuilder.tech
+you may still be dealing with a security issue, so if you're unsure, just email us at security@skyring.io
 
 ## Code Style
 This project follows `black`, `flake8` for code style. You need to ensure compliance before submitting a PR. Proceed with the following procedure to install the requirements and check the style:
@@ -76,10 +76,10 @@ If the suggestion is accepted after discussion in the issues, proceed with the f
 4. Submit a PR 
 
 ## Feature Request
-If you've ever wished for a feature that doesn't exist in dBuilder,
+If you've ever wished for a feature that doesn't exist in Rift,
 you're probably not alone. There must be others out there with similar needs.
-Many of the features that exist in dBuilder today were created because our users saw a need for them.
+Many of the features that exist in Rift today were created because our users saw a need for them.
 Create an issue describing the feature you want to see, why you need it, and how it should work.
 
 ## Code of Conduct
-Please note that this project is released with a [Contributor Code of Conduct](https://github.com/decentralized-builder/dBuilder.py/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/sky-ring/rift/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
