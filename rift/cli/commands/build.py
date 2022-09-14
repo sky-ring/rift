@@ -80,6 +80,16 @@ def build(log_patches, keep):
     # we maintain the order
     t_order = topological(refs)
     c_order = {v: i for i, v in enumerate(t_order)}
+    # Fix missing links (isolated nodes)
+    modules = list(
+        map(
+            lambda x: x.__module__,
+            ContractMeta.contracts,
+        )
+    )
+    for m in modules:
+        if m not in c_order:
+            c_order[m] = len(c_order)
     # we filter the contracts and sort them as in order
     contracts = filter(
         lambda x: x.__bases__ != (object,),
