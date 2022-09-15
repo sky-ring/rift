@@ -49,7 +49,7 @@ class DirectoryStructure(_DirNode):
             p = leaf.as_dir()
             try:
                 _prev_umask = umask(0)
-                makedirs(p, exists_ok, mode=0o777)
+                makedirs(p, exists_ok, 0o777)
             except Exception as e:
                 print(e)
                 traceback.print_exc()
