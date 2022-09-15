@@ -1,4 +1,4 @@
-from os import makedirs, path
+from os import makedirs, path, umask
 
 
 class _DirNode:
@@ -47,7 +47,10 @@ class DirectoryStructure(_DirNode):
         for leaf in self.leaves():
             p = leaf.as_dir()
             try:
-                makedirs(p, exists_ok)
+                _prev_umask = umask(0)
+                makedirs(p, exists_ok, mode=0o777)
             except Exception:
                 return False
+            finally:
+                umask(_prev_umask)
         return True
