@@ -1,4 +1,5 @@
-from os import makedirs, path
+from os import makedirs, path, umask
+import traceback
 
 
 class _DirNode:
@@ -47,7 +48,7 @@ class DirectoryStructure(_DirNode):
         for leaf in self.leaves():
             p = leaf.as_dir()
             try:
-                makedirs(p, exists_ok)
+                makedirs(p, 0o777, exists_ok)
             except Exception:
                 return False
         return True
