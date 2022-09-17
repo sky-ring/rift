@@ -2,7 +2,7 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.1-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/rift-framework/)
+[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.3-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/rift-framework/)
 [![Telegram](https://img.shields.io/badge/Telegram-@rift__framework-informational?style=flat-square&color=0088cc)](https://t.me/d_builder)
 > _A magical **Python3** -> **FunC** portal_
 
