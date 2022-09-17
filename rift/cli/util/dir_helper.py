@@ -48,12 +48,7 @@ class DirectoryStructure(_DirNode):
         for leaf in self.leaves():
             p = leaf.as_dir()
             try:
-                _prev_umask = umask(0)
                 makedirs(p, 0o777, exists_ok)
-            except Exception as e:
-                print(e)
-                traceback.print_exc()
+            except Exception:
                 return False
-            finally:
-                umask(_prev_umask)
         return True
