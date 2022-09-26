@@ -8,12 +8,8 @@ from .util import compile
 class SimpleMsg(Contract):
     """Simple Msg Contract."""
 
-    def external_receive(
-        self,
-        in_msg: Slice,
-    ) -> None:
-        payload = InternalMessage(in_msg)
-        payload.load()
+    def internal_receive(self) -> None:
+        self.message.load()
 
 
 def test_compile():

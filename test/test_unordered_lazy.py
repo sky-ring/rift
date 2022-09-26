@@ -21,14 +21,8 @@ class BurnNotification(Payload):
 class UnorderedLazyPayloads(Contract):
     """UnorderedLazyPayloads Contract."""
 
-    def internal_receive(
-        self,
-        balance: int,
-        msg_value: int,
-        in_msg_full: Cell,
-        in_msg_body: Slice,
-    ) -> None:
-        msg = BurnNotification(in_msg_body)
+    def internal_receive(self) -> None:
+        msg = self.body % BurnNotification
         q_id = msg.query_id
         amount = msg.op
         j = msg.x

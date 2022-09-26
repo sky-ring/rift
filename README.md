@@ -2,8 +2,9 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.3-informational?style=flat-square&color=FFFF91)](https://pypi.org/project/rift-framework/)
-[![Telegram](https://img.shields.io/badge/Telegram-@rift__framework-informational?style=flat-square&color=0088cc)](https://t.me/d_builder)
+[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.5-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
+[![Telegram](https://img.shields.io/badge/Telegram-@rift__framework-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/d_builder)
+[![Telegram](https://img.shields.io/badge/Docs-docs.skyring.io/rift-informational?style=flat-square&color=6A0F49&labelColor=360825)](https://docs.skyring.io/rift/)
 > _A magical **Python3** -> **FunC** portal_
 
 Rift is smart contract development framework in Python for [TON (The Open Network)](https://ton.org). Its purpose is to make the development, testing, and deployment procedures much easier!
@@ -42,23 +43,23 @@ class SimpleWallet(Contract):
     data: Data
 
     def external_receive(
-        ctx,
+        self,
         in_msg: Slice,
     ) -> None:
-        msg = ctx.ExternalBody(in_msg)
+        msg = self.ExternalBody(in_msg)
         assert msg.valid_until > std.now(), 35
-        assert msg.seq_no == ctx.data.seq_no, 33
+        assert msg.seq_no == self.data.seq_no, 33
         assert std.check_signature(
             msg.hash(after="signature"),
             msg.signature,
-            ctx.data.public_key,
+            self.data.public_key,
         ), 34
         std.accept_message()
         while msg.refs():
             mode = msg >> uint8
             std.send_raw_message(msg >> Ref[Cell], mode)
-        ctx.data.seq_no += 1
-        ctx.data.save()
+        self.data.seq_no += 1
+        self.data.save()
 ```
 
 ## Quick Start
@@ -68,7 +69,7 @@ class SimpleWallet(Contract):
 ```bash
 pip install rift-framework
 # or from source
-git clone https://github.com/decentralized-builder/rift
+git clone https://github.com/sky-ring/rift
 cd rift
 pip install -e .
 ```
@@ -84,7 +85,7 @@ rift build
 ```
 
 ## Standard Contracts Implementation
-- [x] Jetton Implementation ([jetton-impl](https://github.com/decentralized-builder/jetton-impl))
+- [x] Jetton Implementation ([jetton-impl](https://github.com/sky-ring/jetton-impl))
 - [ ] NFT Implementation
 - [ ] DEX Implementation
 
@@ -108,7 +109,7 @@ Until then, you may look at standard contracts implementation; they cover the ma
 - [ ] Testing framework for the contracts developed with Rift
 
 ## Contributing
-If you're interested in contributing to Rift, please see [CONTRIBUTING.md](https://github.com/decentralized-builder/Rift.py/blob/main/CONTRIBUTING.md) for the necessary specifications and procedure.
+If you're interested in contributing to Rift, please see [CONTRIBUTING.md](https://github.com/sky-ring/rift/blob/main/CONTRIBUTING.md) for the necessary specifications and procedure.
 
 ## Supporters
 Special thanks to the [TON Society](https://society.ton.org/) for their support and grant, without which the project would not be feasible.

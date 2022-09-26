@@ -5,6 +5,8 @@ from rift.func.meta_contract import ContractMeta
 
 
 class Library(metaclass=ContractMeta):
+    NOT_IMPLEMENTED = 0x91AC43
+
     def __init__(self):
         pass
 

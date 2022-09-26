@@ -54,6 +54,10 @@ class Slice(_SliceBase):
     def type_name(cls) -> str:
         return "slice"
 
+    def __mod__(self, other):
+        assert isinstance(other, type)
+        return other(self)
+
     def __rshift__(self, other):
         return other.__deserialize__(self)
 

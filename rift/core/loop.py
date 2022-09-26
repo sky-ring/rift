@@ -9,7 +9,9 @@ class While:
 
     def __enter__(self):
         ctx = caller_locals(back=2)
-        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+        if "self" in ctx and hasattr(ctx["self"], "__refresh__"):
+            ctx["self"].__refresh__()
+        elif "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
             ctx["ctx"].__refresh__()
         mark(self.cond)
         self.id = CallStacks.begin_while(self.cond)

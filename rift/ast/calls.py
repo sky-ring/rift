@@ -61,6 +61,10 @@ class CallStacks(object):
         cls.current_contract.end_method(method)
 
     @classmethod
+    def hide_method(cls, method):
+        cls.current_contract.hide_method(method)
+
+    @classmethod
     def begin_if(cls, cond):
         ReferenceTable.mark(cond)
         nif = IfFlow()

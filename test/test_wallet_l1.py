@@ -24,24 +24,21 @@ class SimpleWallet(Contract):
 
     data: Data
 
-    def external_receive(
-        ctx,
-        in_msg: Slice,
-    ) -> None:
-        msg = ctx.ExternalBody(in_msg)
+    def external_receive(self) -> None:
+        msg = self.body % self.ExternalBody
         assert msg.valid_until > std.now(), 35
-        assert msg.seq_no == ctx.data.seq_no, 33
+        assert msg.seq_no == self.data.seq_no, 33
         assert std.check_signature(
             msg.hash(after="signature"),
             msg.signature,
-            ctx.data.public_key,
+            self.data.public_key,
         ), 34
         std.accept_message()
         while msg.refs():
             mode = msg >> uint8
             std.send_raw_message(msg >> Ref[Cell], mode)
-        ctx.data.seq_no += 1
-        ctx.data.save()
+        self.data.seq_no += 1
+        self.data.save()
 
 
 def test_compile():

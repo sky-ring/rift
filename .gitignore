@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 # Project
 test_space/
+doc_space/
 .build/
 
 # VSCode

@@ -14,23 +14,11 @@ class SimpleStorage(Contract):
     def double_the_num(self, val: int) -> int:
         return val + 2 + 3
 
-    def internal_receive(
-        self,
-        balance: int,
-        msg_value: int,
-        in_msg_full: Cell,
-        in_msg_body: Slice,
-    ) -> None:
-        super(SimpleStorage, self).internal_receive(
-            balance,
-            msg_value,
-            in_msg_full,
-            in_msg_body,
-        )
-        cs = in_msg_full.begin_parse()
+    def internal_receive(self) -> None:
+        cs = self.message
         cs.skip_bits_(4)
         sender = cs.load_msg_addr_()
-        op = in_msg_body.load_uint_(32)
+        op = self.body.load_uint_(32)
         with Cond() as c:
             c.match(op == 0x2013)
             r = self.double_the_num(op)

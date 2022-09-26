@@ -1,5 +1,5 @@
-from os import makedirs, path, umask
 import traceback
+from os import makedirs, path, umask
 
 
 class _DirNode:

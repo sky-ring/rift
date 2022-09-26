@@ -28,10 +28,7 @@ class SimpleData(Contract):
 
     data: Data
 
-    def external_receive(
-        self,
-        in_msg: Slice,
-    ) -> None:
+    def external_receive(self) -> None:
         self.data.load()
         self.data.maybe_key.pub = 1
         pub_k = self.data.key.pub
