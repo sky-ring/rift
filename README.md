@@ -1,4 +1,4 @@
-<img align="left" width="64" height="64" src="./assets/rift-icon.png">
+<img align="left" width="64" height="64" src="https://github.com/sky-ring/rift/blob/main/assets/rift-icon.png">
 
 # Rift
 
