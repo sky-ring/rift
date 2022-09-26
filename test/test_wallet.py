@@ -7,12 +7,9 @@ from .util import compile
 
 
 class SimpleWallet(Contract):
-    def external_receive(
-        self,
-        in_msg: Slice,
-    ) -> None:
-        signature = in_msg.load_bits_(512)
-        cs = in_msg
+    def external_receive(self) -> None:
+        signature = self.body.load_bits_(512)
+        cs = self.body
         msg_seqno = cs.load_uint_(32)
         valid_until = cs.load_uint_(32)
         self.throw_if(35, valid_until <= self.now())
@@ -24,7 +21,7 @@ class SimpleWallet(Contract):
         self.throw_unless(
             34,
             self.check_signature(
-                self.slice_hash(in_msg),
+                self.slice_hash(self.body),
                 signature,
                 public_key,
             ),

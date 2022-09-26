@@ -1,3 +1,5 @@
+from re import M
+
 from rift.ast.printer import Printer
 from rift.ast.types.method import Method
 from rift.ast.types.node import Node
@@ -5,6 +7,7 @@ from rift.ast.types.node import Node
 
 class Contract(Node):
     methods: list[Method] = []
+    hidden_methods: list[Method] = []
     vars = []
     current_method: Method = None
 
@@ -24,6 +27,18 @@ class Contract(Node):
 
     def end_method(self, method):
         self.current_method = None
+
+    def hide_method(self, method):
+        tg = None
+        tg_i = -1
+        for i, m in enumerate(self.methods):
+            if m.name == method:
+                tg = m
+                tg_i = i
+        if tg is None:
+            return
+        self.methods.pop(tg_i)
+        self.hidden_methods.append(tg)
 
     def add_variable(self):
         pass

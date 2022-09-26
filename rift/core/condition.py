@@ -14,7 +14,9 @@ class Cond:
 
     def match(self, cond):
         ctx = caller_locals(back=2)
-        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+        if "self" in ctx and hasattr(ctx["self"], "__refresh__"):
+            ctx["self"].__refresh__()
+        elif "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
             ctx["ctx"].__refresh__()
         mark(cond)
         self.index += 1
@@ -26,7 +28,9 @@ class Cond:
 
     def otherwise(self):
         ctx = caller_locals(back=2)
-        if "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
+        if "self" in ctx and hasattr(ctx["self"], "__refresh__"):
+            ctx["self"].__refresh__()
+        elif "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
             ctx["ctx"].__refresh__()
         CallStacks.else_if(self.id)
 
@@ -35,6 +39,8 @@ class Cond:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         ctx = caller_locals(back=2)
-        if "ctx" in ctx and hasattr(ctx["ctx"], "__restrain__"):
+        if "self" in ctx and hasattr(ctx["self"], "__restrain__"):
+            ctx["self"].__restrain__()
+        elif "ctx" in ctx and hasattr(ctx["ctx"], "__restrain__"):
             ctx["ctx"].__restrain__()
         CallStacks.end_if(self.id)

@@ -121,7 +121,9 @@ class Engine(object):
                 else:
                     contract.__refresh__(contract, reset=True)
                     args = (contract, *args)
-                value(*args, NO_INTERCEPT=1)
+                res = value(*args, NO_INTERCEPT=1)
+                if res == contract.NOT_IMPLEMENTED:
+                    CallStacks.hide_method(name)
                 CallStacks.end_method(name)
             elif is_asm(value):
                 func_args = value.__args__

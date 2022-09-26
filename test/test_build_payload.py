@@ -15,13 +15,7 @@ class BurnBody(Payload):
 class BuildPayload(Contract):
     """Build Payload Contract."""
 
-    def internal_receive(
-        self,
-        balance: int,
-        msg_value: int,
-        in_msg_full: Cell,
-        in_msg_body: Slice,
-    ) -> None:
+    def internal_receive(self) -> None:
         body = BurnBody()
         body.query_id = 1
         body.amount = 2

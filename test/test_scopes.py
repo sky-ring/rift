@@ -5,16 +5,13 @@ from .util import compile
 
 
 class Scopes(Contract):
-    def external_receive(
-        self,
-        in_msg: Slice,
-    ) -> None:
-        x = in_msg
+    def external_receive(self) -> None:
+        x = self.body
         while x.uint_(2) == 0:
             if x.uint(1) == 1:
                 b = 4
                 b = 2
-                x = in_msg.addr_()
+                x = x.addr_()
             else:
                 b = 6
                 b = 10
