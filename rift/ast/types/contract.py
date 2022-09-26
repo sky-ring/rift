@@ -1,5 +1,3 @@
-from re import M
-
 from rift.ast.printer import Printer
 from rift.ast.types.method import Method
 from rift.ast.types.node import Node
