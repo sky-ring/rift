@@ -81,12 +81,7 @@ def build(log_patches, keep):
     t_order = topological(refs)
     c_order = {v: i for i, v in enumerate(t_order)}
     # Fix missing links (isolated nodes)
-    modules = list(
-        map(
-            lambda x: x.__module__,
-            ContractMeta.contracts,
-        )
-    )
+    modules = [x.__module__ for x in ContractMeta.contracts]
     for m in modules:
         if m not in c_order:
             c_order[m] = len(c_order)
