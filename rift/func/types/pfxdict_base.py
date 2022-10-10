@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from rift.types.types import Slice, PfxDict
 
 from rift.core.invokable import typed_invokable
-from rift.types.bases.cell_base import _CellBase
+from rift.func.types.cell_base import _CellBase
 
 
 class _PfxDictBase(_CellBase):

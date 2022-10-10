@@ -1,4 +1,3 @@
-import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -6,7 +5,7 @@ if TYPE_CHECKING:
     from rift.types.types import Slice, Builder
 
 from rift.core.invokable import typed_invokable
-from rift.types.bases.entity_base import _EntityBase
+from rift.func.types.entity_base import _EntityBase
 
 
 class _CellBase(_EntityBase):

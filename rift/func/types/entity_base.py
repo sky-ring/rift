@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
 from rift.core import Entity
+from rift.func.func_behavior import FunCBehavior
 
 if TYPE_CHECKING:
     from rift.types.types import Builder, Slice
 
 
-class _EntityBase(Entity):
+class _EntityBase(Entity, FunCBehavior):
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         return to

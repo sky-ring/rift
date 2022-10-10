@@ -1,3 +1,6 @@
+from rift.meta.meta_inheritance import mix_metas
+
+
 class Subscriptable(type):
     def __getitem__(cls, item):
         return cls.__build_type__(item)
@@ -15,3 +18,7 @@ class CachingSubscriptable(type):
         v = cls.__build_type__(item)
         bc[item] = v
         return v
+
+
+Subscriptable = mix_metas((Subscriptable,))
+CachingSubscriptable = mix_metas((CachingSubscriptable,))

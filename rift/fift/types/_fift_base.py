@@ -1,4 +1,7 @@
-class _FiftBaseType:
+from rift.fift.fift_behavior import FiftBehavior
+
+
+class _FiftBaseType(FiftBehavior):
     type_: str
     value: str
 

@@ -2,16 +2,16 @@ from rift.ast.types import Expr
 from rift.core import Entity
 from rift.core.factory import Factory
 from rift.core.utils import init_abstract_type
-from rift.types.bases.builder_base import _BuilderBase
-from rift.types.bases.cell_base import _CellBase
-from rift.types.bases.cont_base import _ContBase
-from rift.types.bases.dict_base import _DictBase
-from rift.types.bases.idict_base import _IDictBase
-from rift.types.bases.int_base import _IntBase
-from rift.types.bases.pfxdict_base import _PfxDictBase
-from rift.types.bases.slice_base import _SliceBase
-from rift.types.bases.string_base import _StringBase
-from rift.types.bases.udict_base import _UDictBase
+from rift.func.types.builder_base import _BuilderBase
+from rift.func.types.cell_base import _CellBase
+from rift.func.types.cont_base import _ContBase
+from rift.func.types.dict_base import _DictBase
+from rift.func.types.idict_base import _IDictBase
+from rift.func.types.int_base import _IntBase
+from rift.func.types.pfxdict_base import _PfxDictBase
+from rift.func.types.slice_base import _SliceBase
+from rift.func.types.string_base import _StringBase
+from rift.func.types.udict_base import _UDictBase
 
 
 class Int(_IntBase):

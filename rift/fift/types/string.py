@@ -1,5 +1,5 @@
-from rift.ton.fift.types._fift_base import _FiftBaseType
-from rift.ton.fift.types.factory import Factory
+from rift.fift.types._fift_base import _FiftBaseType
+from rift.fift.types.factory import Factory
 
 
 class String(_FiftBaseType):

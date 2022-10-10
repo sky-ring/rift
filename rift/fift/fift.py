@@ -7,11 +7,11 @@ from ctypes import CDLL, c_char_p, c_int, c_void_p
 from pathlib import Path
 from sysconfig import get_config_var
 
-import rift.ton.fift.types
+import rift.fift.types
+from rift.fift.bundled_libs import FIFT_LIBS
+from rift.fift.types.factory import Factory
+from rift.fift.types.util import create_entry
 from rift.native import NativeLib, native_call
-from rift.ton.fift.bundled_libs import FIFT_LIBS
-from rift.ton.fift.types.factory import Factory
-from rift.ton.fift.types.util import create_entry
 
 
 class FiftError(RuntimeError):

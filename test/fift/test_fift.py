@@ -1,4 +1,4 @@
-from rift.ton.fift.fift import Fift
+from rift.fift.fift import Fift
 
 
 def check_end2end(code: str):
