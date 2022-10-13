@@ -1,5 +1,5 @@
 from rift.core import Entity
-from rift.types.types import Builder, Slice
+from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
 
 

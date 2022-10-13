@@ -3,7 +3,7 @@ from rift.fift.types.factory import Factory
 
 
 class Bytes(_FiftBaseType):
-    def __init__(self):
+    def __init__(self, __factory__: bool = False):
         pass
 
     @classmethod

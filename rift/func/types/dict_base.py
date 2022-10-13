@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from rift.core import Entity
-    from rift.types.types import Slice, Dict, Builder
+    from rift.func.types.types import Slice, Dict, Builder
 
 from rift.core.invokable import typed_invokable
 from rift.func.types.cell_base import _CellBase

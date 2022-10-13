@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from rift.types.types import Slice, Cell, Builder
+    from rift.func.types.types import Slice, Cell, Builder
 
 from rift.core.factory import Factory
 from rift.core.invokable import typed_invokable

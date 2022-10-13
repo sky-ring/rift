@@ -1,153 +1,163 @@
 from typing import TYPE_CHECKING
 
+from rift.fift.types.slice import Slice as FiftSlice
+from rift.func.types.types import Slice as FunCSlice
+from rift.meta.behaviors import stub
+
 if TYPE_CHECKING:
-    from rift.fift.types.cell import Cell
-
-from rift.fift.types._fift_base import _FiftBaseType
-from rift.fift.types.factory import Factory
+    from rift.func.types.types import Cont, Tuple
+    from rift.types.bases.cell import Cell
 
 
-class Slice(_FiftBaseType):
-    def __init__(self, __factory__: bool = False):
+class Slice(FunCSlice + FiftSlice):
+    @stub
+    def coin(self) -> int:
         pass
 
-    @classmethod
-    def __type__(cls) -> str:
-        return "cell_slice"
-
-    def coin_(self) -> int:
-        r: int
-        s: Slice
-        r, s = self.cmd("Gram@+", self)
-        self.value = s.value
-        return r
-
-    def coin(self) -> int:
-        r: int = self.cmd("Gram@", self)[0]
-        return r
-
+    @stub
     def uint_(self, bits: int) -> int:
-        r: int
-        s: Slice
-        r, s = self.cmd("u@+", self, bits)
-        self.value = s.value
-        return r
+        pass
 
+    @stub
     def uint(self, bits: int) -> int:
-        r: int = self.cmd("i@", self, bits)[0]
-        return r
+        pass
 
+    @stub
     def sint_(self, bits: int) -> int:
-        r: int
-        s: Slice
-        r, s = self.cmd("i@+", self, bits)
-        self.value = s.value
-        return r
+        pass
 
+    @stub
     def sint(self, bits: int) -> int:
-        r: int = self.cmd("u@", self, bits)[0]
-        return r
+        pass
 
+    @stub
     def hash(self) -> int:
         pass
 
+    @stub
     def string_hash(self) -> int:
         pass
 
+    @stub
     def check_signature(self, signature: "Slice", public_key: int) -> int:
         pass
 
+    @stub
     def compute_data_size(self, max_cells: int) -> tuple[int, int, int]:
         pass
 
+    @stub
+    def bless(self) -> "Cont":
+        pass
+
+    @stub
     def end_parse(self) -> None:
         pass
 
+    @stub
     def ref_(self) -> "Cell":
-        r: "Cell"
-        s: Slice
-        r, s = self.cmd("ref@+", self)
-        self.value = s.value
-        return r
+        pass
 
+    @stub
     def ref(self) -> "Cell":
-        r: "Cell" = self.cmd("ref@", self)[0]
-        return r
+        pass
 
+    @stub
     def bits_(self, len_: int) -> "Slice":
         pass
 
+    @stub
     def bits(self, len_: int) -> "Slice":
         pass
 
+    @stub
     def skip_n(self, len_: int) -> None:
         pass
 
+    @stub
     def skip_n_(self, len_: int) -> None:
         pass
 
+    @stub
     def first_bits(self, len_: int) -> "Slice":
         pass
 
+    @stub
     def skip_last_n(self, len_: int) -> None:
         pass
 
+    @stub
     def skip_last_n_(self, len_: int) -> None:
         pass
 
+    @stub
     def slice_last(self, len_: int) -> "Slice":
         pass
 
+    @stub
     def ldict_(self) -> "Cell":
         pass
 
+    @stub
     def ldict(self) -> "Cell":
         pass
 
+    @stub
     def skip_dict(self) -> None:
         pass
 
+    @stub
     def maybe_ref_(self) -> "Cell":
         pass
 
+    @stub
     def maybe_ref(self) -> "Cell":
         pass
 
+    @stub
     def refs_n(self) -> int:
         pass
 
+    @stub
     def bits_n(self) -> int:
         pass
 
+    @stub
     def bits_refs_n(self) -> tuple[int, int]:
         pass
 
+    @stub
     def is_empty(self) -> int:
         pass
 
+    @stub
     def is_data_empty(self) -> int:
         pass
 
+    @stub
     def are_refs_empty(self) -> int:
         pass
 
+    @stub
     def depth(self) -> int:
         pass
 
+    @stub
     def addr_(self) -> "Slice":
         pass
 
+    @stub
     def parse_addr(self) -> "Tuple":
         pass
 
+    @stub
     def parse_std_addr(self) -> tuple[int, int]:
         pass
 
+    @stub
     def parse_var_addr(self) -> tuple[int, "Slice"]:
         pass
 
+    @stub
     def is_equal(self, b: "Slice") -> int:
         pass
-
-
-Factory.register(Slice.__type__(), Slice)

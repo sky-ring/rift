@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from rift.types.addr import MsgAddress
+from rift.types.bases import Cell, Dict
 from rift.types.bool import Bool
 from rift.types.coin import Coin
 from rift.types.either import Either
@@ -8,7 +9,6 @@ from rift.types.int_aliases import uint5, uint32, uint64
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
 from rift.types.ref import Ref
-from rift.types.types import Cell, Dict
 
 
 class TickTock(Payload):

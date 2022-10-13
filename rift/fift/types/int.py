@@ -3,8 +3,9 @@ from rift.fift.types.factory import Factory
 
 
 class Int(_FiftBaseType):
-    def __init__(self, value: int | None = None):
-        pass
+    def __init__(self, value: int | None = None, __factory__: bool = False):
+        if value is not None:
+            self.value = value
 
     def __load_data__(self, value: str, *args, **kwargs):
         self.value = int(value)
@@ -12,6 +13,14 @@ class Int(_FiftBaseType):
     @classmethod
     def __type__(cls) -> str:
         return "int"
+
+    def __eq__(self, __o: object) -> bool:
+        if isinstance(__o, Int):
+            return __o.value == self.value
+        return isinstance(__o, int) and __o == self.value
+
+    def __bool__(self):
+        return bool(self.value)
 
 
 Factory.register(Int.__type__(), Int)

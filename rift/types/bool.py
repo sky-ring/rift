@@ -1,5 +1,5 @@
 from rift.core import Entity
-from rift.types.types import Builder, Int, Slice
+from rift.types.bases import Builder, Int, Slice
 
 
 class Bool(Int):

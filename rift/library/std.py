@@ -1,7 +1,7 @@
 from rift.core.annots import asm, impure
 from rift.core.entity import Entity
 from rift.func.library import Library
-from rift.types.types import Builder, Cell, Cont, Slice, Tuple
+from rift.func.types.types import Builder, Cell, Cont, Slice, Tuple
 
 
 # noinspection PyTypeChecker,SpellCheckingInspection,PyUnusedLocal

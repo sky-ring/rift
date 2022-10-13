@@ -1,8 +1,8 @@
 from rift.core import Entity
+from rift.types.bases import Builder, Cell, Int, Slice
 from rift.types.int_aliases import int8, uint2, uint256
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
-from rift.types.types import Builder, Cell, Int, Slice
 
 
 class MsgAddress(Slice):

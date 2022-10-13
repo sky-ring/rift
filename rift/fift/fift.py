@@ -7,7 +7,6 @@ from ctypes import CDLL, c_char_p, c_int, c_void_p
 from pathlib import Path
 from sysconfig import get_config_var
 
-import rift.fift.types
 from rift.fift.bundled_libs import FIFT_LIBS
 from rift.fift.types.factory import Factory
 from rift.fift.types.util import create_entry
@@ -20,6 +19,8 @@ class FiftError(RuntimeError):
 
 
 class Fift(metaclass=NativeLib):
+    _global_instance: "Fift" = None
+
     def __init__(
         self,
         lib_path: str | None = None,
@@ -61,10 +62,11 @@ class Fift(metaclass=NativeLib):
         utils = {**FIFT_LIBS}
         utils.pop("Fift")
         utils.pop("GetOpt")
+        utils.pop("Lisp")
         if load_fift:
             libs = {"Fift": FIFT_LIBS["Fift"], **libs}
         if load_utils:
-            libs = {"Lists": FIFT_LIBS["Lists"], **utils}
+            libs = {**libs, "Lists": FIFT_LIBS["Lists"], **utils}
         for _lib, code in libs.items():
             zc = base64.b64decode(code)
             c = zlib.decompress(zc).decode("utf-8")
@@ -93,3 +95,9 @@ class Fift(metaclass=NativeLib):
             raise FiftError(fift_o["message"])
         stack_o = fift_o["stack"]
         return [Factory.load(t["type"], t["value"]) for t in stack_o]
+
+    @classmethod
+    def exec(cls, code: str, *args):
+        if not cls._global_instance:
+            cls._global_instance = Fift(load_utils=True)
+        return cls._global_instance.eval(code, list(args))

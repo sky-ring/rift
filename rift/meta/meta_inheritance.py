@@ -53,7 +53,9 @@ def _get_non_conflicting_metaclass(bases, left_metas, right_metas):
 def mix_metas(left_metas=(), right_metas=()):
     def make_class(name, bases, attrs):
         metaclass = _get_non_conflicting_metaclass(
-            bases, left_metas, right_metas,
+            bases,
+            left_metas,
+            right_metas,
         )
         return metaclass(name, bases, attrs)
 

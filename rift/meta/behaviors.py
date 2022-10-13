@@ -10,7 +10,7 @@ def is_stub(fn):
     return hasattr(fn, "__stub__") and fn.__stub__
 
 
-class Behavioral(type):
+class Behavioral_(type):
     @classmethod
     def create_new(mcs, type1, type2):
         name = f"Behavioral_{type1.__name__}_{type2.__name__}"
@@ -19,17 +19,17 @@ class Behavioral(type):
             "__meta__": {
                 "types": [type1, type2],
             },
-            "__is_active__": classmethod(Behavioral.__is_active__),
-            "__active_one__": classmethod(Behavioral.__active_one__),
-            "__init__": Behavioral.__init__,
-            "__getattr__": Behavioral.__obj_get_attr__,
-            "__getattribute__": Behavioral.__obj_get_attribute__,
+            "__is_active__": classmethod(Behavioral_.__is_active__),
+            "__active_one__": classmethod(Behavioral_.__active_one__),
+            "__init__": Behavioral_.__init_f__,
+            "__getattr__": Behavioral_.__obj_get_attr__,
+            "__getattribute__": Behavioral_.__obj_get_attribute__,
         }
-        c = type(name, bases, attrs)
+        c = Behavioral(name, bases, attrs)
         return c
 
     @staticmethod
-    def __init__(self, *args, **kwargs) -> None:
+    def __init_f__(self, *args, **kwargs) -> None:
         active_cls = type(self).__active_one__()
         self.instance = active_cls(*args, **kwargs)
 
@@ -71,25 +71,24 @@ class Behavioral(type):
             return t2
 
     def __getattr__(self, __name: str):
-        pass
+        return getattr(self.__active_one__(), __name)
 
     def __add__(self, other):
-        return Behavioral(self, other)
-
-
-class Behaved(type):
-    def __new__(mcs, name, bases, attrs):
-        print(attrs)
-        print(bases)
-        # assert "__is_active__" in attrs
-        c = super().__new__(mcs, name, bases, attrs)
-        assert hasattr(c, "__is_active__")
-        return c
-
-    def __add__(self, other):
-        x = Behavioral.create_new(self, other)
+        x = Behavioral_.create_new(self, other)
         return x
 
 
-Behaved = mix_metas((Behaved,))
-Behavioral = mix_metas((Behavioral,))
+class Behaved_(type):
+    def __new__(mcs, name, bases, attrs):
+        c = super().__new__(mcs, name, bases, attrs)
+        if not hasattr(c, "__is_active__"):
+            raise RuntimeError()
+        return c
+
+    def __add__(self, other):
+        x = Behavioral_.create_new(self, other)
+        return x
+
+
+Behaved = mix_metas((Behaved_,))
+Behavioral = mix_metas((Behavioral_,))

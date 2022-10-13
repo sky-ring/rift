@@ -4,7 +4,7 @@ from rift.core import Entity
 from rift.func.func_behavior import FunCBehavior
 
 if TYPE_CHECKING:
-    from rift.types.types import Builder, Slice
+    from rift.func.types.types import Builder, Slice
 
 
 class _EntityBase(Entity, FunCBehavior):
