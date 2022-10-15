@@ -1,5 +1,6 @@
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.fift.types.util import create_entry
 
 
 class Tuple(_FiftBaseType):
@@ -21,7 +22,7 @@ class Tuple(_FiftBaseType):
     def __stack_entry__(self):
         return {
             "type": self.__type__(),
-            "value": [item.__stack_entry__() for item in self.value],
+            "value": [create_entry(item) for item in self.value],
         }
 
     def __getitem__(self, key):
@@ -29,9 +30,10 @@ class Tuple(_FiftBaseType):
             raise RuntimeError("non int key")
         return self.cmd("[]", self, key)[0]
 
-    def append(self, item):
-        t: Tuple = self.cmd(",", self, item)[0]
-        self.value = t.value
+    def append(self, *items):
+        for item in items:
+            t: Tuple = self.cmd(",", self, item)[0]
+            self.value = t.value
 
     @classmethod
     def __type__(cls) -> str:

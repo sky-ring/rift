@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from rift.fift.types.cell import Cell
+    from rift.fift.types.tuple import Tuple
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory

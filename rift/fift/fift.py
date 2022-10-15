@@ -55,6 +55,10 @@ class Fift(metaclass=NativeLib):
     ) -> c_char_p:
         pass
 
+    @native_call("vm_exec")
+    def _tvm_exec(len_: c_int, data_: c_char_p) -> c_char_p:
+        pass
+
     def _load_internal_libs(self, load_fift, load_utils):
         if not (load_fift or load_utils):
             return
@@ -97,7 +101,19 @@ class Fift(metaclass=NativeLib):
         return [Factory.load(t["type"], t["value"]) for t in stack_o]
 
     @classmethod
-    def exec(cls, code: str, *args):
+    def _init(cls):
         if not cls._global_instance:
             cls._global_instance = Fift(load_utils=True)
+
+    @classmethod
+    def exec(cls, code: str, *args):
+        cls._init()
         return cls._global_instance.eval(code, list(args))
+
+    @classmethod
+    def tvm(cls, exec_config):
+        cls._init()
+        c = json.dumps(exec_config).encode("utf-8")
+        out = cls._global_instance._tvm_exec(len(c), c)
+        obj = json.loads(out.decode("utf-8"), strict=False)
+        return obj

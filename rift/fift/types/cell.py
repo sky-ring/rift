@@ -10,7 +10,9 @@ from rift.fift.types.factory import Factory
 
 class Cell(_FiftBaseType):
     def __init__(self, __factory__: bool = False):
-        pass
+        if not __factory__:
+            c: Cell = self.cmd("<b b>")[0]
+            self.value = c.value
 
     @classmethod
     def __type__(cls) -> str:
@@ -41,6 +43,9 @@ class Cell(_FiftBaseType):
         else:
             v = from_.ref()
         return v
+
+    def __eq__(self, __o: "Cell") -> bool:
+        return __o.value == self.value
 
 
 Factory.register(Cell.__type__(), Cell)
