@@ -1,6 +1,8 @@
 import random
 
 
+# Adapted From:
+# https://maxhalford.github.io/blog/weighted-sampling-without-replacement/
 def sample_without_replacement(population, weights=None, k=1, rng=random):
     if not weights:
         weights = [1 / len(population) for _ in range(len(population))]
