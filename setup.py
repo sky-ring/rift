@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="rift-framework",
-    version="0.7.5",
+    version="0.8.5",
     description="A magical Python3 -> FunC portal",
     license="MIT",
     packages=find_packages(),

@@ -4,3 +4,5 @@ libcst~=0.4.7
 PyYAML~=6.0
 setuptools~=62.6.0
 tomlkit~=0.11.4
+pytonlib~=0.24
+appdirs~=1.4.4

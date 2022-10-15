@@ -2,7 +2,7 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.5-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
+[![PyPI version](https://img.shields.io/badge/rift--framework-0.8.5-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
 [![Telegram](https://img.shields.io/badge/Telegram-@rift__framework-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/d_builder)
 [![Telegram](https://img.shields.io/badge/Docs-docs.skyring.io/rift-informational?style=flat-square&color=6A0F49&labelColor=360825)](https://docs.skyring.io/rift/)
 > _A magical **Python3** -> **FunC** portal_
@@ -104,7 +104,7 @@ Until then, you may look at standard contracts implementation; they cover the ma
 - [x] Providing standard smart contracts implementation with Rift
 
 ### Milestone 2: deploying, testing, interaction capabilities
-- [ ] Simple interaction interface with TON Blockchain
+- [x] Simple interaction interface with TON Blockchain
 - [ ] Simple deploying options of developed contracts
 - [ ] Testing framework for the contracts developed with Rift
 
