@@ -21,7 +21,7 @@ class Cell(_FiftBaseType):
 
     @classmethod
     def __serialize__(
-        cls, to: "Builder", value: "_FiftBaseType"
+        cls, to: "Builder", value: "_FiftBaseType",
     ) -> "Builder":
         if value is None:
             return to

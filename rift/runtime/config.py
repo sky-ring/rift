@@ -1,5 +1,7 @@
 from enum import Enum
 
+from appdirs import AppDirs
+
 
 class Mode(Enum):
     FUNC = 0
@@ -14,3 +16,4 @@ class Mode(Enum):
 
 class Config:
     mode: Mode = Mode.FIFT
+    dirs = AppDirs(appname="Rift", appauthor="Skyring")
