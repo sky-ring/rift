@@ -1,7 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
-from rift.types.ref import Ref
-from rift.types.types import Builder, Cell, Slice
+from rift.runtime.config import Config
+from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
 
 
@@ -65,14 +65,21 @@ class Either(metaclass=CachingSubscriptable):
             i = from_.uint(1)
         m = Either()
         m.which = i
-        m.which.__assign__(f"{name}_which")
-        with Cond() as c:
-            c.match(i)
-            d = base2.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
-            c.otherwise()
-            d = base1.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
+        if Config.mode.is_func():
+            m.which.__assign__(f"{name}_which")
+            with Cond() as c:
+                c.match(i)
+                d = base2.__deserialize__(from_, name=name, inplace=inplace)
+                m.bound = d
+                c.otherwise()
+                d = base1.__deserialize__(from_, name=name, inplace=inplace)
+                m.bound = d
+        elif Config.mode.is_fift():
+            if m.which == 0:
+                d = base1.__deserialize__(from_, name=name, inplace=inplace)
+            else:
+                d = base2.__deserialize__(from_, name=name, inplace=inplace)
+            return d
         return m
 
     @classmethod

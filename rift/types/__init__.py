@@ -1,4 +1,6 @@
+from rift.func.types.types import Cont, Tensor, Tuple
 from rift.types.addr import MsgAddress
+from rift.types.bases import Builder, Cell, Dict, Int, Slice, String
 from rift.types.bool import Bool
 from rift.types.coin import Coin
 from rift.types.constructor import Constructor
@@ -21,14 +23,3 @@ from rift.types.payload import Payload
 from rift.types.ref import Ref
 from rift.types.sized_int import integer
 from rift.types.slice import slice
-from rift.types.types import (
-    Builder,
-    Cell,
-    Cont,
-    Dict,
-    Int,
-    Slice,
-    String,
-    Tensor,
-    Tuple,
-)

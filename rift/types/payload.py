@@ -1,8 +1,10 @@
 from rift.ast.ref_table import ReferenceTable
 from rift.core.condition import Cond
 from rift.core.loop import while_
+from rift.func.types.entity_base import Entity
 from rift.library.std import std
-from rift.types.types import Builder, Cell, Entity, Int, Slice
+from rift.runtime.config import Config, Mode
+from rift.types.bases import Builder, Cell, Int, Slice
 from rift.types.utils import Subscriptable
 
 
@@ -90,10 +92,11 @@ class Payload(metaclass=Subscriptable):
 
     def data_init(self, data_slice: Slice):
         self.__data__ = data_slice
-        if not self.__data__.NAMED:
-            self.__data__.__assign__(f"{self.f_name}_orig")
-        self.__origin__ = self.__data__.__assign__(f"{self.f_name}_cp")
-        ReferenceTable.eliminatable(f"{self.f_name}_cp")
+        if Config.mode.is_func():
+            if not self.__data__.NAMED:
+                self.__data__.__assign__(f"{self.f_name}_orig")
+            self.__origin__ = self.__data__.__assign__(f"{self.f_name}_cp")
+            ReferenceTable.eliminatable(f"{self.f_name}_cp")
 
     def load(self, proc_tag=True, master=True):
         if master:
@@ -139,7 +142,10 @@ class Payload(metaclass=Subscriptable):
         return std.slice_hash(self.__origin__)
 
     def as_builder(self):
-        builder = std.begin_cell()
+        if Config.mode.is_fift():
+            builder = Builder()
+        else:
+            builder = std.begin_cell()
         return self.to_builder(builder)
 
     @classmethod

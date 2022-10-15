@@ -1,6 +1,5 @@
 from rift.core.entity import Entity
 from rift.library.std import std
-from rift.types.msg import StateInit
 
 
 class Model:

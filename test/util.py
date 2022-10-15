@@ -5,6 +5,7 @@ from pathlib import Path
 
 from rift import Engine
 from rift.ast.ref_table import ReferenceTable
+from rift.runtime.config import Config, Mode
 
 
 def write(target: str, content: str):
@@ -16,6 +17,7 @@ def write(target: str, content: str):
 
 
 def compile(contract, print_=True, ast=False, file_=True):
+    Config.mode = Mode.FUNC
     state, code, err = safe_compile(contract)
     if ast:
         print()

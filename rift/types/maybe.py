@@ -1,6 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
-from rift.types.types import Builder, Slice
+from rift.runtime.config import Config
+from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
 
 
@@ -18,7 +19,6 @@ class Maybe(metaclass=CachingSubscriptable):
             return b
         if not isinstance(value, Maybe):
             return type(value).__serialize__(to, value)
-            pass
         base = cls.__basex__
         to.__assign__("_b_tmp_")
         with Cond() as c:
@@ -47,11 +47,18 @@ class Maybe(metaclass=CachingSubscriptable):
             i = from_.uint(1)
         m = Maybe()
         m.has = i
-        m.has.__assign__(f"{name}_has")
-        with Cond() as c:
-            c.match(i)
-            d = base.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
+        if Config.mode.is_func():
+            m.has.__assign__(f"{name}_has")
+            with Cond() as c:
+                c.match(i)
+                d = base.__deserialize__(from_, name=name, inplace=inplace)
+                m.bound = d
+        elif Config.mode.is_fift():
+            if m.has:
+                d = base.__deserialize__(from_, name=name, inplace=inplace)
+                return d
+            else:
+                return None
         return m
 
     @classmethod

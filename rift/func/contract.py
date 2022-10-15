@@ -6,8 +6,8 @@ from rift.core.factory import Factory
 from rift.core.invokable import InvokableFunc
 from rift.core.loop import While
 from rift.func.meta_contract import ContractMeta
+from rift.func.types.types import Cell, Slice
 from rift.types.msg import InternalMessage
-from rift.types.types import Cell, Slice
 
 
 class Contract(metaclass=ContractMeta):

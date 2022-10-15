@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from rift.core import Entity
-from rift.types.types import Builder, Cell, Slice
+from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
 
 if TYPE_CHECKING:
