@@ -35,7 +35,9 @@ class _FiftBaseType(FiftBehavior):
 
     @classmethod
     def __serialize__(
-        cls, to: "Builder", value: "_FiftBaseType",
+        cls,
+        to: "Builder",
+        value: "_FiftBaseType",
     ) -> "Builder":
         return to
 

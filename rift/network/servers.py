@@ -17,7 +17,8 @@ class Servers:
     def _load_data(self):
         if self._path is None:
             self._path = os.path.join(
-                Config.dirs.user_data_dir, f"{self._network}-servers.json",
+                Config.dirs.user_data_dir,
+                f"{self._network}-servers.json",
             )
         self.config = ConfigManager.acquire_config(self._network)
         if os.path.exists(self._path):
@@ -64,7 +65,8 @@ class Servers:
             )
         weights = [s["weight"] for s in servers.values()]
         srv = sample_without_replacement(
-            list(servers.keys()), weights=weights,
+            list(servers.keys()),
+            weights=weights,
         )
         return servers[srv]["ls_index"]
 

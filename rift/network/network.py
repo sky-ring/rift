@@ -5,7 +5,6 @@ from pytonlib import (
     ExternalMessageNotAccepted,
     LiteServerTimeout,
     TonlibClient,
-    TonlibError,
     TonlibNoResponse,
 )
 from pytonlib.client import os
@@ -108,8 +107,11 @@ class Network:
                 "data": e.result,
             }
 
-    def __del__(self):
-        # TODO: somehow we should handle sudden
-        # closing of the event loop + close ton client
-        # self.loop.run_until_complete(self.client.close())
-        pass
+    def close(self):
+        self.loop.run_until_complete(self.client.close())
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        self.close()
