@@ -1,4 +1,5 @@
 from rift.fift.fift import Fift
+from rift.fift.types.tuple import Tuple
 
 
 def check_end2end(code: str):
@@ -36,3 +37,13 @@ def test_bytes():
 
 def test_fift_load():
     check_end2end("B{1234}")
+
+
+def test_tuple():
+    check_end2end("| 2 , 3 , <b b> ,")
+
+
+def test_tuple_2():
+    t = Tuple()
+    t.append(1)
+    print(t)
