@@ -55,6 +55,12 @@ class Fift(metaclass=NativeLib):
     ) -> c_char_p:
         pass
 
+    @native_call("func_compile")
+    def _func_compile(
+        config_: c_char_p,
+    ) -> c_char_p:
+        pass
+
     @native_call("vm_exec")
     def _tvm_exec(len_: c_int, data_: c_char_p) -> c_char_p:
         pass
@@ -115,5 +121,13 @@ class Fift(metaclass=NativeLib):
         cls._init()
         c = json.dumps(exec_config).encode("utf-8")
         out = cls._global_instance._tvm_exec(len(c), c)
+        obj = json.loads(out.decode("utf-8"), strict=False)
+        return obj
+
+    @classmethod
+    def func_compile(cls, exec_config):
+        cls._init()
+        c = json.dumps(exec_config).encode("utf-8")
+        out = cls._global_instance._func_compile(c)
         obj = json.loads(out.decode("utf-8"), strict=False)
         return obj
