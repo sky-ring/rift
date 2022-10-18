@@ -18,6 +18,11 @@ class While:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        ctx = caller_locals(back=2)
+        if "self" in ctx and hasattr(ctx["self"], "__restrain__"):
+            ctx["self"].__restrain__()
+        elif "ctx" in ctx and hasattr(ctx["ctx"], "__restrain__"):
+            ctx["ctx"].__restrain__()
         CallStacks.end_while(self.id)
 
 

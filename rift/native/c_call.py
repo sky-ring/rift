@@ -24,6 +24,7 @@ class NativeLib(type):
             types = [annots[x] for x in args]
             f.argtypes = list(types)
             f.restype = annots["return"]
+            setattr(self, a_n, f)
             return f
 
         return _native_func_creator

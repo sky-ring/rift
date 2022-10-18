@@ -17,6 +17,8 @@ class Block(Node):
         super().__init__()
         self.parent = None
         self.symbols = BoolDict()
+        # Just a simple patch to not define _ as a variable
+        self.symbols["_"] = True
         self.statements = []
 
     def add_statement(self, statement):

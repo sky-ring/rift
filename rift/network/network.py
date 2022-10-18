@@ -30,7 +30,7 @@ class Network:
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
-    def _acquire_config(self, invalidate=True):
+    def _acquire_config(self, invalidate=False):
         self._config = ConfigManager.acquire_config(self._network, invalidate)
         return self._config
 

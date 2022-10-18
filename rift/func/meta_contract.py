@@ -5,11 +5,13 @@ class ContractMeta(type):
         attrs["__refresh__"] = ContractMeta._refresh
         attrs["__restrain__"] = ContractMeta._restrain
         attrs["__refreshables__"] = {}
+        attrs["__restrain_queue__"] = {}
         if "Data" in attrs:
             if attrs["Data"].__magic__ == 0xBB10C0:
                 d = attrs["Data"]()
                 attrs["data"] = d
                 attrs["__refreshables__"]["data"] = d
+                attrs["__restrain_queue__"]["data"] = []
         c = super(ContractMeta, mcs).__new__(mcs, name, bases, attrs)
         if "__ignore__" not in attrs:
             ContractMeta.contracts.add(c)
@@ -17,10 +19,13 @@ class ContractMeta(type):
 
     @staticmethod
     def _refresh(self, reset=False):
-        for k, v in self.__refreshables__.items():
-            setattr(self, k, v.copy(reset=reset))
+        for k, _v in self.__refreshables__.items():
+            c_v = getattr(self, k)
+            self.__restrain_queue__[k].append(c_v)
+            setattr(self, k, c_v.copy(reset=reset))
 
     @staticmethod
     def _restrain(self):
-        for k, v in self.__refreshables__.items():
-            setattr(self, k, v)
+        for k, _v in self.__refreshables__.items():
+            n_v = self.__restrain_queue__[k].pop()
+            setattr(self, k, n_v)

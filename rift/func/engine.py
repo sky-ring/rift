@@ -142,14 +142,15 @@ class Engine(object):
                     "method_id": is_method_id(value),
                     "method_id_v": getattr(value, "__method_id_val__", None),
                 }
-                CallStacks.declare_asm(
-                    name,
-                    [names[i + 1] for i in range(func_args - 1)],
-                    annots,
-                    asm_annots,
-                )
-                value(inst, *args, NO_INTERCEPT=1)
-                CallStacks.end_method(name)
+                if not asm_annots["hide"]:
+                    CallStacks.declare_asm(
+                        name,
+                        [names[i + 1] for i in range(func_args - 1)],
+                        annots,
+                        asm_annots,
+                    )
+                    value(inst, *args, NO_INTERCEPT=1)
+                    CallStacks.end_method(name)
             elif name == "__doc__":
                 cls.handle_docs(contract, value)
 

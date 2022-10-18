@@ -8,7 +8,7 @@ from rift.func.types.types import Builder, Cell, Cont, Slice, Tuple
 class Stdlib(Library):
     __ignore__ = True
 
-    @asm()
+    @asm(hide=True)
     def null(self) -> Entity:
         return "NULL"
 
@@ -20,7 +20,7 @@ class Stdlib(Library):
     def my_address(self) -> Slice:
         return "MYADDR"
 
-    @asm()
+    @asm(hide=True)
     def get_balance(self) -> Tuple:
         return "BALANCE"
 
@@ -97,7 +97,7 @@ class Stdlib(Library):
         return "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT"
 
     @impure
-    @asm()
+    @asm(hide=True)
     def throw_if(self, excno: int, cond: int) -> None:
         return "THROWARGIF"
 
@@ -183,27 +183,32 @@ class Stdlib(Library):
     def preload_ref(self, s: Slice) -> Cell:
         return "PLDREF"
 
-    @asm(input_order=("s", "len_"), out_order=(1, 0), name="~load_int")
-    def load_int_(self, s: Slice, len_: int) -> int:
+    @asm(
+        input_order=("s", "len_"),
+        out_order=(1, 0),
+        name="~load_int",
+        hide=True,
+    )
+    def load_int_(self, s: Slice, len_: int) -> tuple[Slice, int]:
         return "LDIX"
 
-    @asm(out_order=(1, 0), name="~load_uint")
-    def load_uint_(self, s: Slice, len_: int) -> int:
+    @asm(out_order=(1, 0), name="~load_uint", hide=True)
+    def load_uint_(self, s: Slice, len_: int) -> tuple[Slice, int]:
         return "LDUX"
 
-    @asm()
+    @asm(hide=True)
     def preload_int(self, s: Slice, len_: int) -> int:
         return "PLDIX"
 
-    @asm()
+    @asm(hide=True)
     def preload_uint(self, s: Slice, len_: int) -> int:
         return "PLDUX"
 
-    @asm(input_order=("s", "len_"), out_order=(1, 0))
+    @asm(input_order=("s", "len_"), out_order=(1, 0), hide=True)
     def load_bits(self, s: Slice, len_: int) -> tuple[Slice, Slice]:
         return "LDSLICEX"
 
-    @asm()
+    @asm(hide=True)
     def preload_bits(self, s: Slice, len_: int) -> Slice:
         return "PLDSLICEX"
 
@@ -216,7 +221,7 @@ class Stdlib(Library):
         return "SDSKIPFIRST"
 
     @asm(name="~skip_bits")
-    def skip_bits_(self, s: Slice, len_: int) -> None:
+    def skip_bits_(self, s: Slice, len_: int) -> tuple[Slice, None]:
         return "SDSKIPFIRST"
 
     @asm()
@@ -228,7 +233,7 @@ class Stdlib(Library):
         return "SDSKIPLAST"
 
     @asm(name="~skip_last_bits")
-    def skip_last_bits_(self, s: Slice, len_: int) -> None:
+    def skip_last_bits_(self, s: Slice, len_: int) -> tuple[Slice, None]:
         return "SDSKIPLAST"
 
     @asm()
@@ -315,11 +320,11 @@ class Stdlib(Library):
     def store_ref(self, b: Builder, c: Cell) -> Builder:
         return "STREF"
 
-    @asm(input_order=("x", "b", "len_"))
+    @asm(input_order=("x", "b", "len_"), hide=True)
     def store_uint(self, b: Builder, x: int, len_: int) -> Builder:
         return "STUX"
 
-    @asm(input_order=("x", "b", "len_"))
+    @asm(input_order=("x", "b", "len_"), hide=True)
     def store_int(self, b: Builder, x: int, len_: int) -> Builder:
         return "STIX"
 
@@ -371,7 +376,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Cell,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTISETREF"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -394,14 +399,18 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Cell,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTUSETREF"
 
-    @asm(input_order=("index", "dict_", "key_len"))
+    @asm(input_order=("index", "dict_", "key_len"), hide=True)
     def idict_get_ref(self, dict_: Cell, key_len: int, index: int) -> Cell:
         return "DICTIGETOPTREF"
 
-    @asm(input_order=("index", "dict_", "key_len"), name="idict_get_ref?")
+    @asm(
+        input_order=("index", "dict_", "key_len"),
+        name="idict_get_ref?",
+        hide=True,
+    )
     def idict_get_ref_check(
         self,
         dict_: Cell,
@@ -417,7 +426,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
     ) -> tuple[Cell, int]:
-        return "DICTUGETREF"
+        return "DICTUGETREF", "NULLSWAPIFNOT"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
     def idict_set_get_ref(
@@ -499,7 +508,7 @@ class Stdlib(Library):
         dict_: Cell,
         key_len: int,
         index: int,
-    ) -> tuple[Slice, int]:
+    ) -> tuple[Cell, tuple[Slice, int]]:
         return "DICTIDELGET", "NULLSWAPIFNOT"
 
     @asm(input_order=("index", "dict_", "key_len"), name="~udict_delete_get?")
@@ -508,7 +517,7 @@ class Stdlib(Library):
         dict_: Cell,
         key_len: int,
         index: int,
-    ) -> tuple[Slice, int]:
+    ) -> tuple[Cell, tuple[Slice, int]]:
         return "DICTUDELGET", "NULLSWAPIFNOT"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -531,7 +540,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Slice,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTUSET"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -554,7 +563,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Slice,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTISET"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -574,7 +583,7 @@ class Stdlib(Library):
         key_len: int,
         index: Slice,
         value: Slice,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTSET"
 
     @asm(
@@ -649,7 +658,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Builder,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTUSETB"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -672,7 +681,7 @@ class Stdlib(Library):
         key_len: int,
         index: int,
         value: Builder,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTISETB"
 
     @asm(input_order=("value", "index", "dict_", "key_len"))
@@ -695,7 +704,7 @@ class Stdlib(Library):
         key_len: int,
         index: Slice,
         value: Builder,
-    ) -> None:
+    ) -> tuple[Cell, None]:
         return "DICTSETB"
 
     @asm(
@@ -763,7 +772,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[int, Slice, int]:
+    ) -> tuple[Cell, tuple[int, Slice, int]]:
         return "DICTUREMMIN", "NULLSWAPIFNOT2"
 
     @asm(out_order=(0, 2, 1, 3))
@@ -779,7 +788,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[int, Slice, int]:
+    ) -> tuple[Cell, tuple[int, Slice, int]]:
         return "DICTIREMMIN", "NULLSWAPIFNOT2"
 
     @asm(out_order=(0, 2, 1, 3))
@@ -795,7 +804,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[Slice, Slice, int]:
+    ) -> tuple[Cell, tuple[Slice, Slice, int]]:
         return "DICTREMMIN", "NULLSWAPIFNOT2"
 
     @asm(out_order=(0, 2, 1, 3))
@@ -811,7 +820,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[int, Slice, int]:
+    ) -> tuple[Cell, tuple[int, Slice, int]]:
         return "DICTUREMMAX", "NULLSWAPIFNOT2"
 
     @asm(out_order=(0, 2, 1, 3))
@@ -827,7 +836,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[int, Slice, int]:
+    ) -> tuple[Cell, tuple[int, Slice, int]]:
         return "DICTIREMMAX", "NULLSWAPIFNOT2"
 
     @asm(out_order=(0, 2, 1, 3))
@@ -843,7 +852,7 @@ class Stdlib(Library):
         self,
         dict_: Cell,
         key_len: int,
-    ) -> tuple[Slice, Slice, int]:
+    ) -> tuple[Cell, tuple[Slice, Slice, int]]:
         return "DICTREMMAX", "NULLSWAPIFNOT2"
 
     @asm(out_order=(1, 0, 2), name="udict_get_min?")
@@ -1116,11 +1125,11 @@ class Stdlib(Library):
     def randomize_lt(self) -> None:
         return "LTIME", "ADDRAND"
 
-    @asm()
+    @asm(hide=True)
     def store_coins(self, b: Builder, x: int) -> Builder:
         return "STVARUINT16"
 
-    @asm(out_order=(1, 0))
+    @asm(out_order=(1, 0), hide=True)
     def load_coins(self, s: Slice) -> tuple[Slice, int]:
         return "LDVARUINT16"
 

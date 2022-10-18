@@ -55,4 +55,4 @@ class Asm(Library):
 
 
 def test_compile():
-    compile(Asm)
+    compile(Asm, link_std=False)

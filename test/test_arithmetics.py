@@ -6,7 +6,7 @@ from .util import compile
 
 class Arithmetics(Contract):
     def external_receive(self) -> None:
-        const = -2
+        some_const = -2
         v = self.body.load_uint_(8)
         _ = v + 2
         _ = v / 2

@@ -21,6 +21,7 @@ class PatchContract(Contract):
                 b = a * 4
             else:
                 body.coin()
+            i = 1
         raise 0xFFFF
 
 

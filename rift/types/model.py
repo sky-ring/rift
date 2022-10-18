@@ -60,6 +60,7 @@ class Model:
                 self._skipped_ones[t] = n
 
     def load(self):
+        self.__predefine__("data")
         data = std.get_data().parse()
         data.__assign__("data")
         for k, v in self.annotations.items():
@@ -94,3 +95,21 @@ class Model:
         if not reset:
             cp.__dict__ = {**self.__dict__}
         return cp
+
+    def __predefine__(
+        self,
+        name: str = None,
+        lazy: bool = True,
+        **kwargs,
+    ):
+        if name is None:
+            return
+        if lazy and "target" in kwargs:
+            tg = kwargs["target"]
+            targets = {tg: self.annotations[tg]}
+        else:
+            targets = self.annotations
+
+        for k, v in targets.items():
+            v_name = f"{name}_{k}"
+            v.__predefine__(name=v_name, lazy=lazy, **kwargs)
