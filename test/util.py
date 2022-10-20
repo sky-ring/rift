@@ -27,12 +27,8 @@ def compile(contract, print_=True, ast=False, file_=True, link_std=True):
 
 def compile_fift(program):
     Config.mode = Mode.FIFT
-    if "DECLPROC recv_internal" not in program:
-        idx = program.find("}END>c")
-        main_method = "DECLPROC recv_internal\nrecv_internal PROC:<{\n}>\n"
-        program = program[:idx] + main_method + program[idx:]
-    c = Fift.exec(program.strip())
-    return c[0]
+    c = Fift.assemble(program, fix_main=True, patch_methods=True)
+    return c
 
 
 def compile_func(code, link_std=True):

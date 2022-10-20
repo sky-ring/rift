@@ -12,7 +12,11 @@ class SimpleStorage(Contract):
 
     @method()
     def untyped_func(
-        self, theta: int, a: int, b: int, c: int,
+        self,
+        theta: int,
+        a: int,
+        b: int,
+        c: int,
     ) -> tuple[int, int, int]:
         return c * theta, a * theta, b * theta
 

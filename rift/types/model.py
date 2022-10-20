@@ -1,5 +1,7 @@
 from rift.core.entity import Entity
 from rift.library.std import std
+from rift.runtime.config import Config
+from rift.types.bases import Builder
 
 
 class Model:
@@ -69,7 +71,10 @@ class Model:
             setattr(self, k, n)
 
     def as_cell(self):
-        builder = std.begin_cell()
+        if Config.mode.is_fift():
+            builder = Builder()
+        else:
+            builder = std.begin_cell()
         for k, v in self.annotations.items():
             c_v = getattr(self, k)
             builder = v.__serialize__(builder, c_v)

@@ -1,6 +1,7 @@
 import base64
 import json
 import os.path
+import re
 import sys
 import zlib
 from ctypes import CDLL, c_char_p, c_int, c_void_p
@@ -10,6 +11,7 @@ from sysconfig import get_config_var
 from rift.fift.bundled_libs import FIFT_LIBS
 from rift.fift.types.factory import Factory
 from rift.fift.types.util import create_entry
+from rift.fift.utils import calc_method_id
 from rift.native import NativeLib, native_call
 
 
@@ -113,6 +115,39 @@ class Fift(metaclass=NativeLib):
     def exec(cls, code: str, *args):
         cls._init()
         return cls._global_instance.eval(code, list(args))
+
+    @classmethod
+    def assemble(cls, program: str, fix_main=True, patch_methods=False):
+        if fix_main and "DECLPROC recv_internal" not in program:
+            idx = program.find("}END>c")
+            main_method = (
+                "DECLPROC recv_internal\nrecv_internal PROC:<{\n}>\n"
+            )
+            program = program[:idx] + main_method + program[idx:]
+        if patch_methods:
+            # NOTE: What we do here is to make the procedures
+            # Use custom id - crc16 version
+            # So we can call them by known id
+            defined_names = [
+                "recv_internal",
+                "main",
+                "recv_external",
+                "run_ticktock",
+                "split_prepare",
+                "split_install",
+            ]
+            pattern = r"DECLPROC (.*?)\n"
+            r = re.findall(pattern, program)
+            r = [proc.strip() for proc in r]
+            r = list(filter(lambda x: x not in defined_names, r))
+            for proc in r:
+                id_ = calc_method_id(proc)
+                program = program.replace(
+                    f"DECLPROC {proc}",
+                    f"{id_} DECLMETHOD {proc}",
+                )
+        c = Fift.exec(program.strip())
+        return c[0]
 
     @classmethod
     def tvm(cls, exec_config):
