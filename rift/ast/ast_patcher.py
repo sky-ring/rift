@@ -11,6 +11,7 @@ import ast
 from rift.ast.patchers import (
     AssertPatcher,
     AssignPatcher,
+    BreakPatcher,
     IfPatcher,
     RaisePatcher,
     ReturnPatcher,
@@ -24,6 +25,7 @@ def patch(node):
         UnaryPatcher(),
         AssertPatcher(),
         AssignPatcher(),
+        BreakPatcher(),
         IfPatcher(),
         RaisePatcher(),
         ReturnPatcher(),

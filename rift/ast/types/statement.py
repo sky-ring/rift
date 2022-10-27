@@ -14,6 +14,7 @@ class Statement(Node):
     EXPR = 4
     ASSIGN = 5
     M_ASSIGN = 6
+    BREAK = 7
     # local
     # TODO: Fix scopes in __n_def
     parent: "Block"
@@ -78,6 +79,8 @@ class Statement(Node):
             if obj is None:
                 obj = "()"
             printer.print("return {object};", object=obj)
+        elif self.type == Statement.BREAK:
+            printer.print("break;")
         elif self.type == Statement.METHOD_CALL:
             printer.print(
                 "{object}{op}{name}({args});",
