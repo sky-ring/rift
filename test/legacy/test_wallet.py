@@ -1,9 +1,9 @@
+from test.util import compile
+
 from rift import method, method_id
 from rift.core.loop import while_
 from rift.func.contract import Contract
 from rift.types import Slice
-
-from .util import compile
 
 
 class SimpleWallet(Contract):

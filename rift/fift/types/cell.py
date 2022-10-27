@@ -3,16 +3,19 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from rift.fift.types.slice import Slice
     from rift.fift.types.builder import Builder
+    from rift.fift.types.int import Int
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
 
 
 class Cell(_FiftBaseType):
-    def __init__(self, __factory__: bool = False):
+    def __init__(self, __factory__: bool = False, __value__: str = None):
         if not __factory__:
             c: Cell = self.cmd("<b b>")[0]
             self.value = c.value
+        if __value__ is not None:
+            self.__load_data__(__value__)
 
     @classmethod
     def __type__(cls) -> str:
@@ -20,6 +23,9 @@ class Cell(_FiftBaseType):
 
     def parse(self) -> "Slice":
         return self.cmd("<s", self)[0]
+
+    def hash(self) -> "Int":
+        return self.cmd("hashu", self)[0]
 
     @classmethod
     def __serialize__(

@@ -115,10 +115,10 @@ class Slice(_FiftBaseType):
         pass
 
     def refs_n(self) -> int:
-        pass
+        return self.cmd("srefs", self)[0]
 
     def bits_n(self) -> int:
-        pass
+        return self.cmd("sbits", self)[0]
 
     def bits_refs_n(self) -> tuple[int, int]:
         pass

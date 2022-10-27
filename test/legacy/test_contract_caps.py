@@ -1,8 +1,8 @@
+from test.util import compile
+
 from rift import Cond, method
 from rift.func.contract import Contract
 from rift.types import Cell, Slice
-
-from .util import compile
 
 
 class SimpleStorage(Contract):
@@ -39,7 +39,7 @@ class SimpleStorage(Contract):
             r.recalc()
             with Cond() as c2:
                 c2.match(r == 1)
-                self.ret_()
+                return
             c.match(op == 0x2012)
             self.double_the_num(1)
             y1, y2 = self.copy_num(2)

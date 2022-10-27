@@ -18,6 +18,8 @@ from rift.core.factory import Factory
 from rift.core.utils import init_abstract_type
 from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
+from rift.func.util import cls_attrs
+from rift.types import helpers
 
 
 class Engine(object):
@@ -59,7 +61,7 @@ class Engine(object):
                 annots,
             )
             r = model.get(data_name)
-            contract.ret_(None, r)
+            helpers.ret_(r)
             CallStacks.end_method(name)
 
     @classmethod
@@ -67,7 +69,7 @@ class Engine(object):
         inst = contract()
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
-        attrs = dir(contract)
+        attrs = cls_attrs(contract)
         d = zip(attrs, [getattr(contract, attr) for attr in attrs])
         for name, value in d:
             if name == "__annotations__":
