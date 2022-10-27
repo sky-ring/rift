@@ -5,6 +5,7 @@ from time import time
 from rift.fift.fift import Fift
 from rift.fift.types.cell import Cell
 from rift.fift.types.factory import Factory
+from rift.fift.types.null import Null
 from rift.fift.types.tuple import Tuple
 from rift.fift.types.util import create_entry
 from rift.fift.utils import calc_method_id
@@ -28,7 +29,7 @@ class C7Register:
         self.unixtime = int(time())
         self.balance = 1000
         self.myself = MsgAddress.std(0, 1)
-        self.rand_seed = int.from_bytes(randbytes(32), byteorder="little")
+        self.rand_seed = int.from_bytes(randbytes(32), byteorder="big")
         self.actions = 0
         self.messages_sent = 0
         self.block_lt = self.unixtime
@@ -37,15 +38,19 @@ class C7Register:
 
     def as_tuple(self) -> Tuple:
         t = Tuple()
+        balance = Tuple()
+        balance.append(self.balance)
+        balance.append(Null())
         t.append(
-            self.unixtime,
-            self.balance,
-            self.myself,
-            self.rand_seed,
+            0x076EF1EA,
             self.actions,
             self.messages_sent,
+            self.unixtime,
             self.block_lt,
             self.trans_lt,
+            self.rand_seed,
+            balance,
+            self.myself,
             self.global_config,
         )
         return t
@@ -65,13 +70,15 @@ class TVMConfig:
         self.c7 = c7
 
     def __entry__(self) -> dict:
+        t = Tuple()
+        t.append(self.c7.as_tuple())
         return {
             "debug": self.debug,
             "code": self.code,
             "data": self.data,
             "function_selector": self.selector,
             "init_stack": [create_entry(i) for i in self.stack],
-            "c7_register": self.c7.as_tuple().__stack_entry__(),
+            "c7_register": t.__stack_entry__(),
         }
 
 

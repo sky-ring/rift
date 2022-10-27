@@ -16,7 +16,8 @@ class Tuple(_FiftBaseType):
 
     def __load_data__(self, value: list, *args, **kwargs):
         self.value = [
-            Factory.load(item["type"], item["value"]) for item in value
+            Factory.load(item["type"], item.get("value", None))
+            for item in value
         ]
 
     def __stack_entry__(self):
