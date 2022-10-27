@@ -15,6 +15,7 @@ from rift.cli.util.dag import topological
 from rift.cli.util.dir_util import clear_contents
 from rift.cst.cst_visitor import relative_imports
 from rift.func.meta_contract import ContractMeta
+from rift.runtime import FunCMode
 
 
 @entry.command(help="Builds the project")
@@ -31,6 +32,7 @@ from rift.func.meta_contract import ContractMeta
     is_flag=True,
 )
 def build(log_patches, keep):
+    FunCMode.activate()
     cwd = getcwd()
     config_file = p_join(cwd, "project.toml")
     if not p_exists(config_file):

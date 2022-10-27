@@ -14,7 +14,6 @@ class SimpleMsg(Contract):
     """Simple Msg Contract."""
 
     def internal_receive(self) -> None:
-        # self.message.load()
         x = self.body >> uint4
         assert x == 10, 45
 

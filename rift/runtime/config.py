@@ -31,6 +31,9 @@ class Scope:
     def __exit__(self, *args, **kwargs):
         Config.mode = self._p_mode
 
+    def activate(self):
+        Config.mode = self.mode
+
 
 FunCMode = Scope(Mode.FUNC)
 FiftMode = Scope(Mode.FIFT)

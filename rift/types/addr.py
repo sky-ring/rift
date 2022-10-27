@@ -6,8 +6,6 @@ from rift.types.payload import Payload
 
 
 class MsgAddress(Slice):
-    Empty = uint2(0b00)
-
     class Std(Payload):
         __tag__ = "$10"
         anycast: Maybe[Cell]
@@ -48,3 +46,7 @@ class MsgAddress(Slice):
             .as_cell()
             .parse()
         )
+
+    @classmethod
+    def empty(cls):
+        return uint2(0b00)

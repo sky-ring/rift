@@ -46,9 +46,11 @@ class InboundExternalMsgInfo(Payload):
     def build(
         cls,
         dest: MsgAddress,
-        src: MsgAddress = MsgAddress.Empty,
+        src: MsgAddress = None,
         import_fee: Coin = 0,
     ) -> "InternalMsgInfo":
+        if src is None:
+            src = MsgAddress.empty()
         info = InboundExternalMsgInfo()
         info.dest = dest
         info.src = src
@@ -76,7 +78,7 @@ class InternalMsgInfo(Payload):
         ihr_disabled: Bool = True,
         bounce: Bool = True,
         bounced: Bool = False,
-        src: MsgAddress = MsgAddress.Empty,
+        src: MsgAddress = None,
         amount: Coin = 0,
         extra_currency: Dict = None,
         ihr_fee: Coin = 0,
@@ -84,6 +86,8 @@ class InternalMsgInfo(Payload):
         created_lt: uint64 = 0,
         created_at: uint32 = 0,
     ) -> "InternalMsgInfo":
+        if src is None:
+            src = MsgAddress.empty()
         info = InternalMsgInfo()
         info.dest = dest
         info.ihr_disabled = ihr_disabled
@@ -127,7 +131,7 @@ class InternalMessage(Payload):
         ihr_disabled: Bool = 1,
         bounce: Bool = 1,
         bounced: Bool = 0,
-        src: MsgAddress = MsgAddress.Empty,
+        src: MsgAddress = None,
         amount: Coin = 0,
         extra_currency: Dict = None,
         ihr_fee: Coin = 0,
@@ -135,6 +139,8 @@ class InternalMessage(Payload):
         created_lt: uint64 = 0,
         created_at: uint32 = 0,
     ) -> "InternalMessage":
+        if src is None:
+            src = MsgAddress.empty()
         msg = InternalMessage()
         msg.info = InternalMsgInfo.build(
             dest=dest,
@@ -174,11 +180,13 @@ class ExternalMessage(Payload):
     def build(
         cls,
         dest: MsgAddress,
-        src: MsgAddress = MsgAddress.Empty,
+        src: MsgAddress = None,
         state_init: Maybe[Either[StateInit, Ref[StateInit]]] = None,
         body: Either[Cell, Ref[Cell]] = None,
         import_fee: Coin = 0,
     ) -> "ExternalMessage":
+        if src is None:
+            src = MsgAddress.empty()
         msg = ExternalMessage()
         msg.info = InboundExternalMsgInfo.build(
             dest=dest,

@@ -180,6 +180,10 @@ class Engine(object):
         _selected = {k: v for k, v in _globals.items() if k in rel_imported}
         m = {**m, **_selected}
         src = inspect.getsource(contract)
+        activate_func_mode = (
+            "from rift.runtime import FunCMode\nFunCMode.activate()\n"
+        )
+        src = activate_func_mode + src
         src = cst_patch(src)
         x = ast.parse(src)
         patched_ast = patch(x)
