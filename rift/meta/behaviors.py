@@ -52,6 +52,12 @@ class Behavioral_(type):
         except Exception:
             return False
 
+    def __instancecheck__(cls, instance):
+        # TODO: Explain
+        if issubclass(type(instance), cls):
+            return True
+        return isinstance(instance, cls.__active_one__())
+
     @staticmethod
     def __active_one__(cls):
         t1, t2 = tuple(cls.__meta__["types"])

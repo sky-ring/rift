@@ -1,6 +1,6 @@
 from rift.core import Entity
 from rift.types.bases import Builder, Cell, Int, Slice
-from rift.types.int_aliases import int8, uint2, uint256
+from rift.types.int_aliases import int8, integer, uint2, uint256
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
 
@@ -16,7 +16,7 @@ class MsgAddress(Slice):
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
-        if isinstance(value, Int):
+        if isinstance(value, Int) or isinstance(value, integer):
             b = type(value).__serialize__(to, value)
         else:
             b = to.slice(value)

@@ -31,6 +31,7 @@ class Servers:
             }
 
     def _reconfigure(self):
+        # TODO: pop-out removed servers
         d = json.dumps(self.config, sort_keys=True)
         hash_ = sha256(d.encode("utf-8")).hexdigest()
         prev_hash = self.data["config_hash"]

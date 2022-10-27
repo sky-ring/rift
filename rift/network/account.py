@@ -34,3 +34,8 @@ class Account:
         self.code = code
         self.data = c_data
         self.state = state
+
+    def __repr__(self) -> str:
+        return (
+            f"Account{{state = {self.state.name}, balance = {self.balance}}}"
+        )

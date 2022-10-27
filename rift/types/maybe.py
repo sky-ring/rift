@@ -18,7 +18,8 @@ class Maybe(metaclass=CachingSubscriptable):
             b = to.uint(0, 1)
             return b
         if not isinstance(value, Maybe):
-            return type(value).__serialize__(to, value)
+            b = to.uint(1, 1)
+            return type(value).__serialize__(b, value)
         base = cls.__basex__
         to.__assign__("_b_tmp_")
         with Cond() as c:

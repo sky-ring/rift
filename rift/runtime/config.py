@@ -17,3 +17,20 @@ class Mode(Enum):
 class Config:
     mode: Mode = Mode.FIFT
     dirs = AppDirs(appname="Rift", appauthor="Skyring")
+
+
+class Scope:
+    def __init__(self, mode: Mode) -> None:
+        self.mode = mode
+
+    def __enter__(self, *args, **kwargs):
+        self._p_mode = Config.mode
+        Config.mode = self.mode
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        Config.mode = self._p_mode
+
+
+FunCMode = Scope(Mode.FUNC)
+FiftMode = Scope(Mode.FIFT)

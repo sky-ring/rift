@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from rift.core import Entity
+from rift.fift.types._fift_base import _FiftBaseType
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
 
@@ -18,7 +19,7 @@ class Ref(metaclass=CachingSubscriptable):
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         if isinstance(value, Ref):
             value = value.bound
-            if isinstance(value, Entity):
+            if isinstance(value, Entity) or isinstance(value, _FiftBaseType):
                 b = to.ref(value)
             elif hasattr(value, "__magic__") and value.__magic__ == 0xA935E5:
                 p: "Payload" = value
@@ -26,6 +27,9 @@ class Ref(metaclass=CachingSubscriptable):
                 b = to.ref(c)
             return b
         base = cls.__basex__
+        if value is None:
+            # NOTE: Is this ideal behavior for a None ref ?! I think so
+            return to
         if base == Cell:
             b = to.ref(value)
         elif hasattr(base, "__magic__") and base.__magic__ == 0xA935E5:

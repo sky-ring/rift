@@ -36,6 +36,26 @@ class CurrencyCollection(Payload):
     other: Dict
 
 
+class InboundExternalMsgInfo(Payload):
+    __tag__ = "$10"
+    src: MsgAddress
+    dest: MsgAddress
+    import_fee: Coin
+
+    @classmethod
+    def build(
+        cls,
+        dest: MsgAddress,
+        src: MsgAddress = MsgAddress.Empty,
+        import_fee: Coin = 0,
+    ) -> "InternalMsgInfo":
+        info = InboundExternalMsgInfo()
+        info.dest = dest
+        info.src = src
+        info.import_fee = import_fee
+        return info
+
+
 class InternalMsgInfo(Payload):
     __tag__ = "$0"
     ihr_disabled: Bool
@@ -128,6 +148,42 @@ class InternalMessage(Payload):
             fwd_fee=fwd_fee,
             created_lt=created_lt,
             created_at=created_at,
+        )
+        msg.init = state_init
+        msg.body = body
+        return msg
+
+    def send(self, mode: int = 0, flags: int = 0):
+        c = self.as_cell()
+        c.send_raw_message(mode + flags)
+        pass
+
+
+class ExternalMessage(Payload):
+    info: InboundExternalMsgInfo
+    init: Maybe[Either[StateInit, Ref[StateInit]]]
+    body: Either[Cell, Ref[Cell]]
+
+    @classmethod
+    def __build_type__(cls, item):
+        n_cls = deepcopy(cls)
+        n_cls.__annotations__["body"] = Either[item, Ref[item]]
+        return n_cls
+
+    @classmethod
+    def build(
+        cls,
+        dest: MsgAddress,
+        src: MsgAddress = MsgAddress.Empty,
+        state_init: Maybe[Either[StateInit, Ref[StateInit]]] = None,
+        body: Either[Cell, Ref[Cell]] = None,
+        import_fee: Coin = 0,
+    ) -> "ExternalMessage":
+        msg = ExternalMessage()
+        msg.info = InboundExternalMsgInfo.build(
+            dest=dest,
+            import_fee=import_fee,
+            src=src,
         )
         msg.init = state_init
         msg.body = body
