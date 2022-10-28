@@ -1,7 +1,16 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from rift.func.types.types import Slice, Cont, Cell, Tuple
+    from rift.func.types.types import (
+        Slice,
+        Cont,
+        Cell,
+        Tuple,
+        Dict,
+        IDict,
+        UDict,
+        PfxDict,
+    )
 
 from rift.core.invokable import typed_invokable
 from rift.func.types.entity_base import _EntityBase
@@ -93,11 +102,35 @@ class _SliceBase(_EntityBase):
         pass
 
     @typed_invokable(name="load_dict_")
-    def ldict_(self) -> "Cell":
+    def ldict_(self) -> "Dict":
         pass
 
     @typed_invokable(name="preload_dict")
-    def ldict(self) -> "Cell":
+    def ldict(self) -> "Dict":
+        pass
+
+    @typed_invokable(name="load_dict_")
+    def idict_(self) -> "IDict":
+        pass
+
+    @typed_invokable(name="preload_dict")
+    def idict(self) -> "IDict":
+        pass
+
+    @typed_invokable(name="load_dict_")
+    def udict_(self) -> "UDict":
+        pass
+
+    @typed_invokable(name="preload_dict")
+    def udict(self) -> "UDict":
+        pass
+
+    @typed_invokable(name="load_dict_")
+    def pdict_(self) -> "PfxDict":
+        pass
+
+    @typed_invokable(name="preload_dict")
+    def pdict(self) -> "PfxDict":
         pass
 
     @typed_invokable(name="skip_dict")

@@ -22,6 +22,7 @@ def compile(contract, print_=True, ast=False, file_=True, link_std=True):
     code = compile_py(contract, print_=print_, ast=ast, file_=file_)
     program = compile_func(code, link_std=link_std)
     cell = compile_fift(program)
+    contract.__code_cell__ = cell
     return cell
 
 

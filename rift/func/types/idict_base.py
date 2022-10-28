@@ -222,3 +222,20 @@ class _IDictBase(_DictBase):
         pivot: int,
     ) -> tuple[int, "Slice", int]:
         pass
+
+    @classmethod
+    def __deserialize__(
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
+    ):
+        if inplace:
+            v = from_.idict_()
+        else:
+            v = from_.idict()
+        if name is not None:
+            v.__assign__(name)
+        return v

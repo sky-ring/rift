@@ -1,4 +1,6 @@
 from rift.core import Entity
+from rift.library import std
+from rift.runtime import Config
 from rift.types.bases import Builder, Cell, Int, Slice
 from rift.types.int_aliases import int8, integer, uint2, uint256
 from rift.types.maybe import Maybe
@@ -48,5 +50,10 @@ class MsgAddress(Slice):
         )
 
     @classmethod
-    def empty(cls):
-        return uint2(0b00)
+    def empty(cls) -> Slice:
+        if Config.mode.is_fift():
+            b = Builder()
+        else:
+            b = std.begin_cell()
+        b = b.uint(0, 2)
+        return b.end().parse()

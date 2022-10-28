@@ -1,10 +1,5 @@
-from rift.ast import CallStacks
 from rift.core.annots import impure, method
-from rift.core.condition import Cond
-from rift.core.entity import mark
-from rift.core.factory import Factory
 from rift.core.invokable import InvokableFunc
-from rift.core.loop import While
 from rift.func.meta_contract import ContractMeta
 from rift.func.types.types import Cell, Slice
 from rift.types.msg import InternalMessage

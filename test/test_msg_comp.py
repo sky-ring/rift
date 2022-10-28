@@ -1,3 +1,4 @@
+from rift.core.annots import asm
 from rift.fift.tvm import TVM, TVMError
 from rift.fift.types.builder import Builder
 from rift.func.contract import Contract
@@ -13,7 +14,23 @@ from .util import compile
 class SimpleMsg(Contract):
     """Simple Msg Contract."""
 
+    @asm()
+    def equal_slices(self, a: Slice, b: Slice) -> int:
+        return "SDEQ"
+
     def internal_receive(self) -> None:
+        # Ensure Message Info is correctly costructed
+        assert self.message.info.ihr_disabled, 1
+        assert self.message.info.bounce, 2
+        assert self.message.info.bounced == 0, 3
+        assert self.message.info.src.is_equal(MsgAddress.empty()), 4
+        assert self.message.info.dest.is_equal(MsgAddress.std(0, 0)), 5
+        assert self.message.info.value.amount == 0, 6
+        assert self.message.info.value.other.dict_empty_check(), 7
+        assert self.message.info.ihr_fee == 0, 8
+        assert self.message.info.fwd_fee == 0, 9
+        assert self.message.info.created_lt == 0, 10
+        assert self.message.info.created_at == 0, 11
         x = self.body >> uint4
         assert x == 10, 45
 

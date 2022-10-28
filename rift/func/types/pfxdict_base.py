@@ -45,3 +45,20 @@ class _PfxDictBase(_CellBase):
     @typed_invokable(name="pfxdict_delete?")
     def pfxdict_delete_check_(self, key_len: int, key: "Slice") -> int:
         pass
+
+    @classmethod
+    def __deserialize__(
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
+    ):
+        if inplace:
+            v = from_.pdict_()
+        else:
+            v = from_.pdict()
+        if name is not None:
+            v.__assign__(name)
+        return v

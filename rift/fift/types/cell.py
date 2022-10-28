@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from rift.fift.types.slice import Slice
     from rift.fift.types.builder import Builder
     from rift.fift.types.int import Int
+    from rift.fift.types.bytes import Bytes
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
@@ -26,6 +27,9 @@ class Cell(_FiftBaseType):
 
     def hash(self) -> "Int":
         return self.cmd("hashu", self)[0]
+
+    def hashB(self) -> "Bytes":
+        return self.cmd("hashB", self)[0]
 
     @classmethod
     def __serialize__(

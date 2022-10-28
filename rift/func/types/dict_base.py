@@ -77,3 +77,20 @@ class _DictBase(_CellBase):
         if value is None:
             return to.uint(0, 1)
         return to.dict(value)
+
+    @classmethod
+    def __deserialize__(
+        cls,
+        from_: "Slice",
+        name: str = None,
+        inplace: bool = True,
+        lazy: bool = True,
+        **kwargs,
+    ):
+        if inplace:
+            v = from_.ldict_()
+        else:
+            v = from_.ldict()
+        if name is not None:
+            v.__assign__(name)
+        return v

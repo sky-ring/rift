@@ -1,0 +1,2 @@
+class InvalidMnemonicsError(Exception):
+    pass
