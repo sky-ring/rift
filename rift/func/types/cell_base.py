@@ -52,7 +52,8 @@ class _CellBase(_EntityBase):
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         if value is None:
             return to
-        return to.ref(value)
+        s = value.parse()
+        return to.slice(s)
 
     @classmethod
     def __deserialize__(
@@ -63,10 +64,9 @@ class _CellBase(_EntityBase):
         lazy: bool = True,
         **kwargs,
     ):
-        if inplace:
-            v = from_.ref_()
-        else:
-            v = from_.ref()
-        if name is not None:
-            v.__assign__(name)
-        return v
+        # it's better to impl this as NOP
+        # We may need to reassign it and have
+        # a copy on stack
+        # WHY -> Next deserialization may change from_
+        # If it's not the last field this'll occur most probably
+        return from_

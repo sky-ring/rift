@@ -12,9 +12,12 @@ from rift.func.types.pfxdict_base import _PfxDictBase
 from rift.func.types.slice_base import _SliceBase
 from rift.func.types.string_base import _StringBase
 from rift.func.types.udict_base import _UDictBase
+from rift.util import type_id
 
 
 class Int(_IntBase):
+    __type_id__ = type_id("Int")
+
     def __init__(self, value, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.value = value
@@ -31,6 +34,8 @@ class Int(_IntBase):
 
 
 class HexInt(_IntBase):
+    __type_id__ = type_id("HexInt")
+
     def __init__(self, value, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.value = value
@@ -50,6 +55,8 @@ class HexInt(_IntBase):
 
 
 class Slice(_SliceBase):
+    __type_id__ = type_id("Slice")
+
     @classmethod
     def type_name(cls) -> str:
         return "slice"
@@ -63,50 +70,68 @@ class Slice(_SliceBase):
 
 
 class Cont(_ContBase):
+    __type_id__ = type_id("Cont")
+
     @classmethod
     def type_name(cls) -> str:
         return "cont"
 
 
 class String(_StringBase):
+    __type_id__ = type_id("String")
+
     @classmethod
     def type_name(cls) -> str:
         return "string"
 
 
 class Cell(_CellBase):
+    __type_id__ = type_id("Cell")
+
     @classmethod
     def type_name(cls) -> str:
         return "cell"
 
 
 class Dict(_DictBase):
+    __type_id__ = type_id("Dict")
+
     @classmethod
     def type_name(cls) -> str:
         return "cell"
 
 
 class UDict(_UDictBase):
+    __type_id__ = type_id("UDict")
+
     pass
 
 
 class IDict(_IDictBase):
+    __type_id__ = type_id("IDict")
+
     pass
 
 
 class PfxDict(_PfxDictBase, Cell):
+    __type_id__ = type_id("PfxDict")
+
     @classmethod
     def type_name(cls) -> str:
         return "cell"
 
 
 class Builder(_BuilderBase):
+    __type_id__ = type_id("Builder")
+
     @classmethod
     def type_name(cls) -> str:
         return "builder"
 
 
 class Tensor(Entity, tuple):
+    __type_id__ = type_id("Tensor")
+
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls, *args)
 
@@ -125,6 +150,8 @@ class Tensor(Entity, tuple):
 
 
 class Tuple(Entity):
+    __type_id__ = type_id("Tuple")
+
     @classmethod
     def type_name(cls) -> str:
         return "tuple"

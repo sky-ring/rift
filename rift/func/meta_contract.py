@@ -6,6 +6,7 @@ class ContractMeta(type):
         attrs["__restrain__"] = ContractMeta._restrain
         attrs["__refreshables__"] = {}
         attrs["__restrain_queue__"] = {}
+        attrs["__fingerprint__"] = -1091
         if "Data" in attrs:
             if attrs["Data"].__magic__ == 0xBB10C0:
                 d = attrs["Data"]()

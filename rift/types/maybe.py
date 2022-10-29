@@ -8,9 +8,19 @@ from rift.types.utils import CachingSubscriptable
 class Maybe(metaclass=CachingSubscriptable):
     has: Entity
     bound: Entity
+    name: str
+
+    def __init__(self) -> None:
+        pass
 
     def __getattr__(self, item):
         return getattr(self.bound, item)
+
+    def __assign__(self, name):
+        return self
+
+    def is_present(self):
+        return self.has == 1
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Maybe") -> "Builder":
@@ -46,17 +56,18 @@ class Maybe(metaclass=CachingSubscriptable):
             i = from_.uint_(1)
         else:
             i = from_.uint(1)
-        m = Maybe()
+        m = cls()
         m.has = i
         if Config.mode.is_func():
             m.has.__assign__(f"{name}_has")
+            base.__predefine__(name)
             with Cond() as c:
                 c.match(i)
-                d = base.__deserialize__(from_, name=name, inplace=inplace)
+                d = base.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
                 m.bound = d
         elif Config.mode.is_fift():
             if m.has:
-                d = base.__deserialize__(from_, name=name, inplace=inplace)
+                d = base.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
                 return d
             else:
                 return None

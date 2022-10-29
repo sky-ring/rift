@@ -4,6 +4,7 @@ from rift.core import Entity
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
+from rift.util.type_id import type_id
 
 if TYPE_CHECKING:
     from rift.types.payload import Payload
@@ -82,10 +83,12 @@ class Ref(metaclass=CachingSubscriptable):
 
     @classmethod
     def __build_type__(cls, item):
-        return type(
+        t = type(
             "Ref_%s" % item.__name__,
             (cls,),
             {
                 "__basex__": item,
             },
         )
+        t.__type_id__ = type_id(t.__name__)
+        return t

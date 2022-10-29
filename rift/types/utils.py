@@ -1,5 +1,13 @@
 from rift.meta.meta_inheritance import mix_metas
 
+TMP_COUNTER = -1
+
+
+def obtain_tmp():
+    global TMP_COUNTER
+    TMP_COUNTER += 1
+    return TMP_COUNTER
+
 
 class Subscriptable(type):
     def __getitem__(cls, item):

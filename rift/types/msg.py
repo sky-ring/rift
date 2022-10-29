@@ -5,6 +5,7 @@ from rift.types.bases import Cell, Dict
 from rift.types.bool import Bool
 from rift.types.coin import Coin
 from rift.types.either import Either
+from rift.types.either_ref import EitherRef
 from rift.types.int_aliases import uint5, uint32, uint64
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
@@ -113,8 +114,8 @@ class InboundExtMsgInfo(Payload):
 
 class InternalMessage(Payload):
     info: InternalMsgInfo
-    init: Maybe[Either[StateInit, Ref[StateInit]]]
-    body: Either[Cell, Ref[Cell]]
+    init: Maybe[EitherRef[StateInit]]
+    body: EitherRef[Cell]
 
     @classmethod
     def __build_type__(cls, item):

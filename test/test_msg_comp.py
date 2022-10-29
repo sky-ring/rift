@@ -11,7 +11,7 @@ from rift.types.msg import InternalMessage
 from .util import compile
 
 
-class SimpleMsg(Contract):
+class SimpleMsgConstruct(Contract):
     """Simple Msg Contract."""
 
     @asm()
@@ -22,25 +22,31 @@ class SimpleMsg(Contract):
         # Ensure Message Info is correctly costructed
         assert self.message.info.ihr_disabled, 1
         assert self.message.info.bounce, 2
-        assert self.message.info.bounced == 0, 3
+        assert ~ self.message.info.bounced, 3
         assert self.message.info.src.is_equal(MsgAddress.empty()), 4
         assert self.message.info.dest.is_equal(MsgAddress.std(0, 0)), 5
-        assert self.message.info.value.amount == 0, 6
+        assert ~ self.message.info.value.amount, 6
         assert self.message.info.value.other.dict_empty_check(), 7
-        assert self.message.info.ihr_fee == 0, 8
-        assert self.message.info.fwd_fee == 0, 9
-        assert self.message.info.created_lt == 0, 10
-        assert self.message.info.created_at == 0, 11
+        assert ~ self.message.info.ihr_fee, 8
+        assert ~ self.message.info.fwd_fee, 9
+        assert ~ self.message.info.created_lt, 10
+        assert ~ self.message.info.created_at, 11
+        # Ensure Init is absent
+        assert ~ self.message.init.is_present(), 12
+        # Ensure Body isn't ref , and parse it
+        assert ~ self.message.body.is_ref(), 13
+        x2 = self.message.body.bound >> uint4
         x = self.body >> uint4
-        assert x == 10, 45
+        assert x == 10, 14
+        assert x == x2, 15
 
 
 def test_compile():
-    compile(SimpleMsg)
+    compile(SimpleMsgConstruct)
 
 
 def test_run():
-    c = compile(SimpleMsg)
+    c = compile(SimpleMsgConstruct)
     with FiftMode:
         body = Builder()
         body = body.uint(10, 4)

@@ -1,5 +1,6 @@
 from rift.ast.calls import CallStacks
 from rift.core.entity import mark
+from rift.core.utils import restrain_context, refresh_context
 from rift.meta.utils import caller_locals
 
 
@@ -14,10 +15,7 @@ class Cond:
 
     def match(self, cond):
         ctx = caller_locals(back=2)
-        if "self" in ctx and hasattr(ctx["self"], "__refresh__"):
-            ctx["self"].__refresh__()
-        elif "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
-            ctx["ctx"].__refresh__()
+        refresh_context(ctx)
         mark(cond)
         self.index += 1
         self.conds.append(cond)
@@ -28,10 +26,7 @@ class Cond:
 
     def otherwise(self):
         ctx = caller_locals(back=2)
-        if "self" in ctx and hasattr(ctx["self"], "__refresh__"):
-            ctx["self"].__refresh__()
-        elif "ctx" in ctx and hasattr(ctx["ctx"], "__refresh__"):
-            ctx["ctx"].__refresh__()
+        refresh_context(ctx)
         CallStacks.else_if(self.id)
 
     def __enter__(self):
@@ -39,8 +34,5 @@ class Cond:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         ctx = caller_locals(back=2)
-        if "self" in ctx and hasattr(ctx["self"], "__restrain__"):
-            ctx["self"].__restrain__()
-        elif "ctx" in ctx and hasattr(ctx["ctx"], "__restrain__"):
-            ctx["ctx"].__restrain__()
+        restrain_context(ctx)
         CallStacks.end_if(self.id)

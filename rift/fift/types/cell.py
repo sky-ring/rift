@@ -8,9 +8,12 @@ if TYPE_CHECKING:
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Cell(_FiftBaseType):
+    __type_id__ = type_id("Cell")
+
     def __init__(self, __factory__: bool = False, __value__: str = None):
         if not __factory__:
             c: Cell = self.cmd("<b b>")[0]
@@ -39,7 +42,8 @@ class Cell(_FiftBaseType):
     ) -> "Builder":
         if value is None:
             return to
-        return to.ref(value)
+        s = value.parse()
+        return to.slice(s)
 
     @classmethod
     def __deserialize__(
