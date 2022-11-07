@@ -1,3 +1,4 @@
+import base64
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -8,6 +9,7 @@ if TYPE_CHECKING:
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.network.network import Network
 from rift.util import type_id
 
 
@@ -60,6 +62,19 @@ class Cell(_FiftBaseType):
 
     def __eq__(self, __o: "Cell") -> bool:
         return __o.value == self.value
+
+    def __bytes__(self) -> bytes:
+        return base64.b64decode(self.value)
+
+    def as_ref(self):
+        from rift.types.ref import Ref
+
+        return Ref[Cell](self)
+
+    def send(self, testnet=True):
+        n = Network(testnet=testnet)
+        data = bytes(self)
+        return n.send_boc(data)
 
 
 Factory.register(Cell.__type__(), Cell)

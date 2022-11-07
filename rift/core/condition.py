@@ -1,6 +1,6 @@
 from rift.ast.calls import CallStacks
 from rift.core.entity import mark
-from rift.core.utils import restrain_context, refresh_context
+from rift.core.utils import refresh_context, restrain_context
 from rift.meta.utils import caller_locals
 
 

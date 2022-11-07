@@ -1,6 +1,8 @@
 from rift import *
 from rift.fift.tvm import TVM, TVMError, TVMResult
 from rift.runtime.config import Config, Mode
+from rift.runtime.keystore import KeyStore
+from rift.network.network import Network
 
 from .util import compile
 
@@ -50,10 +52,6 @@ def test_compile():
 def test_get_methods():
     cell = compile(SimpleWallet)
     Config.mode = Mode.FIFT
-    # d = SimpleWallet.Data(
-    #     seq_no=1,
-    #     public_key=0,
-    # ).as_cell()
     d = SimpleWallet.Data()
     d.seq_no = 1
     d.public_key = 0
@@ -65,3 +63,23 @@ def test_get_methods():
         raise AssertionError()
     (seq_no,) = r.stack
     assert seq_no == 1
+
+
+def test_deploy():
+    compile(SimpleWallet)
+
+    d = SimpleWallet.Data()
+    d.seq_no = 0
+    d.public_key = KeyStore.public_key()
+
+    body = Builder()
+    body = body.uint(0, 32)
+    body = body.sint(-1, 32)
+    body = body.end()
+    body_signed = KeyStore.sign_pack(body)
+    body_ref = body_signed.as_ref()
+
+    msg, address = SimpleWallet.deploy(d, body=body_ref, amount=0, independent=True)
+    print("Contract Address:", MsgAddress.human_readable(address))
+    r = msg.send(testnet=True)
+    print(r)

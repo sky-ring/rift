@@ -168,8 +168,8 @@ class InternalMessage(Payload):
 
 class ExternalMessage(Payload):
     info: InboundExternalMsgInfo
-    init: Maybe[Either[StateInit, Ref[StateInit]]]
-    body: Either[Cell, Ref[Cell]]
+    init: Maybe[EitherRef[StateInit]]
+    body: EitherRef[Cell]
 
     @classmethod
     def __build_type__(cls, item):

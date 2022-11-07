@@ -93,7 +93,7 @@ class Payload(metaclass=Subscriptable):
                 self.__data__,
                 name=name,
                 inplace=True,
-                lazy=is_,
+                lazy=False,
                 bypass=not is_,
             )
             if is_:
@@ -126,7 +126,9 @@ class Payload(metaclass=Subscriptable):
     def load_body(self):
         for k, v in self.annotations.items():
             name = f"{self.f_name}_{k}"
-            n = v.__deserialize__(self.__data__, name=name, inplace=True, lazy=False)
+            n = v.__deserialize__(
+                self.__data__, name=name, inplace=True, lazy=False,
+            )
             setattr(self, k, n)
 
     def __assign__(self, name):
@@ -238,7 +240,7 @@ class Payload(metaclass=Subscriptable):
         if "tag" in kwargs:
             tag = kwargs["tag"]
         if not lazy:
-            p.load(proc_tag=tag, master=False)
+            p.load(proc_tag=tag, master=True)
         return p
 
     @classmethod

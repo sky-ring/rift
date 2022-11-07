@@ -92,6 +92,11 @@ class Cell(_CellBase):
     def type_name(cls) -> str:
         return "cell"
 
+    def as_ref(self):
+        from rift.types.ref import Ref
+
+        return Ref[Cell](self)
+
 
 class Dict(_DictBase):
     __type_id__ = type_id("Dict")

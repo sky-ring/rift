@@ -15,7 +15,7 @@ from rift.cli.util.dag import topological
 from rift.cli.util.dir_util import clear_contents
 from rift.cst.cst_visitor import relative_imports
 from rift.func.meta_contract import ContractMeta
-from rift.runtime import FunCMode
+from rift.runtime.config import FunCMode
 
 
 @entry.command(help="Builds the project")

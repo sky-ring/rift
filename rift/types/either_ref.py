@@ -1,12 +1,13 @@
 from email.mime import base
 from re import T
+
 from rift.core import Entity
 from rift.core.condition import Cond
+from rift.library import std
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.ref import Ref
 from rift.types.utils import CachingSubscriptable
-from rift.library import std
 from rift.util.type_id import type_id
 
 
@@ -33,6 +34,11 @@ class EitherRef(metaclass=CachingSubscriptable):
             if type(value).__type_id__() == base1.__type_id__():
                 v = 0
             elif type(value).__type_id__() == Ref[base1].__type_id__():
+                v = 1
+            elif type(value).__type_id__() == Cell.__type_id__():
+                # NOTE: Is this a good approach?
+                v = 0
+            elif type(value).__type_id__() == Ref[Cell].__type_id__():
                 v = 1
             else:
                 msg = "got {current} expected {e1} or {e2}"
@@ -74,13 +80,19 @@ class EitherRef(metaclass=CachingSubscriptable):
         if Config.mode.is_func():
             m.which.__assign__(f"{name}_which")
             Slice.__predefine__(f"{name}_slice")
+            first_name = from_.name
             with Cond() as c:
                 c.match(i)
                 v = Ref[Cell].__deserialize__(from_)
                 x = v.parse().__assign__(f"{name}_slice")
                 c.otherwise()
                 x = from_.__assign__(f"{name}_slice")
-            d = base1.__deserialize__(x, name=name, inplace=inplace, lazy=lazy)
+            d = base1.__deserialize__(
+                x, name=name, inplace=inplace, lazy=lazy,
+            )
+            with Cond() as c:
+                c.match(i == 0)
+                x.__assign__(first_name)
             m.bound = d
         elif Config.mode.is_fift():
             if m.which == 0:

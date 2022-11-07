@@ -22,16 +22,10 @@ class Either(metaclass=CachingSubscriptable):
         if value is None:
             b = to.uint(0, 1)
             return b
-        if isinstance(value, Slice):
-            b = to.slice(value)
-            return b
-        if isinstance(value, Cell):
-            b = to.ref(value)
-            return b
         if not isinstance(value, Either):
-            if type(value) == base1:
+            if type(value).__type_id__() == base1.__type_id__():
                 v = 0
-            elif type(value) == base2:
+            elif type(value).__type_id__() == base2.__type_id__():
                 v = 1
             else:
                 msg = "got {current} expected {e1} or {e2}"
@@ -72,10 +66,14 @@ class Either(metaclass=CachingSubscriptable):
             m.which.__assign__(f"{name}_which")
             with Cond() as c:
                 c.match(i)
-                d = base2.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
+                d = base2.__deserialize__(
+                    from_, name=name, inplace=inplace, lazy=lazy,
+                )
                 m.bound = d
                 c.otherwise()
-                d = base1.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
+                d = base1.__deserialize__(
+                    from_, name=name, inplace=inplace, lazy=lazy,
+                )
                 m.bound = d
         elif Config.mode.is_fift():
             if m.which == 0:

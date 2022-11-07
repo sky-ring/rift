@@ -9,4 +9,5 @@ def type_id(cls: type | str):
 
     def f():
         return x
+
     return f
