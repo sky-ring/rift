@@ -5,6 +5,7 @@ from rift.fift.types import Bytes, Cell
 from rift.keys.mnemonic import (
     InvalidMnemonicsError,
     mnemonic_is_valid,
+    mnemonic_new,
     mnemonic_to_wallet_key,
 )
 from rift.types.payload import Payload
@@ -32,9 +33,13 @@ class KeyPair:
             self.pub_key = Bytes(__value__=pub)
         else:
             # Nothing provided? Let's generate
-            priv_hex = secrets.token_hex(32)
-            self.priv_key = Bytes(__value__=priv_hex, encoding="hex")
-            self.pub_key = self.priv_key.cmd("priv>pub", self.priv_key)[0]
+            mnemonics = mnemonic_new()
+            if not mnemonic_is_valid(mnemonics):
+                raise InvalidMnemonicsError()
+            pub, priv = mnemonic_to_wallet_key(mnemonics)
+            self.priv_key = Bytes(__value__=priv[:32])
+            self.pub_key = Bytes(__value__=pub)
+            self.mnem = mnemonics
 
     def sign(self, data: Bytes | Cell | Payload, hash_bytes=False) -> Bytes:
         if isinstance(data, Payload):

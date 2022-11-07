@@ -1,8 +1,11 @@
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Int(_FiftBaseType):
+    __type_id__ = type_id("Int")
+
     def __init__(self, value: int | None = None, __factory__: bool = False):
         if value is not None:
             self.value = value

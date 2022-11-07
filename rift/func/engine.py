@@ -181,7 +181,7 @@ class Engine(object):
         m = {**m, **_selected}
         src = inspect.getsource(contract)
         activate_func_mode = (
-            "from rift.runtime import FunCMode\nFunCMode.activate()\n"
+            "from rift.runtime.config import FunCMode\nFunCMode.activate()\n"
         )
         src = activate_func_mode + src
         src = cst_patch(src)

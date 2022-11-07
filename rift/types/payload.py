@@ -5,7 +5,8 @@ from rift.func.types.entity_base import Entity
 from rift.library.std import std
 from rift.runtime.config import Config, Mode
 from rift.types.bases import Builder, Cell, Int, Slice
-from rift.types.utils import Subscriptable
+from rift.types.utils import Subscriptable, obtain_tmp
+from rift.util.type_id import type_id
 
 
 class Payload(metaclass=Subscriptable):
@@ -60,15 +61,23 @@ class Payload(metaclass=Subscriptable):
             return n.__assign__(name)
 
         if self.__data__ is None:
+            # We have no data => user is probably building!
             name = f"{self.f_name}_{item}"
             return Entity(name=name)
+
         if not self._lazy or item not in self._items:
+            # CASE I: The requested item is not a defined field
+            # CASE II: Payload is not lazy
+            # DECISION: let's try get it from underlying data
             # Q: Is this a good idea?
             return getattr(self.__data__, item)
+
         if self._pointer == 0:
+            # If pointer is zero we have to load tag
             tag_len, _ = self.tag_data()
             if tag_len != 0:
                 self.__data__.uint_(tag_len)
+
         # Strategy => Skip if not present
         targets = self._items[self._pointer :]
         for t in targets:
@@ -78,11 +87,14 @@ class Payload(metaclass=Subscriptable):
             name = None
             if is_:
                 name = f"{self.f_name}_{t}"
+            else:
+                name = f"{self.f_name}_{obtain_tmp()}"
             n = v.__deserialize__(
                 self.__data__,
                 name=name,
                 inplace=True,
-                lazy=True,
+                lazy=False,
+                bypass=not is_,
             )
             if is_:
                 setattr(self, t, n)
@@ -114,7 +126,9 @@ class Payload(metaclass=Subscriptable):
     def load_body(self):
         for k, v in self.annotations.items():
             name = f"{self.f_name}_{k}"
-            n = v.__deserialize__(self.__data__, name=name, inplace=True)
+            n = v.__deserialize__(
+                self.__data__, name=name, inplace=True, lazy=False,
+            )
             setattr(self, k, n)
 
     def __assign__(self, name):
@@ -226,7 +240,7 @@ class Payload(metaclass=Subscriptable):
         if "tag" in kwargs:
             tag = kwargs["tag"]
         if not lazy:
-            p.load(proc_tag=tag, master=False)
+            p.load(proc_tag=tag, master=True)
         return p
 
     @classmethod
@@ -251,3 +265,7 @@ class Payload(metaclass=Subscriptable):
     @classmethod
     def type_name(cls) -> str:
         return "-"
+
+    @classmethod
+    def __type_id__(cls) -> int:
+        return type_id(cls)()

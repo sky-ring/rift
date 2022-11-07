@@ -6,10 +6,15 @@ if TYPE_CHECKING:
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Slice(_FiftBaseType):
-    def __init__(self, __factory__: bool = False):
+    __type_id__ = type_id("Slice")
+
+    def __init__(self, __value__: str = None, __factory__: bool = False):
+        if not __factory__ and __value__:
+            self.__load_data__(__value__)
         pass
 
     @classmethod
@@ -35,7 +40,7 @@ class Slice(_FiftBaseType):
         return r
 
     def uint(self, bits: int) -> int:
-        r: int = self.cmd("i@", self, bits)[0]
+        r: int = self.cmd("u@", self, bits)[0]
         return r
 
     def sint_(self, bits: int) -> int:
@@ -46,7 +51,7 @@ class Slice(_FiftBaseType):
         return r
 
     def sint(self, bits: int) -> int:
-        r: int = self.cmd("u@", self, bits)[0]
+        r: int = self.cmd("i@", self, bits)[0]
         return r
 
     def hash(self) -> int:
@@ -67,7 +72,7 @@ class Slice(_FiftBaseType):
     def ref_(self) -> "Cell":
         r: "Cell"
         s: Slice
-        r, s = self.cmd("ref@+", self)
+        s, r = self.cmd("ref@+", self)
         self.value = s.value
         return r
 

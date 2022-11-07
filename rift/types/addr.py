@@ -1,7 +1,7 @@
 from rift.core import Entity
 from rift.library import std
-from rift.runtime import Config
-from rift.types.bases import Builder, Cell, Int, Slice
+from rift.runtime.config import Config
+from rift.types.bases import Builder, Cell, Int, Slice, String
 from rift.types.int_aliases import int8, integer, uint2, uint256
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
@@ -48,6 +48,18 @@ class MsgAddress(Slice):
             .as_cell()
             .parse()
         )
+
+    @classmethod
+    def human_readable(cls, addr: Slice, flags=0) -> str:
+        # We assume this is an standard one
+        # TODO: Copy stuff
+        s = Slice(__value__=addr.value)
+        s.uint_(3)
+        wc = s.uint_(8)
+        hash_ = s.uint_(256)
+        hr: String
+        (hr,) = s.cmd("smca>$", wc, hash_, flags)
+        return hr.value
 
     @classmethod
     def empty(cls) -> Slice:

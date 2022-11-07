@@ -6,9 +6,12 @@ if TYPE_CHECKING:
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Builder(_FiftBaseType):
+    __type_id__ = type_id("Builder")
+
     def __init__(self, __factory__: bool = False):
         if not __factory__:
             b: Builder = self.cmd("<b")[0]

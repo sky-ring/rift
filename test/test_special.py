@@ -1,5 +1,5 @@
 from rift import *
-from rift.runtime import FunCMode
+from rift.runtime.config import FunCMode
 
 
 def test_special_methods():

@@ -2,9 +2,12 @@ import base64
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Bytes(_FiftBaseType):
+    __type_id__ = type_id("Bytes")
+
     def __init__(
         self,
         __factory__: bool = False,
@@ -32,6 +35,9 @@ class Bytes(_FiftBaseType):
 
     def hashB(self) -> "Bytes":
         return self.cmd("BhashB", self)[0]
+
+    def __bytes__(self) -> bytes:
+        return base64.b64decode(self.value)
 
     @classmethod
     def __type__(cls) -> str:

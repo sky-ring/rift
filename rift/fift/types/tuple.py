@@ -1,9 +1,12 @@
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
 from rift.fift.types.util import create_entry
+from rift.util import type_id
 
 
 class Tuple(_FiftBaseType):
+    __type_id__ = type_id("Tuple")
+
     def __init__(self, __factory__: bool = False):
         if not __factory__:
             # NOTE: Although we can implement all behavior here just

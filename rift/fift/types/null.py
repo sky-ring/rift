@@ -1,8 +1,11 @@
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
+from rift.util import type_id
 
 
 class Null(_FiftBaseType):
+    __type_id__ = type_id("Null")
+
     def __init__(self, __factory__: bool = False):
         pass
 

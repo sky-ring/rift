@@ -79,7 +79,7 @@ class Expr:
                 wrap_e=")" if wrap else "",
             )
         elif self.type == Expr.EXPR_AR1:
-            return "{op} {ope}".format(op=self.args[0], ope=self.args[1])
+            return "{op} ({ope})".format(op=self.args[0], ope=self.args[1])
         elif self.type == Expr.EXPR_CALL:
             return "{object}{op}{name}({args})".format(
                 op="~" if self.args[1].endswith("_") else ".",
