@@ -72,7 +72,7 @@ class Network:
                 r = self.loop.run_until_complete(future)
                 return r
             except (TonlibNoResponse, LiteServerTimeout):
-                log_info(
+                log_warn(
                     "Network",
                     "Attempting server change due to timeout ...",
                 )

@@ -80,7 +80,10 @@ def test_deploy():
     body_ref = body_signed.as_ref()
 
     msg, address = SimpleWallet.deploy(
-        d, body=body_ref, amount=0, independent=True,
+        d,
+        body=body_ref,
+        amount=0,
+        independent=True,
     )
     print("Contract Address:", MsgAddress.human_readable(address))
     r = msg.send(testnet=True)
