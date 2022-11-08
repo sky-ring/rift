@@ -1,8 +1,8 @@
 from rift import *
 from rift.fift.tvm import TVM, TVMError, TVMResult
+from rift.network.network import Network
 from rift.runtime.config import Config, Mode
 from rift.runtime.keystore import KeyStore
-from rift.network.network import Network
 
 from .util import compile
 
@@ -79,7 +79,9 @@ def test_deploy():
     body_signed = KeyStore.sign_pack(body)
     body_ref = body_signed.as_ref()
 
-    msg, address = SimpleWallet.deploy(d, body=body_ref, amount=0, independent=True)
+    msg, address = SimpleWallet.deploy(
+        d, body=body_ref, amount=0, independent=True,
+    )
     print("Contract Address:", MsgAddress.human_readable(address))
     r = msg.send(testnet=True)
     print(r)

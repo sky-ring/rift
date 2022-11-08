@@ -7,7 +7,11 @@ from nacl.bindings import crypto_box_seed_keypair
 def generate_keystore_key(password: str, salt: bytes) -> tuple[bytes, bytes]:
     """:rtype: (bytes(public_key), bytes(secret_key))."""
     secret = pbkdf2_hmac(
-        "sha512", password.encode("utf-8"), salt, 400_000, 32,
+        "sha512",
+        password.encode("utf-8"),
+        salt,
+        400_000,
+        32,
     )
     return crypto_box_seed_keypair(secret)
 

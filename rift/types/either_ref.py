@@ -88,7 +88,10 @@ class EitherRef(metaclass=CachingSubscriptable):
                 c.otherwise()
                 x = from_.__assign__(f"{name}_slice")
             d = base1.__deserialize__(
-                x, name=name, inplace=inplace, lazy=lazy,
+                x,
+                name=name,
+                inplace=inplace,
+                lazy=lazy,
             )
             with Cond() as c:
                 c.match(i == 0)

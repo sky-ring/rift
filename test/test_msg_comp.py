@@ -99,7 +99,11 @@ def test_run_external():
         body_ref = Ref[Cell](body)
         d = Cell()
         msg, address = SimpleMsgConstruct.deploy(
-            d, body=body, amount=0, independent=True, ref_state=False,
+            d,
+            body=body,
+            amount=0,
+            independent=True,
+            ref_state=False,
         )
     d = Cell()
     r = TVM.get_method(c.value, d.value, -1, 0, 0, msg, body.parse())

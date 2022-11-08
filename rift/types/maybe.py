@@ -65,13 +65,19 @@ class Maybe(metaclass=CachingSubscriptable):
             with Cond() as c:
                 c.match(i)
                 d = base.__deserialize__(
-                    from_, name=name, inplace=inplace, lazy=lazy,
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
                 )
                 m.bound = d
         elif Config.mode.is_fift():
             if m.has:
                 d = base.__deserialize__(
-                    from_, name=name, inplace=inplace, lazy=lazy,
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
                 )
                 return d
             else:

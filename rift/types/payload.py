@@ -127,7 +127,10 @@ class Payload(metaclass=Subscriptable):
         for k, v in self.annotations.items():
             name = f"{self.f_name}_{k}"
             n = v.__deserialize__(
-                self.__data__, name=name, inplace=True, lazy=False,
+                self.__data__,
+                name=name,
+                inplace=True,
+                lazy=False,
             )
             setattr(self, k, n)
 

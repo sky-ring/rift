@@ -124,7 +124,9 @@ class KeyStore:
 
     @classmethod
     def sign(
-        cls, data: Union["Bytes", "Cell", "Payload"], hash_bytes=False,
+        cls,
+        data: Union["Bytes", "Cell", "Payload"],
+        hash_bytes=False,
     ) -> "Bytes":
         if not cls._global_ks:
             cls.initialize()
@@ -132,7 +134,9 @@ class KeyStore:
 
     @classmethod
     def sign_pack(
-        cls, data: Union["Bytes", "Cell", "Payload"], hash_bytes=False,
+        cls,
+        data: Union["Bytes", "Cell", "Payload"],
+        hash_bytes=False,
     ) -> "Cell":
         sig = cls.sign(data, hash_bytes=hash_bytes)
         b = Builder()
