@@ -1,6 +1,3 @@
-from email.mime import base
-from re import T
-
 from rift.core import Entity
 from rift.core.condition import Cond
 from rift.library import std
@@ -36,6 +33,9 @@ class EitherRef(metaclass=CachingSubscriptable):
             elif type(value).__type_id__() == Ref[base1].__type_id__():
                 v = 1
             elif type(value).__type_id__() == Cell.__type_id__():
+                # NOTE: Is this a good approach?
+                v = 0
+            elif type(value).__type_id__() == Slice.__type_id__():
                 # NOTE: Is this a good approach?
                 v = 0
             elif type(value).__type_id__() == Ref[Cell].__type_id__():

@@ -2,14 +2,12 @@ import ast
 import re
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
-from os import getcwd, listdir
-from os.path import exists as p_exists
-from os.path import join as p_join
+from os import getcwd, path
 
 import click
-from tomlkit import parse
 
 from rift import Engine
+from rift.cli.config import ContractConfig, ProjectConfig
 from rift.cli.entry import entry
 from rift.cli.util.dag import topological
 from rift.cli.util.dir_util import clear_contents
@@ -31,56 +29,53 @@ from rift.runtime.config import FunCMode
     help="keep contents of build/ directory",
     is_flag=True,
 )
-def build(log_patches, keep):
+@click.argument("target")
+def build(target, log_patches, keep):
     FunCMode.activate()
     cwd = getcwd()
-    config_file = p_join(cwd, "project.toml")
-    if not p_exists(config_file):
+    config = ProjectConfig.working()
+    if not config:
         click.echo(
             click.style("Not a rift project!", fg="red"),
         )
         return
-    f = open(config_file, "r")
-    doc = parse(f.read())
-    click.echo(f"Building {doc['name']} project ...")
 
-    c_dir = p_join(cwd, "contracts")
-    # we want to extract references and go in DAG topological order
-    refs = []
-    allowed_modules = []
-    module_globals = {}
-    module_rel_imps = {}
-    for cf in listdir(c_dir):
-        if not cf.endswith(".py"):
-            continue
-        mod_name = cf.replace(".py", "")
-        fp = p_join(c_dir, cf)
-        spec = spec_from_file_location(
-            mod_name,
-            fp,
-            submodule_search_locations=[],
-        )
-        mod = module_from_spec(spec)
-        f = open(fp, "r")
-        code = f.read()
-        code = Engine.cst_patch(code)
-        mod.__file__ = fp
-        sys.modules[mod_name] = mod
-        # gather refs
-        imp_ = relative_imports(code)
-        module_rel_imps[mod_name] = imp_._detailed_imports
-        for i in imp_._relative_accesses:
-            refs.append((mod_name, i))
-        compiled = compile(code, fp, "exec")
-        exec(compiled, mod.__dict__)
-        module_globals[mod_name] = mod.__dict__
-        allowed_modules.append(mod_name)
-        click.echo(f"compiling {cf}")
-    b_dir = p_join(cwd, "build")
+    click.echo(
+        f"Building {click.style(target, 'yellow')} from {click.style(config.name, 'blue')} project ..."
+    )
+
+    contracts_dir = path.join(cwd, "contracts")
+    build_dir = path.join(cwd, "build")
+
     if not keep:
-        clear_contents(b_dir)
+        clear_contents(build_dir)
+    # we want to extract references and go in DAG topological order
+    build_target(
+        target,
+        config.contracts[target],
+        contracts_dir,
+        build_dir,
+        save_patches=log_patches,
+    )
+
+
+def create_save_callback(name: str, contract_name: str, build_directory: str):
+    def save_patch(src):
+        nonlocal name, contract_name, build_directory
+        src = ast.unparse(src)
+        f_x = open(path.join(build_directory, f"{name}.patched.py"), "w")
+        f_x.write(src)
+        f_x.close()
+        click.echo(
+            f"Patched {contract_name} -> build/{name}.patched.py",
+        )
+
+    return save_patch
+
+
+def target_contracts(reference_graph: list):
     # we maintain the order
-    t_order = topological(refs)
+    t_order = topological(reference_graph)
     c_order = {v: i for i, v in enumerate(t_order)}
     # Fix missing links (isolated nodes)
     modules = [x.__module__ for x in ContractMeta.contracts]
@@ -92,12 +87,46 @@ def build(log_patches, keep):
         lambda x: x.__bases__ != (object,),
         ContractMeta.contracts,
     )
-    contracts = filter(
-        lambda x: x.__module__ in allowed_modules,
-        ContractMeta.contracts,
-    )
     contracts = list(contracts)
     contracts = sorted(contracts, key=lambda c: c_order[c.__module__])
+    # Filter out those modules that exist as sub-modules too (because of python import)
+    contracts = list(
+        filter(
+            lambda c: "." not in c.__module__,
+            contracts,
+        ),
+    )
+    return contracts
+
+
+def build_target(
+    target: str,
+    target_config: ContractConfig,
+    contracts_dir: str,
+    build_dir: str,
+    log=True,
+    save_patches=True,
+):
+    reference_graph = []
+    module_globals = {}
+    module_rel_imps = {}
+
+    compile_target = target.replace("-", "_")
+    process_queue = [compile_target]
+
+    while len(process_queue) > 0:
+        tg = process_queue.pop(0)
+        fp = path.join(contracts_dir, tg + ".py")
+        mod_name = tg
+
+        module, imports, refs = load_module(fp, mod_name)
+        module_rel_imps[mod_name] = imports
+        module_globals[mod_name] = module.__dict__
+        reference_graph = [*reference_graph, *refs]
+        imported_ones = [x[1] for x in refs]
+        process_queue.extend(imported_ones)
+
+    contracts = target_contracts(reference_graph)
     patched_ones = []
     for contract in contracts:
         module = sys.modules.get(contract.__module__)
@@ -112,35 +141,53 @@ def build(log_patches, keep):
             # instead of old ones (imported)
             tg_dict[p.__name__] = p
 
-        name = None
-        c = doc.get("contracts")
-        if c is not None:
-            ct = c.get(contract.__name__)
-            if ct is not None:
-                name = ct.get("name")
+        name = target_config.name
         if name is None:
             name = contract.__name__
+            # CamelCase -> snake_case
             name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
 
-        def save_patch(src):
-            if not log_patches:
-                return
-            nonlocal name
-            src = ast.unparse(src)
-            f_x = open(p_join(b_dir, f"{name}.patched.py"), "w")
-            f_x.write(src)
-            f_x.close()
-            click.echo(
-                f"Patched {contract.__name__} -> build/{name}.patched.py",
-            )
+        callback = create_save_callback(name, contract.__name__, build_dir)
+        callback = callback if save_patches else None
 
-        t = Engine.patch(contract, tg_dict, src_callback=save_patch)
+        is_target = contract.__name__ == target_config.contract
+        t = Engine.patch(contract, tg_dict, src_callback=callback)
         patched_ones.append(t)
         compiled = Engine.compile(t)
         fc = compiled.to_func()
-
-        f = open(p_join(b_dir, f"{name}.fc"), "w")
+        f = open(path.join(build_dir, f"{name}.fc"), "w")
         f.write(fc)
         f.close()
-        click.echo(f"Built {contract.__name__} -> build/{name}.fc")
-    click.echo(click.style("Project was built successfully!", fg="green"))
+        add_info = ""
+        if not is_target:
+            add_info = click.style(" (Dependency)", fg="cyan")
+        if log:
+            click.echo(
+                f"Built {contract.__name__} -> build/{name}.fc{add_info}"
+            )
+    if log:
+        click.echo(click.style("Target was built successfully!", fg="green"))
+
+
+def load_module(file_path: str, module_name: str):
+    spec = spec_from_file_location(
+        module_name,
+        file_path,
+        submodule_search_locations=[],
+    )
+    mod = module_from_spec(spec)
+    f = open(file_path, "r")
+    code = f.read()
+    code = Engine.cst_patch(code)
+    mod.__file__ = file_path
+    sys.modules[module_name] = mod
+
+    imp_ = relative_imports(code)
+    full_imports = imp_._detailed_imports
+    refs = []
+    for i in full_imports:
+        refs.append((module_name, i))
+
+    compiled = compile(code, file_path, "exec")
+    exec(compiled, mod.__dict__)
+    return mod, full_imports, refs

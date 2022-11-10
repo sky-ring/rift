@@ -13,7 +13,7 @@ class RelativeImportVisitor(cst.CSTVisitor):
     def visit_ImportFrom(self, node: "cst.ImportFrom"):
         if len(node.relative) == 1:
             m_name = node.module.value
-            self._relative_accesses.append(node.module.value)
+            self._relative_accesses.append(m_name)
             if m_name not in self._detailed_imports:
                 self._detailed_imports[m_name] = []
             imported = node.names

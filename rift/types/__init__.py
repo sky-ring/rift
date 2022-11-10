@@ -6,6 +6,7 @@ from rift.types.coin import Coin
 from rift.types.constructor import Constructor
 from rift.types.contract_dep import ContractDeployer
 from rift.types.either import Either
+from rift.types.either_ref import EitherRef
 from rift.types.int_aliases import *
 from rift.types.maybe import Maybe
 from rift.types.model import Model

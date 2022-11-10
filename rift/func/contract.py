@@ -100,3 +100,8 @@ class Contract(metaclass=ContractMeta):
                 body=body,
             )
         return msg.as_cell(), address
+
+    @classmethod
+    def compile(cls):
+
+        pass
