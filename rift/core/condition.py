@@ -15,6 +15,9 @@ class Cond:
 
     def match(self, cond):
         ctx = caller_locals(back=2)
+        if self.index != 0:
+            # release the previous guy
+            restrain_context(ctx)
         refresh_context(ctx)
         mark(cond)
         self.index += 1
@@ -26,6 +29,9 @@ class Cond:
 
     def otherwise(self):
         ctx = caller_locals(back=2)
+        if self.index != 0:
+            # release the previous guy
+            restrain_context(ctx)
         refresh_context(ctx)
         CallStacks.else_if(self.id)
 

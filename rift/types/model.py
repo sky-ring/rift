@@ -96,9 +96,11 @@ class Model:
         return res
 
     def copy(self, reset=False):
+        # TODO: Better copy
         cp = type(self)()
         if not reset:
             cp.__dict__ = {**self.__dict__}
+            cp._skipped_ones = {**cp._skipped_ones}
         return cp
 
     def __predefine__(

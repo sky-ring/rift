@@ -68,3 +68,28 @@ class FunC:
             f.write(s)
             f.close()
         return cls.compile(*f_sources, optimization_level=optimization_level)
+
+    @classmethod
+    def compile_link(cls, files, links, optimization_level=2):
+        f_sources = []
+        for i, s in enumerate(links):
+            if s.startswith("#"):
+                # We load the libraries dude
+                i = s.replace("#", "").strip()
+                code = FUNC_LIBS[i]
+                zc = base64.b64decode(code)
+                s = zlib.decompress(zc).decode("utf-8")
+            else:
+                raise RuntimeError("Unknown library")
+            f = NamedTemporaryFile(
+                prefix=f"source-{i}-",
+                suffix=".fc",
+                mode="w",
+                delete=False,
+                encoding="utf-8",
+            )
+            f_sources.append(f.name)
+            f.write(s)
+            f.close()
+        f_sources.extend(files)
+        return cls.compile(*f_sources, optimization_level=optimization_level)

@@ -1,6 +1,33 @@
 import libcst as cst
 
 
+class GeneralImportVisitor(cst.CSTVisitor):
+    _relative_accesses = []
+    _imported_ones = []
+
+    def __init__(self, target_module: str):
+        self.target_module = target_module
+        self.imports = {}
+
+    def visit_ImportFrom(self, node: "cst.ImportFrom"):
+        m = node.module
+        if isinstance(m, cst.Attribute):
+            if (
+                isinstance(m.value, cst.Name)
+                and m.value.value == self.target_module
+            ):
+                # Here we captured an `from [Target].[X] import [Names]`
+                from_ = m.attr.value
+                names = node.names
+                if isinstance(names, cst.ImportStar):
+                    # TODO: Disallow this explicitly
+                    pass
+                else:
+                    names = [name.name.value for name in names]
+                    self.imports[from_] = names
+        return super().visit_ImportFrom(node)
+
+
 class RelativeImportVisitor(cst.CSTVisitor):
     _relative_accesses = []
     _imported_ones = []

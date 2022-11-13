@@ -1,9 +1,13 @@
+import sys
 from os import getcwd, path
 
 import click
 
+from rift.cli.commands.utils import load_module
 from rift.cli.config import ContractConfig, ProjectConfig
 from rift.cli.entry import entry
+from rift.cst.cst_visitor import target_imports
+from rift.func.meta_contract import ContractMeta
 from rift.runtime.config import FiftMode
 
 
@@ -25,3 +29,22 @@ def deploy(target):
 
     contracts_dir = path.join(cwd, "deployers")
     build_dir = path.join(cwd, "build")
+
+    contract_config = config.contracts[target]
+    compile_target = contract_config.deploy
+    if compile_target is None:
+        click.secho(
+            "Target doesn't have a deploy script!",
+            fg="red",
+        )
+    fp = path.join(contracts_dir, compile_target + ".py")
+
+    sys.path.append(cwd)
+    mod, *_ = load_module(fp, compile_target, patch=False)
+    print(mod)
+    # print(mod.__dict__)
+    print(ContractMeta.defined_contracts())
+    # TODO:
+    # Inject built code from the dir into it
+    # If it's not built, error and suggest build command
+    # Proceed with running the function

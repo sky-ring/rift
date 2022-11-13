@@ -7,7 +7,7 @@ class ContractConfig:
     name: str | None
     contract: str
     tests: list[str]
-    deploys: list[str]
+    deploy: str | None
 
     @classmethod
     def load(cls, data: dict) -> "ContractConfig":
@@ -15,7 +15,7 @@ class ContractConfig:
         config.name = data.get("name", None)
         config.contract = data["contract"]
         config.tests = data.get("tests", [])
-        config.deploys = data.get("deploys", [])
+        config.deploy = data.get("deploy", None)
         return config
 
 
