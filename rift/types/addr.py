@@ -1,8 +1,9 @@
 from rift.core import Entity
+from rift.fift.fift import Fift
 from rift.library import std
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Int, Slice, String
-from rift.types.int_aliases import int8, integer, uint2, uint256
+from rift.types.int_aliases import int8, integer, uint256
 from rift.types.maybe import Maybe
 from rift.types.payload import Payload
 
@@ -18,6 +19,12 @@ class MsgAddress(Slice):
     def __serialize__(cls, to: "Builder", value: "Entity") -> "Builder":
         if isinstance(value, Int) or isinstance(value, integer):
             b = type(value).__serialize__(to, value)
+        elif isinstance(value, str) and Config.mode.is_fift():
+            wc, addr, _, ok = Fift.exec("$>smca", value)
+            if not ok:
+                raise RuntimeError("Invalid addr!")
+            s = cls.std(wc, addr)
+            b = to.slice(s)
         else:
             b = to.slice(value)
         return b

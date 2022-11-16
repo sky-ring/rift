@@ -60,11 +60,7 @@ def build_target(
             # instead of old ones (imported)
             tg_dict[p.__name__] = p
 
-        name = target_config.name
-        if name is None:
-            name = contract.__name__
-            # CamelCase -> snake_case
-            name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
+        name = config.get_contract_file_name(contract)
 
         callback = create_save_callback(name, contract.__name__, build_dir)
         callback = callback if save_patches else None
@@ -101,7 +97,9 @@ def build_target(
             try:
                 c = compile_fift(res, patch_methods=False)
                 write_file(
-                    path.join(build_dir, f"{name}.boc"), bytes(c), mode="wb"
+                    path.join(build_dir, f"{name}.boc"),
+                    bytes(c),
+                    mode="wb",
                 )
                 click.echo(
                     f"Assembled {name_styled}.fif -> build/{name}.boc",

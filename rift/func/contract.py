@@ -1,7 +1,11 @@
-from rift.core.annots import impure, method
+from typing import Type, TypeVar
+
+from rift.core.annots import impure, is_method, method
 from rift.core.invokable import InvokableFunc
+from rift.fift.contract import ExecutableContract
 from rift.func.meta_contract import ContractMeta
 from rift.func.types.types import Cell, Slice
+from rift.func.util import cls_attrs
 from rift.types.bases.cell import Cell as GeneralCell
 from rift.types.model import Model
 from rift.types.msg import (
@@ -11,6 +15,8 @@ from rift.types.msg import (
     StateInit,
 )
 from rift.types.payload import Payload
+
+T = TypeVar("T", bound="Contract")
 
 
 class Contract(metaclass=ContractMeta):
@@ -102,6 +108,12 @@ class Contract(metaclass=ContractMeta):
         return msg.as_cell(), address
 
     @classmethod
-    def compile(cls):
+    def code(cls) -> Cell:
+        return cls.__code_cell__
 
-        pass
+    @classmethod
+    def instantiate(cls: Type[T], data: Cell) -> T:
+        attrs = cls_attrs(cls)
+        methods = list(filter(lambda x: is_method(x[1]), attrs.items()))
+        methods = [x[0] for x in methods]
+        return ExecutableContract.create(cls.code(), data, methods)

@@ -29,7 +29,7 @@ class Model:
         # Purpose => Lazy Loading
 
         if item not in self.annotations:
-            raise AttributeError()
+            raise AttributeError(item)
 
         if item in self._skipped_ones:
             n = self._skipped_ones[item]
