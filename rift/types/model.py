@@ -23,13 +23,20 @@ class Model:
                 if k in self.annotations:
                     setattr(self, k, kwargs[k])
 
+    @classmethod
+    def from_slice(cls, data):
+        d = cls()
+        d.__data__ = data
+        d._pointer = -1
+        return d
+
     def __getattr__(self, item):
         # This gets called whenever item doesn't exist in data model
         # So we'll check whether it's really from fields or not
         # Purpose => Lazy Loading
 
         if item not in self.annotations:
-            raise AttributeError()
+            raise AttributeError(item)
 
         if item in self._skipped_ones:
             n = self._skipped_ones[item]
@@ -39,6 +46,9 @@ class Model:
         if self._pointer == 0:
             self.__data__ = std.get_data().parse()
             self.__data__.__assign__("data")
+
+        if self._pointer == -1:
+            self._pointer = 0
 
         # Strategy => Skip if not present
         targets = self._items[self._pointer :]
@@ -96,9 +106,11 @@ class Model:
         return res
 
     def copy(self, reset=False):
+        # TODO: Better copy
         cp = type(self)()
         if not reset:
             cp.__dict__ = {**self.__dict__}
+            cp._skipped_ones = {**cp._skipped_ones}
         return cp
 
     def __predefine__(

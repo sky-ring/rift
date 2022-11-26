@@ -120,15 +120,15 @@ class InternalMessage(Payload):
     @classmethod
     def __build_type__(cls, item):
         n_cls = deepcopy(cls)
-        n_cls.__annotations__["body"] = Either[item, Ref[item]]
+        n_cls.__annotations__["body"] = EitherRef[item]
         return n_cls
 
     @classmethod
     def build(
         cls,
         dest: MsgAddress,
-        state_init: Maybe[Either[StateInit, Ref[StateInit]]] = None,
-        body: Either[Cell, Ref[Cell]] = None,
+        state_init: Maybe[EitherRef[StateInit]] = None,
+        body: EitherRef[Cell] = None,
         ihr_disabled: Bool = 1,
         bounce: Bool = 1,
         bounced: Bool = 0,
@@ -174,7 +174,7 @@ class ExternalMessage(Payload):
     @classmethod
     def __build_type__(cls, item):
         n_cls = deepcopy(cls)
-        n_cls.__annotations__["body"] = Either[item, Ref[item]]
+        n_cls.__annotations__["body"] = EitherRef[item]
         return n_cls
 
     @classmethod
@@ -182,8 +182,8 @@ class ExternalMessage(Payload):
         cls,
         dest: MsgAddress,
         src: MsgAddress = None,
-        state_init: Maybe[Either[StateInit, Ref[StateInit]]] = None,
-        body: Either[Cell, Ref[Cell]] = None,
+        state_init: Maybe[EitherRef[StateInit]] = None,
+        body: EitherRef[Cell] = None,
         import_fee: Coin = 0,
     ) -> "ExternalMessage":
         if src is None:

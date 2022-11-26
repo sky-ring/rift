@@ -31,7 +31,7 @@ class Network:
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
-    def _acquire_config(self, invalidate=False):
+    def _acquire_config(self, invalidate=True):
         self._config = ConfigManager.acquire_config(self._network, invalidate)
         return self._config
 
@@ -108,7 +108,7 @@ class Network:
         data = self._try_do(
             lambda: self.client.raw_get_account_state(address),
         )
-        return Account(raw_data=data)
+        return Account(raw_data=data, addr=address)
 
     def send_boc(self, boc: bytes):
         try:

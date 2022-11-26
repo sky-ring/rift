@@ -76,5 +76,12 @@ class Cell(_FiftBaseType):
         data = bytes(self)
         return n.send_boc(data)
 
+    @classmethod
+    def load_from(cls, file: str) -> "Cell":
+        with open(file, "rb") as f:
+            buf = f.read()
+        data = base64.b64encode(buf).decode("utf-8")
+        return Cell(__factory__=False, __value__=data)
+
 
 Factory.register(Cell.__type__(), Cell)

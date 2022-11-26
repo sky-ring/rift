@@ -30,3 +30,11 @@ class ContractMeta(type):
         for k, _v in self.__refreshables__.items():
             n_v = self.__restrain_queue__[k].pop()
             setattr(self, k, n_v)
+
+    @classmethod
+    def defined_contracts(cls):
+        contracts = filter(
+            lambda x: x.__bases__ != (object,),
+            cls.contracts,
+        )
+        return list(contracts)

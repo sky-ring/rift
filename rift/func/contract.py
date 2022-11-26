@@ -1,7 +1,13 @@
-from rift.core.annots import impure, method
+from typing import Type, TypeVar
+
+from rift.core.annots import impure, is_method, method
 from rift.core.invokable import InvokableFunc
+from rift.fift.contract import ExecutableContract
+from rift.fift.types.cell import Cell as FiftCell
 from rift.func.meta_contract import ContractMeta
 from rift.func.types.types import Cell, Slice
+from rift.func.util import cls_attrs
+from rift.network.network import Network
 from rift.types.bases.cell import Cell as GeneralCell
 from rift.types.model import Model
 from rift.types.msg import (
@@ -12,8 +18,11 @@ from rift.types.msg import (
 )
 from rift.types.payload import Payload
 
+T = TypeVar("T", bound="Contract")
+
 
 class Contract(metaclass=ContractMeta):
+    __interface__ = False
     NOT_IMPLEMENTED = 0x91AC43
 
     def __init__(self):
@@ -58,6 +67,52 @@ class Contract(metaclass=ContractMeta):
     def __getattr__(self, item):
         return InvokableFunc(item)
 
+    def connect(
+        self, network: Network, addr: str, use_code=False, use_data=True,
+    ):
+        self._addr = addr
+        acc = network.get_account(self._addr)
+        if acc.state != acc.state.ACTIVE:
+            return False, acc
+        if use_data:
+            d_slice = FiftCell(__value__=acc.data).parse()
+            if hasattr(type(self), "Data"):
+                Data = type(self).Data
+                self.data = Data.from_slice(d_slice)
+            else:
+                self.data = d_slice
+        if use_code:
+            self.__code_cell__ = FiftCell(__value__=acc.code)
+        return True, acc
+
+    @classmethod
+    def address(
+        cls,
+        data: GeneralCell | Model | Payload,
+        code: GeneralCell = None,
+        pretty=False,
+        return_state=False,
+    ) -> Slice | str | tuple[Slice | str, GeneralCell]:
+        if isinstance(data, Model) or isinstance(data, Payload):
+            data = data.as_cell()
+        if code is None:
+            code = cls.__code_cell__
+        s = StateInit(
+            split_depth=None,
+            special=None,
+            code=code,
+            data=data,
+            library=None,
+        )
+        s = s.as_cell()
+        s_hash = s.hash()
+        address = MsgAddress.std(0, s_hash)
+        if pretty:
+            address = MsgAddress.human_readable(address)
+        if return_state:
+            return address, s
+        return address
+
     @classmethod
     def deploy(
         cls,
@@ -72,20 +127,11 @@ class Contract(metaclass=ContractMeta):
             data = data.as_cell()
         if code is None:
             code = cls.__code_cell__
-        s = StateInit(
-            split_depth=None,
-            special=None,
-            code=code,
-            data=data,
-            library=None,
-        )
-        s = s.as_cell()
-        s_hash = s.hash()
+        address, s = cls.address(data, code, pretty=False, return_state=True)
         if ref_state:
             s = s.as_ref()
         if body is None:
             body = GeneralCell()
-        address = MsgAddress.std(0, s_hash)
         if not independent:
             msg = InternalMessage.build(
                 address,
@@ -100,3 +146,14 @@ class Contract(metaclass=ContractMeta):
                 body=body,
             )
         return msg.as_cell(), address
+
+    @classmethod
+    def code(cls) -> Cell:
+        return cls.__code_cell__
+
+    @classmethod
+    def instantiate(cls: Type[T], data: Cell) -> T:
+        attrs = cls_attrs(cls)
+        methods = list(filter(lambda x: is_method(x[1]), attrs.items()))
+        methods = [x[0] for x in methods]
+        return ExecutableContract.create(cls.code(), data, methods)
