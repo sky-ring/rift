@@ -53,15 +53,15 @@ class TestResult:
             return
         if self.state == State.VMError:
             raise TestError(
-                f"Expected {exit_code} exit code but got {self.vm_error.exit_code} instead!"
+                f"Expected {exit_code} exit code but got {self.vm_error.exit_code} instead!",
             )
         else:
             raise TestError(
-                f"Expected {exit_code} exit code but got unexpected error instead!"
+                f"Expected {exit_code} exit code but got unexpected error instead!",
             )
 
     def expect_error(self):
         if self.state == State.Ok:
             raise TestError(
-                "Expected error but got successfull exit instead!"
+                "Expected error but got successfull exit instead!",
             )

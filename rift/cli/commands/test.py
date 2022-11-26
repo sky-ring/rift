@@ -63,7 +63,7 @@ def render_test_panel(session: TestSession) -> Panel:
                 state_t = Text.from_markup(state_t)
                 progress = session.cached_progress(test_tg + "/" + t)
                 t = Text.from_markup(
-                    f"[white]{test_tg}[/white] -> [gray]{t}[/gray]"
+                    f"[white]{test_tg}[/white] -> [gray]{t}[/gray]",
                 )
                 t.append(state_t)
                 pg_t = (

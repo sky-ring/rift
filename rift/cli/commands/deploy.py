@@ -8,12 +8,20 @@ from rift.cli.config import ProjectConfig
 from rift.cli.entry import entry
 from rift.fift.types import Cell
 from rift.func.meta_contract import ContractMeta
+from rift.network.network import Network
 from rift.runtime.config import FiftMode
+from rift.wallet.wallet_manager import WalletManager
 
 
 @entry.command(help="Deploys an specific target")
 @click.argument("target")
-def deploy(target):
+@click.option(
+    "--network",
+    type=click.Choice(["test-net", "main-net"], case_sensitive=False),
+    default="test-net",
+    help="The target network",
+)
+def deploy(target: str, network: str):
     FiftMode.activate()
     cwd = getcwd()
     config = ProjectConfig.working()
@@ -41,26 +49,41 @@ def deploy(target):
 
     sys.path.append(cwd)
     mod, *_ = load_module(fp, compile_target, patch=False)
-    print(mod)
-    # print(mod.__dict__)
+
     contracts = ContractMeta.defined_contracts()
 
     for contract in contracts:
         contract_cfg = config.get_contract(contract.__name__)
         name = contract_cfg.get_file_name()
         boc_file = path.join(build_dir, f"{name}.boc")
-        if not path.exists(boc_file):
-            click.secho(
-                f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
-                fg="red",
-            )
-            return
-        code_cell = Cell.load_from(boc_file)
-        contract.__code_cell__ = code_cell
+        if not contract.__interface__:
+            if not path.exists(boc_file):
+                click.secho(
+                    f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
+                    fg="red",
+                )
+                return
+            code_cell = Cell.load_from(boc_file)
+            contract.__code_cell__ = code_cell
 
-    mod.deploy()
+    FiftMode.activate()
+    res = mod.deploy()
+    if isinstance(res, tuple):
+        msg, independent = res
+    else:
+        msg, independent = res, False
 
-    # TODO:
-    # Inject built code from the dir into it
-    # If it's not built, error and suggest build command
-    # Proceed with running the function
+    network = network.lower()
+    n = Network(testnet=network == "test-net")
+
+    if independent:
+        # send to blockchain
+        r = n.send_boc(msg)
+    else:
+        # acquire wallet, build msg and then send
+        r = WalletManager.send_message(n, msg)
+    if r["ok"]:
+        print("Successfuly deployed contract at the address:", "")
+    else:
+        print("Error deploying contract")
+        print(r)

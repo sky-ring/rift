@@ -33,7 +33,7 @@ class StyleMocker:
 
 class Logger:
     initialized = False
-    logging_level = Level.DEBUG
+    logging_level = Level.WARNING
     palette = {
         "red": "#F75590",
         "blue": "#3DB1F5",
