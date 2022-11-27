@@ -111,19 +111,19 @@ def test(target):
 
             mod, *_ = load_module(fp, test_tg, patch=False)
             contracts = ContractMeta.defined_contracts()
-
             for contract in contracts:
                 contract_cfg = config.get_contract(contract.__name__)
                 name = contract_cfg.get_file_name()
                 boc_file = path.join(build_dir, f"{name}.patched.boc")
-                if not path.exists(boc_file):
-                    click.secho(
-                        f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
-                        fg="red",
-                    )
-                    return
-                code_cell = Cell.load_from(boc_file)
-                contract.__code_cell__ = code_cell
+                if not contract.__interface__:
+                    if not path.exists(boc_file):
+                        click.secho(
+                            f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
+                            fg="red",
+                        )
+                        return
+                    code_cell = Cell.load_from(boc_file)
+                    contract.__code_cell__ = code_cell
 
             keys = list(filter(lambda x: x.startswith("test_"), mod.__dict__))
             for k in keys:
@@ -134,9 +134,7 @@ def test(target):
                     session.tests[test_tg][k] = 1
                 except TestError as te:
                     session.tests[test_tg][k] = -1
-                    pass
                 except Exception as e:
                     session.tests[test_tg][k] = -1
-                    pass
                 live.update(render_test_panel(session))
                 sleep(0.1)
