@@ -12,7 +12,7 @@ class _UDictBase(_DictBase):
     def set_ref(self, key_len: int, index: int, value: "Cell") -> "UDict":
         pass
 
-    @typed_invokable(name="udict_set_ref")
+    @typed_invokable(name="udict_set_ref_")
     def set_ref_(self, key_len: int, index: int, value: "Cell") -> None:
         pass
 
@@ -33,7 +33,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", "Cell"]:
         pass
 
-    @typed_invokable(name="udict_set_get_ref")
+    @typed_invokable(name="udict_set_get_ref_")
     def set_get_ref_(self, key_len: int, index: int, value: "Cell") -> "Cell":
         pass
 
@@ -41,7 +41,7 @@ class _UDictBase(_DictBase):
     def delete_check(self, key_len: int, index: int) -> tuple["UDict", int]:
         pass
 
-    @typed_invokable(name="udict_delete?")
+    @typed_invokable(name="udict_delete?_")
     def delete_check_(self, key_len: int, index: int) -> int:
         pass
 
@@ -57,7 +57,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", "Slice", int]:
         pass
 
-    @typed_invokable(name="udict_delete_get?")
+    @typed_invokable(name="udict_delete_get?_")
     def delete_get_check_(
         self,
         key_len: int,
@@ -69,7 +69,7 @@ class _UDictBase(_DictBase):
     def set(self, key_len: int, index: int, value: "Slice") -> "UDict":
         pass
 
-    @typed_invokable(name="udict_set")
+    @typed_invokable(name="udict_set_")
     def set_(self, key_len: int, index: int, value: "Slice") -> None:
         pass
 
@@ -82,7 +82,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", int]:
         pass
 
-    @typed_invokable(name="udict_add?")
+    @typed_invokable(name="udict_add?_")
     def add_check_(self, key_len: int, index: int, value: "Slice") -> int:
         pass
 
@@ -95,7 +95,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", int]:
         pass
 
-    @typed_invokable(name="udict_replace?")
+    @typed_invokable(name="udict_replace?_")
     def replace_check_(self, key_len: int, index: int, value: "Slice") -> int:
         pass
 
@@ -108,7 +108,7 @@ class _UDictBase(_DictBase):
     ) -> "UDict":
         pass
 
-    @typed_invokable(name="udict_set_builder")
+    @typed_invokable(name="udict_set_builder_")
     def set_builder_(
         self,
         key_len: int,
@@ -135,7 +135,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", int]:
         pass
 
-    @typed_invokable(name="udict_add_builder?")
+    @typed_invokable(name="udict_add_builder?_")
     def add_builder_check_(
         self,
         key_len: int,
@@ -144,7 +144,7 @@ class _UDictBase(_DictBase):
     ) -> int:
         pass
 
-    @typed_invokable(name="udict_replace_builder?")
+    @typed_invokable(name="udict_replace_builder?_")
     def replace_builder_check_(
         self,
         key_len: int,
@@ -160,7 +160,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", int, "Slice", int]:
         pass
 
-    @typed_invokable(name="udict::delete_get_min")
+    @typed_invokable(name="udict::delete_get_min_")
     def delete_get_min_(self, key_len: int) -> tuple[int, "Slice", int]:
         pass
 
@@ -171,7 +171,7 @@ class _UDictBase(_DictBase):
     ) -> tuple["UDict", int, "Slice", int]:
         pass
 
-    @typed_invokable(name="udict::delete_get_max")
+    @typed_invokable(name="udict::delete_get_max_")
     def delete_get_max_(self, key_len: int) -> tuple[int, "Slice", int]:
         pass
 

@@ -40,7 +40,9 @@ class WalletManager:
                 print("Waiting 15 seconds to be sure wallet is deployed!")
                 time.sleep(15)
         return wallet.send_message(
-            message, valid_until=valid_until, mode=mode,
+            message,
+            valid_until=valid_until,
+            mode=mode,
         )
 
     @classmethod

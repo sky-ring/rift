@@ -143,9 +143,13 @@ class AssignPatcher(ast.NodeTransformer):
                     value=c_expr,
                 )
             else:
-                a_expr = ast.Expr(
+                a_expr = ast.Assign(
+                    targets=[target],
                     value=c_expr,
                 )
+                # a_expr = ast.Expr(
+                #     value=c_expr,
+                # )
             nodes.append(a_expr)
         for g_node in nodes:
             ast.fix_missing_locations(g_node)

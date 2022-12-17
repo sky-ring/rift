@@ -41,7 +41,7 @@ class MsgAddress(Slice):
         # TODO: HANDLE INPLACE STUFF
         v = from_.addr_()
         if name is not None:
-            v.__assign__(name)
+            v and v.__assign__(name)
         return v
 
     @classmethod

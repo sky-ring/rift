@@ -1,10 +1,18 @@
 from types import GenericAlias
 
 DEBUG = False
+type_map = {
+    "Slice": "slice",
+    "Int": "int",
+    "Builder": "builder",
+    "Cell": "cell",
+}
 
 
 def _type_name(type_):
     proxy = _type_name_p(type_)
+    if proxy == "_" and isinstance(type_, str):
+        proxy = type_map.get(type_, "_")
     if DEBUG:
         print(type_, proxy)
     return proxy

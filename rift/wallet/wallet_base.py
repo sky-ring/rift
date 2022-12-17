@@ -36,7 +36,10 @@ class WalletBase(Contract):
     def connect(self):
         addr = self.calculate_address()
         return super().connect(
-            self.network, addr, use_code=False, use_data=True,
+            self.network,
+            addr,
+            use_code=False,
+            use_data=True,
         )
 
     def send_message(

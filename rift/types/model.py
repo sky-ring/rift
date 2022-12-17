@@ -15,6 +15,8 @@ class Model:
         self._lazy = True
         self._skipped_ones = {}
         self._pointer = 0
+        self._has_data = False
+        self._build = False
         if len(kwargs) != 0:
             self._build = True
             for k in self.annotations:
@@ -43,9 +45,8 @@ class Model:
             name = f"data_{item}"
             return n.__assign__(name)
 
-        if self._pointer == 0:
-            self.__data__ = std.get_data().parse()
-            self.__data__.__assign__("data")
+        if not self._has_data and not self._build:
+            self._init_data()
 
         if self._pointer == -1:
             self._pointer = 0
@@ -79,6 +80,16 @@ class Model:
             name = f"data_{k}"
             n = v.__deserialize__(data, name=name, inplace=True)
             setattr(self, k, n)
+
+    def _init_data(self):
+        self.__data__ = std.get_data().parse()
+        self.__data__.__assign__("data")
+        self._has_data = True
+
+    def is_empty(self):
+        if not self._has_data:
+            self._init_data()
+        return self.__data__.bits_n() == 0
 
     def as_cell(self):
         if Config.mode.is_fift():

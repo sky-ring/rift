@@ -31,7 +31,10 @@ class ExecutableContract:
 
     @classmethod
     def create(
-        cls, code: Cell, data: Cell, methods: list[str],
+        cls,
+        code: Cell,
+        data: Cell,
+        methods: list[str],
     ) -> "ExecutableContract":
         contract = ExecutableContract(code, data)
         for m in methods:

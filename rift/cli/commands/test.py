@@ -1,4 +1,5 @@
 import sys
+import traceback
 from os import getcwd, path
 from time import sleep
 
@@ -133,8 +134,12 @@ def test(target):
                     mod.__dict__[k]()
                     session.tests[test_tg][k] = 1
                 except TestError as te:
+                    traceback.print_exception(te)
+                    # print(te)
                     session.tests[test_tg][k] = -1
                 except Exception as e:
+                    traceback.print_exception(e)
+                    # print(e)
                     session.tests[test_tg][k] = -1
                 live.update(render_test_panel(session))
                 sleep(0.1)

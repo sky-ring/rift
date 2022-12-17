@@ -68,7 +68,11 @@ class Contract(metaclass=ContractMeta):
         return InvokableFunc(item)
 
     def connect(
-        self, network: Network, addr: str, use_code=False, use_data=True,
+        self,
+        network: Network,
+        addr: str,
+        use_code=False,
+        use_data=True,
     ):
         self._addr = addr
         acc = network.get_account(self._addr)

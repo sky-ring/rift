@@ -9,7 +9,7 @@ from rift.runtime.config import Config
 
 class ConfigManager:
     @classmethod
-    def acquire_config(cls, network="main", invalidate=False):
+    def acquire_config(cls, network="main", invalidate=True):
         config_url = {
             "main": "https://ton-blockchain.github.io/global.config.json",
             "test": "https://ton-blockchain.github.io/testnet-global.config.json",

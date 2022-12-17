@@ -105,10 +105,13 @@ class Slice(_FiftBaseType):
         pass
 
     def ldict_(self) -> "Cell":
-        pass
+        x = self.uint_(1)
+        if x == 1:
+            return self.ref_()
+        return None
 
     def ldict(self) -> "Cell":
-        pass
+        return self.ref()
 
     def skip_dict(self) -> None:
         pass
@@ -141,7 +144,13 @@ class Slice(_FiftBaseType):
         pass
 
     def addr_(self) -> "Slice":
-        pass
+        x = self.uint_(2)
+        if x == 0:
+            return None
+        if x == 2:
+            self.uint_(8)
+            self.uint_(256)
+        return None
 
     def parse_addr(self) -> "Tuple":
         pass

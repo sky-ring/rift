@@ -118,10 +118,15 @@ class Payload(metaclass=Subscriptable):
             self.load_body()
             return
         read_tag = self.__data__.uint(tag_len)
-        with Cond() as c:
-            c.match(read_tag == tag)
-            self.skip_tag(self.__data__)
-            self.load_body()
+        if Config.mode == Config.mode.FIFT:
+            if read_tag == tag:
+                self.skip_tag(self.__data__)
+                self.load_body()
+        else:
+            with Cond() as c:
+                c.match(read_tag == tag)
+                self.skip_tag(self.__data__)
+                self.load_body()
 
     def load_body(self):
         for k, v in self.annotations.items():
@@ -136,6 +141,7 @@ class Payload(metaclass=Subscriptable):
 
     def __assign__(self, name):
         self.f_name = name
+        return self
 
     def __rshift__(self, other):
         return other.__deserialize__(self.__data__)
@@ -198,7 +204,8 @@ class Payload(metaclass=Subscriptable):
     @classmethod
     def skip_tag(cls, from_):
         tag_len, _ = cls.tag_data()
-        from_.skip_bits_(tag_len)
+        # from_.skip_bits_(tag_len)
+        from_.uint_(tag_len)
 
     def to_builder(self, builder):
         builder = self.write_tag(builder)
@@ -253,6 +260,8 @@ class Payload(metaclass=Subscriptable):
         lazy: bool = True,
         **kwargs,
     ):
+        if Config.mode == Config.mode.FIFT:
+            return
         if name is None:
             return
         if lazy and "target" in kwargs:

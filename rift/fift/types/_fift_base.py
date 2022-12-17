@@ -31,6 +31,7 @@ class _FiftBaseType(FiftBehavior):
         return f"Fift{self.__type__().capitalize()}{{{self.value}}}"
 
     def __assign__(self, *args, **kwargs):
+        return self
         pass
 
     @classmethod

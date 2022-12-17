@@ -21,6 +21,7 @@ class ContractDeployer(metaclass=CachingSubscriptable):
     def __assign__(self, v):
         self.state_init.__assign__(f"{v}_state_init")
         self.address.__assign__(f"{v}_address")
+        return self
 
     @classmethod
     def __build_type__(cls, item):
