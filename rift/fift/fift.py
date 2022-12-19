@@ -35,7 +35,7 @@ class Fift(metaclass=NativeLib):
             p = Path(sys.modules["rift"].__file__).parent.parent
             lib_path = os.path.join(
                 p.absolute(),
-                ("_fift_ex" + get_config_var("EXT_SUFFIX")),
+                ("_riftlib" + get_config_var("EXT_SUFFIX")),
             )
         if not fift_libs:
             fift_libs = "<none>"
