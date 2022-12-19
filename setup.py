@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from build import build_kwargs
 
 setup(
@@ -6,7 +6,7 @@ setup(
     version="0.9.5",
     description="A magical Python3 -> FunC portal",
     license="MIT",
-    packages=["rift"],
+    packages=find_packages(exclude=["test"]),
     author="Amin Rezaei",
     author_email="AminRezaei0x443@gmail.com",
     keywords=[],

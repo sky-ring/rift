@@ -266,6 +266,23 @@ optional = false
 python-versions = ">=3.6,<4.0"
 
 [[package]]
+name = "tqdm"
+version = "4.64.1"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+notebook = ["ipywidgets (>=6)"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+
+[[package]]
 name = "tvm-valuetypes"
 version = "0.0.9"
 description = "Collection of utils for handling Telegram Open Network Virtual Machine value types"
@@ -313,7 +330,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1758048d2390223ed4988360ecb3a1d3051b26caf659768a68fa25595a91f70f"
+content-hash = "28cf0e4e069738ff0985ca16efa5633367d57fed56b0de400b51e149015713e9"
 
 [metadata.files]
 appdirs = [
@@ -648,6 +665,10 @@ tomli = [
 tomlkit = [
     {file = "tomlkit-0.11.4-py3-none-any.whl", hash = "sha256:25d4e2e446c453be6360c67ddfb88838cfc42026322770ba13d1fbd403a93a5c"},
     {file = "tomlkit-0.11.4.tar.gz", hash = "sha256:3235a9010fae54323e727c3ac06fb720752fe6635b3426e379daec60fbd44a83"},
+]
+tqdm = [
+    {file = "tqdm-4.64.1-py2.py3-none-any.whl", hash = "sha256:6fee160d6ffcd1b1c68c65f14c829c22832bc401726335ce92c52d395944a6a1"},
+    {file = "tqdm-4.64.1.tar.gz", hash = "sha256:5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4"},
 ]
 tvm-valuetypes = [
     {file = "tvm_valuetypes-0.0.9-py3-none-any.whl", hash = "sha256:ad714628fa3fef35b69135a2baaf22c546dc773ed68cec36cf764055c687f8d6"},
