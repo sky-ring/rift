@@ -13,6 +13,7 @@ from rift.fift.types.factory import Factory
 from rift.fift.types.util import create_entry
 from rift.fift.utils import calc_method_id
 from rift.native import NativeLib, native_call
+from rift.runtime.riftlib import RiftLibSetup
 
 
 class FiftError(RuntimeError):
@@ -32,6 +33,7 @@ class Fift(metaclass=NativeLib):
         load_utils=False,
     ):
         if not lib_path:
+            lib_path = RiftLibSetup.acquire_lib(ensure=True)
             p = Path(sys.modules["rift"].__file__).parent.parent
             lib_path = os.path.join(
                 p.absolute(),
