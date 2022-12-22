@@ -38,7 +38,8 @@ class TestResult:
     def expect_ok(self) -> TVMResult:
         if self.state != State.Ok:
             raise TestError(
-                "Expected successful exit but got error!", self.curr_error(),
+                "Expected successful exit but got error!",
+                self.curr_error(),
             )
         return self.result
 

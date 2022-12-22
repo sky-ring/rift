@@ -1,10 +1,9 @@
-from setuptools import setup, find_packages
-from build import build_kwargs
+from setuptools import find_packages, setup
 
 setup(
     name="rift-framework",
     version="0.9.5",
-    description="A magical Python3 -> FunC portal",
+    description="A magical Python3 -> TON portal",
     license="MIT",
     packages=find_packages(exclude=["test"]),
     author="Amin Rezaei",
@@ -18,5 +17,4 @@ setup(
     url="https://github.com/sky-ring/rift",
     install_requires=[],
     extras_require={},
-    **build_kwargs(),
 )
