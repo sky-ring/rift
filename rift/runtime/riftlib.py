@@ -1,10 +1,10 @@
 import os
 import platform
 import subprocess
+from pathlib import Path
 
 import requests
 from tqdm import tqdm
-from pathlib import Path
 
 from rift.runtime.config import Config
 
@@ -55,7 +55,9 @@ class RiftLibSetup:
     @classmethod
     def _call_get(cls, command):
         p = subprocess.Popen(
-            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         out, err = p.communicate()
         if p.returncode == 0:
@@ -69,7 +71,8 @@ class RiftLibSetup:
             raise RuntimeError("Error fetching shared libraries!")
         res = filter(lambda x: "=>" in x, res.split("\n"))
         res = map(
-            lambda x: list(map(lambda f: f.strip(), x.split("=>"))), res
+            lambda x: list(map(lambda f: f.strip(), x.split("=>"))),
+            res,
         )
         libs = dict(res)
         return libs
@@ -106,5 +109,7 @@ class RiftLibSetup:
         if cls.is_setup():
             return
         url = cls.determine_lib()
-        os.makedirs(Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True)
+        os.makedirs(
+            Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True
+        )
         cls._download(url, lib_path, buffer=4096)
