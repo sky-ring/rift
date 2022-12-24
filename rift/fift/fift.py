@@ -1,12 +1,8 @@
 import base64
 import json
-import os.path
 import re
-import sys
 import zlib
 from ctypes import CDLL, c_char_p, c_int, c_void_p
-from pathlib import Path
-from sysconfig import get_config_var
 
 from rift.fift.bundled_libs import FIFT_LIBS
 from rift.fift.types.factory import Factory
@@ -34,11 +30,6 @@ class Fift(metaclass=NativeLib):
     ):
         if not lib_path:
             lib_path = RiftLibSetup.acquire_lib(ensure=True)
-            p = Path(sys.modules["rift"].__file__).parent.parent
-            lib_path = os.path.join(
-                p.absolute(),
-                ("_riftlib" + get_config_var("EXT_SUFFIX")),
-            )
         if not fift_libs:
             fift_libs = "<none>"
         self._lib = CDLL(lib_path, winmode=0x8)

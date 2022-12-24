@@ -4,6 +4,7 @@ import subprocess
 
 import requests
 from tqdm import tqdm
+from pathlib import Path
 
 from rift.runtime.config import Config
 
@@ -105,4 +106,5 @@ class RiftLibSetup:
         if cls.is_setup():
             return
         url = cls.determine_lib()
+        os.makedirs(Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True)
         cls._download(url, lib_path, buffer=4096)
