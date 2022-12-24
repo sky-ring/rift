@@ -1,7 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
-from rift.types.ref import Ref
-from rift.types.types import Builder, Cell, Slice
+from rift.runtime.config import Config
+from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
 
 
@@ -12,6 +12,9 @@ class Either(metaclass=CachingSubscriptable):
     def __getattr__(self, item):
         return getattr(self.bound, item)
 
+    def __assign__(self, name):
+        return self
+
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Either") -> "Builder":
         base1 = cls.__base1__
@@ -19,16 +22,10 @@ class Either(metaclass=CachingSubscriptable):
         if value is None:
             b = to.uint(0, 1)
             return b
-        if isinstance(value, Slice):
-            b = to.slice(value)
-            return b
-        if isinstance(value, Cell):
-            b = to.ref(value)
-            return b
         if not isinstance(value, Either):
-            if type(value) == base1:
+            if type(value).__type_id__() == base1.__type_id__():
                 v = 0
-            elif type(value) == base2:
+            elif type(value).__type_id__() == base2.__type_id__():
                 v = 1
             else:
                 msg = "got {current} expected {e1} or {e2}"
@@ -65,14 +62,31 @@ class Either(metaclass=CachingSubscriptable):
             i = from_.uint(1)
         m = Either()
         m.which = i
-        m.which.__assign__(f"{name}_which")
-        with Cond() as c:
-            c.match(i)
-            d = base2.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
-            c.otherwise()
-            d = base1.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
+        if Config.mode.is_func():
+            m.which.__assign__(f"{name}_which")
+            with Cond() as c:
+                c.match(i)
+                d = base2.__deserialize__(
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
+                )
+                m.bound = d
+                c.otherwise()
+                d = base1.__deserialize__(
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
+                )
+                m.bound = d
+        elif Config.mode.is_fift():
+            if m.which == 0:
+                d = base1.__deserialize__(from_, name=name, inplace=inplace)
+            else:
+                d = base2.__deserialize__(from_, name=name, inplace=inplace)
+            return d
         return m
 
     @classmethod

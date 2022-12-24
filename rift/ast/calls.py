@@ -51,6 +51,12 @@ class CallStacks(object):
         return s.node_id()
 
     @classmethod
+    def break_(cls):
+        # TODO: Add when FunC supports or we move to TVM Engine
+        # cls.add_statement(Statement.BREAK)
+        raise Exception("FunC doesn't support break keyword!")
+
+    @classmethod
     def return_(cls, entity):
         ReferenceTable.mark(entity)
         cls.add_statement(Statement.RETURN, entity)

@@ -5,6 +5,9 @@ from pathlib import Path
 
 from rift import Engine
 from rift.ast.ref_table import ReferenceTable
+from rift.fift.fift import Fift
+from rift.fift.func import FunC, FunCError, FunCResult
+from rift.runtime.config import Config, Mode
 
 
 def write(target: str, content: str):
@@ -15,8 +18,38 @@ def write(target: str, content: str):
         f.write(content)
 
 
-def compile(contract, print_=True, ast=False, file_=True):
-    state, code, err = safe_compile(contract)
+def compile(contract, print_=True, ast=False, file_=True, link_std=True):
+    code = compile_py(contract, print_=print_, ast=ast, file_=file_)
+    program = compile_func(code, link_std=link_std)
+    cell = compile_fift(program)
+    contract.__code_cell__ = cell
+    return cell
+
+
+def compile_fift(program):
+    Config.mode = Mode.FIFT
+    c = Fift.assemble(program, fix_main=True, patch_methods=True)
+    return c
+
+
+def compile_func(code, link_std=True):
+    sources = [code]
+    if link_std:
+        sources.insert(0, "#stdlib")
+    res = FunC.compile_source(
+        *sources,
+        optimization_level=0,
+    )
+    if isinstance(res, FunCError):
+        print(res.error)
+    assert isinstance(res, FunCResult)
+    fift_code = res.fift_code
+    return fift_code
+
+
+def compile_py(contract, print_=True, ast=False, file_=True):
+    Config.mode = Mode.FUNC
+    state, code, err = safe_compile_py(contract)
     if ast:
         print()
         print(err)
@@ -40,9 +73,10 @@ def compile(contract, print_=True, ast=False, file_=True):
     if state == 0:
         print(err)
     assert state == 1
+    return code
 
 
-def safe_compile(contract):
+def safe_compile_py(contract):
     Engine.VERBOSE = 1
     t = Engine.patched(contract)
     c_ast = Engine._cache[contract.__name__]

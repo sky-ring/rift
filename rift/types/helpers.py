@@ -36,6 +36,10 @@ def _while(cond):
     return While(cond)
 
 
+def _break():
+    CallStacks.break_()
+
+
 def _throw(what):
     return std.throw(what)
 

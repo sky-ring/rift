@@ -11,8 +11,8 @@ class Contract2(Contract):
         cs = self.body
         msg_seqno = cs.load_uint_(32)
         valid_until = cs.load_uint_(32)
-        self.throw_if(35, valid_until <= std.now())
-        o = std.load_uint_(cs, 10)
+        assert valid_until > std.now(), 35
+        std.skip_bits_(cs, 1)
         x = 10
         y = 15
         x = x + 1

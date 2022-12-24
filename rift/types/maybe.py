@@ -1,25 +1,37 @@
 from rift.core import Entity
 from rift.core.condition import Cond
-from rift.types.types import Builder, Slice
+from rift.func.types.types import Int
+from rift.runtime.config import Config
+from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
 
 
 class Maybe(metaclass=CachingSubscriptable):
     has: Entity
     bound: Entity
+    name: str
+
+    def __init__(self) -> None:
+        pass
 
     def __getattr__(self, item):
         return getattr(self.bound, item)
+
+    def __assign__(self, name):
+        return self
+
+    def is_present(self):
+        return self.has == 1
 
     @classmethod
     def __serialize__(cls, to: "Builder", value: "Maybe") -> "Builder":
         if value is None:
             b = to.uint(0, 1)
             return b
-        if not isinstance(value, Maybe):
-            return type(value).__serialize__(to, value)
-            pass
         base = cls.__basex__
+        if not isinstance(value, Maybe):
+            b = to.uint(1, 1)
+            return base.__serialize__(b, value)
         to.__assign__("_b_tmp_")
         with Cond() as c:
             c.match(value.has)
@@ -45,13 +57,31 @@ class Maybe(metaclass=CachingSubscriptable):
             i = from_.uint_(1)
         else:
             i = from_.uint(1)
-        m = Maybe()
+        m = cls()
         m.has = i
-        m.has.__assign__(f"{name}_has")
-        with Cond() as c:
-            c.match(i)
-            d = base.__deserialize__(from_, name=name, inplace=inplace)
-            m.bound = d
+        if Config.mode.is_func():
+            m.has.__assign__(f"{name}_has")
+            base.__predefine__(name)
+            with Cond() as c:
+                c.match(i)
+                d = base.__deserialize__(
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
+                )
+                m.bound = d
+        elif Config.mode.is_fift():
+            if m.has:
+                d = base.__deserialize__(
+                    from_,
+                    name=name,
+                    inplace=inplace,
+                    lazy=lazy,
+                )
+                return d
+            else:
+                return None
         return m
 
     @classmethod
@@ -62,6 +92,7 @@ class Maybe(metaclass=CachingSubscriptable):
         **kwargs,
     ):
         base = cls.__basex__
+        Int.__predefine__(name=f"{name}_has")
         base.__predefine__(name=name)
 
     @classmethod

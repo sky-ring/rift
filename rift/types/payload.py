@@ -1,9 +1,12 @@
 from rift.ast.ref_table import ReferenceTable
 from rift.core.condition import Cond
 from rift.core.loop import while_
+from rift.func.types.entity_base import Entity
 from rift.library.std import std
-from rift.types.types import Builder, Cell, Entity, Int, Slice
-from rift.types.utils import Subscriptable
+from rift.runtime.config import Config, Mode
+from rift.types.bases import Builder, Cell, Int, Slice
+from rift.types.utils import Subscriptable, obtain_tmp
+from rift.util.type_id import type_id
 
 
 class Payload(metaclass=Subscriptable):
@@ -58,15 +61,23 @@ class Payload(metaclass=Subscriptable):
             return n.__assign__(name)
 
         if self.__data__ is None:
+            # We have no data => user is probably building!
             name = f"{self.f_name}_{item}"
             return Entity(name=name)
+
         if not self._lazy or item not in self._items:
+            # CASE I: The requested item is not a defined field
+            # CASE II: Payload is not lazy
+            # DECISION: let's try get it from underlying data
             # Q: Is this a good idea?
             return getattr(self.__data__, item)
+
         if self._pointer == 0:
+            # If pointer is zero we have to load tag
             tag_len, _ = self.tag_data()
             if tag_len != 0:
                 self.__data__.uint_(tag_len)
+
         # Strategy => Skip if not present
         targets = self._items[self._pointer :]
         for t in targets:
@@ -76,11 +87,14 @@ class Payload(metaclass=Subscriptable):
             name = None
             if is_:
                 name = f"{self.f_name}_{t}"
+            else:
+                name = f"{self.f_name}_{obtain_tmp()}"
             n = v.__deserialize__(
                 self.__data__,
                 name=name,
                 inplace=True,
-                lazy=True,
+                lazy=False,
+                bypass=not is_,
             )
             if is_:
                 setattr(self, t, n)
@@ -90,10 +104,11 @@ class Payload(metaclass=Subscriptable):
 
     def data_init(self, data_slice: Slice):
         self.__data__ = data_slice
-        if not self.__data__.NAMED:
-            self.__data__.__assign__(f"{self.f_name}_orig")
-        self.__origin__ = self.__data__.__assign__(f"{self.f_name}_cp")
-        ReferenceTable.eliminatable(f"{self.f_name}_cp")
+        if Config.mode.is_func():
+            if not self.__data__.NAMED:
+                self.__data__.__assign__(f"{self.f_name}_orig")
+            self.__origin__ = self.__data__.__assign__(f"{self.f_name}_cp")
+            ReferenceTable.eliminatable(f"{self.f_name}_cp")
 
     def load(self, proc_tag=True, master=True):
         if master:
@@ -103,19 +118,30 @@ class Payload(metaclass=Subscriptable):
             self.load_body()
             return
         read_tag = self.__data__.uint(tag_len)
-        with Cond() as c:
-            c.match(read_tag == tag)
-            self.skip_tag(self.__data__)
-            self.load_body()
+        if Config.mode == Config.mode.FIFT:
+            if read_tag == tag:
+                self.skip_tag(self.__data__)
+                self.load_body()
+        else:
+            with Cond() as c:
+                c.match(read_tag == tag)
+                self.skip_tag(self.__data__)
+                self.load_body()
 
     def load_body(self):
         for k, v in self.annotations.items():
             name = f"{self.f_name}_{k}"
-            n = v.__deserialize__(self.__data__, name=name, inplace=True)
+            n = v.__deserialize__(
+                self.__data__,
+                name=name,
+                inplace=True,
+                lazy=False,
+            )
             setattr(self, k, n)
 
     def __assign__(self, name):
         self.f_name = name
+        return self
 
     def __rshift__(self, other):
         return other.__deserialize__(self.__data__)
@@ -139,7 +165,10 @@ class Payload(metaclass=Subscriptable):
         return std.slice_hash(self.__origin__)
 
     def as_builder(self):
-        builder = std.begin_cell()
+        if Config.mode.is_fift():
+            builder = Builder()
+        else:
+            builder = std.begin_cell()
         return self.to_builder(builder)
 
     @classmethod
@@ -175,7 +204,8 @@ class Payload(metaclass=Subscriptable):
     @classmethod
     def skip_tag(cls, from_):
         tag_len, _ = cls.tag_data()
-        from_.skip_bits_(tag_len)
+        # from_.skip_bits_(tag_len)
+        from_.uint_(tag_len)
 
     def to_builder(self, builder):
         builder = self.write_tag(builder)
@@ -220,7 +250,7 @@ class Payload(metaclass=Subscriptable):
         if "tag" in kwargs:
             tag = kwargs["tag"]
         if not lazy:
-            p.load(proc_tag=tag, master=False)
+            p.load(proc_tag=tag, master=True)
         return p
 
     @classmethod
@@ -230,6 +260,8 @@ class Payload(metaclass=Subscriptable):
         lazy: bool = True,
         **kwargs,
     ):
+        if Config.mode == Config.mode.FIFT:
+            return
         if name is None:
             return
         if lazy and "target" in kwargs:
@@ -245,3 +277,7 @@ class Payload(metaclass=Subscriptable):
     @classmethod
     def type_name(cls) -> str:
         return "-"
+
+    @classmethod
+    def __type_id__(cls) -> int:
+        return type_id(cls)()

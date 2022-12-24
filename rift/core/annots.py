@@ -85,16 +85,17 @@ def method_(func, name=None, static=False):
     return nf
 
 
-def asm(input_order=None, out_order=None, name=None):
+def asm(input_order=None, out_order=None, name=None, hide=False):
     return partial(
         asm_,
         input_order=input_order,
         out_order=out_order,
         name=name,
+        hide=hide,
     )
 
 
-def asm_(func, input_order=None, out_order=None, name=None):
+def asm_(func, input_order=None, out_order=None, name=None, hide=False):
     if is_asm(func):
         return func
 
@@ -150,6 +151,7 @@ def asm_(func, input_order=None, out_order=None, name=None):
         {
             "input_order": input_order,
             "out_order": out_order,
+            "hide": hide,
         },
     )
     setattr(

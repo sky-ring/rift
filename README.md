@@ -2,10 +2,10 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-0.7.5-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
-[![Telegram](https://img.shields.io/badge/Telegram-@rift__framework-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/d_builder)
+[![PyPI version](https://img.shields.io/badge/rift--framework-0.9.6-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
+[![Telegram](https://img.shields.io/badge/Telegram-@skyring__org-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/skyring_org)
 [![Telegram](https://img.shields.io/badge/Docs-docs.skyring.io/rift-informational?style=flat-square&color=6A0F49&labelColor=360825)](https://docs.skyring.io/rift/)
-> _A magical **Python3** -> **FunC** portal_
+> _A magical **Python3** -> **TON** portal_
 
 Rift is smart contract development framework in Python for [TON (The Open Network)](https://ton.org). Its purpose is to make the development, testing, and deployment procedures much easier!
 
@@ -104,9 +104,9 @@ Until then, you may look at standard contracts implementation; they cover the ma
 - [x] Providing standard smart contracts implementation with Rift
 
 ### Milestone 2: deploying, testing, interaction capabilities
-- [ ] Simple interaction interface with TON Blockchain
-- [ ] Simple deploying options of developed contracts
-- [ ] Testing framework for the contracts developed with Rift
+- [x] Simple interaction interface with TON Blockchain
+- [x] Simple deploying options of developed contracts
+- [x] Testing framework for the contracts developed with Rift
 
 ## Contributing
 If you're interested in contributing to Rift, please see [CONTRIBUTING.md](https://github.com/sky-ring/rift/blob/main/CONTRIBUTING.md) for the necessary specifications and procedure.

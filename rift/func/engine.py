@@ -18,6 +18,8 @@ from rift.core.factory import Factory
 from rift.core.utils import init_abstract_type
 from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
+from rift.func.util import cls_attrs
+from rift.types import helpers
 
 
 class Engine(object):
@@ -59,7 +61,7 @@ class Engine(object):
                 annots,
             )
             r = model.get(data_name)
-            contract.ret_(None, r)
+            helpers.ret_(r)
             CallStacks.end_method(name)
 
     @classmethod
@@ -67,7 +69,7 @@ class Engine(object):
         inst = contract()
         CallStacks.declare_contract(contract.__name__)
         setattr(inst, "__intercepted__", True)
-        attrs = dir(contract)
+        attrs = cls_attrs(contract)
         d = zip(attrs, [getattr(contract, attr) for attr in attrs])
         for name, value in d:
             if name == "__annotations__":
@@ -142,14 +144,15 @@ class Engine(object):
                     "method_id": is_method_id(value),
                     "method_id_v": getattr(value, "__method_id_val__", None),
                 }
-                CallStacks.declare_asm(
-                    name,
-                    [names[i + 1] for i in range(func_args - 1)],
-                    annots,
-                    asm_annots,
-                )
-                value(inst, *args, NO_INTERCEPT=1)
-                CallStacks.end_method(name)
+                if not asm_annots["hide"]:
+                    CallStacks.declare_asm(
+                        name,
+                        [names[i + 1] for i in range(func_args - 1)],
+                        annots,
+                        asm_annots,
+                    )
+                    value(inst, *args, NO_INTERCEPT=1)
+                    CallStacks.end_method(name)
             elif name == "__doc__":
                 cls.handle_docs(contract, value)
 
@@ -177,6 +180,10 @@ class Engine(object):
         _selected = {k: v for k, v in _globals.items() if k in rel_imported}
         m = {**m, **_selected}
         src = inspect.getsource(contract)
+        activate_func_mode = (
+            "from rift.runtime.config import FunCMode\nFunCMode.activate()\n"
+        )
+        src = activate_func_mode + src
         src = cst_patch(src)
         x = ast.parse(src)
         patched_ast = patch(x)

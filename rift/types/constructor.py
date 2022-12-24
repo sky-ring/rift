@@ -1,7 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
 from rift.library.std import std
-from rift.types.types import Builder, Slice
+from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
 
 

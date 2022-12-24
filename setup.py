@@ -2,10 +2,10 @@ from setuptools import find_packages, setup
 
 setup(
     name="rift-framework",
-    version="0.7.5",
-    description="A magical Python3 -> FunC portal",
+    version="0.9.6",
+    description="A magical Python3 -> TON portal",
     license="MIT",
-    packages=find_packages(),
+    packages=find_packages(exclude=["test"]),
     author="Amin Rezaei",
     author_email="AminRezaei0x443@gmail.com",
     keywords=[],
