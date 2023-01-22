@@ -110,7 +110,8 @@ class TVM:
             res.logs = base64.b64decode(result["logs"]).decode("utf-8")
             res.gas = result["gas_consumed"]
             res.stack = [
-                Factory.load(r["type"], r["value"]) for r in result["stack"]
+                Factory.load(r["type"], r.get("value", None))
+                for r in result["stack"]
             ]
             return res
         else:

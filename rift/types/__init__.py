@@ -22,5 +22,6 @@ from rift.types.msg import (
 )
 from rift.types.payload import Payload
 from rift.types.ref import Ref
+from rift.types.signed_payload import SignedPayload
 from rift.types.sized_int import integer
 from rift.types.slice import slice

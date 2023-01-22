@@ -64,7 +64,6 @@ class Payload(metaclass=Subscriptable):
             # We have no data => user is probably building!
             name = f"{self.f_name}_{item}"
             return Entity(name=name)
-
         if not self._lazy or item not in self._items:
             # CASE I: The requested item is not a defined field
             # CASE II: Payload is not lazy
