@@ -1,13 +1,13 @@
 import asyncio
 from pathlib import Path
 
-from pytonlib import (
+from rift_tonlib import (
     ExternalMessageNotAccepted,
     LiteServerTimeout,
     TonlibClient,
     TonlibNoResponse,
 )
-from pytonlib.client import os
+from rift_tonlib.client import os
 
 from rift.logging import log_info, log_panic, log_warn
 from rift.network.account import Account
@@ -88,7 +88,8 @@ class Network:
             self.servers.reward(i)
             self._current = i
             return True
-        except Exception:
+        except Exception as e:
+            raise e
             self.servers.punish(i)
             return False
 

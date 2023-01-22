@@ -35,8 +35,11 @@ class KeyStore:
             print("\t[1] Import your mnemonics")
             print("\t[2] Generate new mnemonics")
             print("\t[3] Import your 32-byte private key as a hex string")
-            print("\t[4] Import your 32-byte private key as a base64 string")
-            choice = int(input(":"))
+            print("\t[4] Import your 32-byte private key as a base64 string")                
+            if Config.TEST:
+                choice = 2
+            else:
+                choice = int(input(":"))
             if choice == 1:
                 mnemonics = input(
                     "Please provide your mnemonics as a space separated string:",
@@ -60,10 +63,13 @@ class KeyStore:
                 kp = KeyPair(priv_key=pk, encoding="base64")
             else:
                 raise RuntimeError("Invalid choice! Valid range [1-4]")
-            secure = input(
-                "Would you like to secure keystore with custom password (we'll ask on every run)? [Y/n]: ",
-            )
-            secure = secure.lower() == "y"
+            if Config.TEST:
+                secure = False
+            else:
+                secure = input(
+                    "Would you like to secure keystore with custom password (we'll ask on every run)? [Y/n]: ",
+                )
+                secure = secure.lower() == "y"
             if secure:
                 pass_ = input("Please input a memorable password: ")
             else:
@@ -72,8 +78,9 @@ class KeyStore:
             ks._key = cls._fernet_key(pass_)
             ks.pair = kp
             ks.secure = secure
-            cls._write_keystore(ks)
-            print("Configuration done successfully!")
+            if not Config.TEST:
+                cls._write_keystore(ks)
+                print("Configuration done successfully!")
         cls._global_ks = ks
 
     @classmethod

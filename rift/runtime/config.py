@@ -15,6 +15,7 @@ class Mode(Enum):
 
 
 class Config:
+    TEST: bool = False
     mode: Mode = Mode.FIFT
     dirs = AppDirs(appname="Rift", appauthor="Skyring")
 
