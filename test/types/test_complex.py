@@ -1,6 +1,7 @@
+from test.util import compile
+
 from rift import *
 from rift.fift.tvm import TVM, TVMError
-from test.util import compile
 
 
 class Point(Payload):
@@ -39,7 +40,7 @@ class ComplexTypeTest(Contract):
         assert p.x == 0, 101
         assert p.y == 10
         assert p.z1.bound == 20, 103
-        assert ~ p.z2.has, 104
+        assert ~p.z2.has, 104
         assert p.t.a == 1, 105
         assert p.t.b == 2, 106
         assert p.t2.a == 1, 107
@@ -54,7 +55,7 @@ def obtain_custom_payload():
         print(r.exit_code)
         print(r.logs)
         raise AssertionError()
-    out_cell, = r.stack
+    (out_cell,) = r.stack
     return out_cell
 
 

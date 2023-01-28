@@ -1,4 +1,5 @@
 import pytest
+
 from rift.runtime.config import Config
 
 

@@ -35,7 +35,7 @@ class KeyStore:
             print("\t[1] Import your mnemonics")
             print("\t[2] Generate new mnemonics")
             print("\t[3] Import your 32-byte private key as a hex string")
-            print("\t[4] Import your 32-byte private key as a base64 string")                
+            print("\t[4] Import your 32-byte private key as a base64 string")
             if Config.TEST:
                 choice = 2
             else:

@@ -1,6 +1,7 @@
+from test.util import compile
+
 from rift import *
 from rift.fift.tvm import TVM, TVMError
-from test.util import compile
 
 
 class CustomPayload(Payload):

@@ -83,9 +83,13 @@ class Either(metaclass=CachingSubscriptable):
                 m.bound = d
         elif Config.mode.is_fift():
             if m.which == 0:
-                d = base1.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
+                d = base1.__deserialize__(
+                    from_, name=name, inplace=inplace, lazy=lazy
+                )
             else:
-                d = base2.__deserialize__(from_, name=name, inplace=inplace, lazy=lazy)
+                d = base2.__deserialize__(
+                    from_, name=name, inplace=inplace, lazy=lazy
+                )
             return d
         return m
 
