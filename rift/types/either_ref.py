@@ -102,7 +102,7 @@ class EitherRef(metaclass=CachingSubscriptable):
                 n = from_
             else:
                 n = from_.ref_().parse()
-            d = base1.__deserialize__(n, name=name, inplace=inplace)
+            d = base1.__deserialize__(n, name=name, inplace=inplace, lazy=lazy)
             return d
         return m
 

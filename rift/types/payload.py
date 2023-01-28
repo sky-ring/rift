@@ -58,6 +58,8 @@ class Payload(metaclass=Subscriptable):
         if item in self._skipped_ones:
             n = self._skipped_ones[item]
             name = f"{self.f_name}_{item}"
+            if n is None:
+                return n
             return n.__assign__(name)
 
         if self.__data__ is None:
