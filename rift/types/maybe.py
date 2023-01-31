@@ -1,6 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
 from rift.func.types.types import Int
+from rift.logging import log_system
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
@@ -72,7 +73,14 @@ class Maybe(metaclass=CachingSubscriptable):
                 )
                 m.bound = d
         elif Config.mode.is_fift():
-            if m.has:
+            if m.has == 1:
+                log_system(
+                    "DE",
+                    "[{name}] loaded present maybe=>{base} [{lazy}]",
+                    name=name,
+                    lazy=lazy,
+                    base=base.__name__,
+                )
                 d = base.__deserialize__(
                     from_,
                     name=name,
@@ -81,6 +89,13 @@ class Maybe(metaclass=CachingSubscriptable):
                 )
                 return d
             else:
+                log_system(
+                    "DE",
+                    "[{name}] loaded empty maybe=>{base} [{lazy}]",
+                    name=name,
+                    lazy=lazy,
+                    base=base.__name__,
+                )
                 return None
         return m
 

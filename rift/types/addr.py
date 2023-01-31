@@ -1,6 +1,7 @@
 from rift.core import Entity
 from rift.fift.fift import Fift
 from rift.library import std
+from rift.logging import log_system
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Int, Slice, String
 from rift.types.int_aliases import int8, integer, uint256
@@ -38,6 +39,9 @@ class MsgAddress(Slice):
         lazy: bool = True,
         **kwargs,
     ):
+        log_system(
+            "DE", "[{name}] loading address [{lazy}]", name=name, lazy=lazy
+        )
         # TODO: HANDLE INPLACE STUFF
         v = from_.addr_()
         if name is not None:

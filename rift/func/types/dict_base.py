@@ -92,5 +92,5 @@ class _DictBase(_CellBase):
         else:
             v = from_.ldict()
         if name is not None:
-            v.__assign__(name)
+            v and v.__assign__(name)
         return v

@@ -18,7 +18,7 @@ from rift.func.types.entity_base import _EntityBase
 
 class _SliceBase(_EntityBase):
     @typed_invokable(name="load_coins_")
-    def coin(self) -> int:
+    def coin_(self) -> int:
         pass
 
     @typed_invokable(name="load_uint_")

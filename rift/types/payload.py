@@ -3,6 +3,7 @@ from rift.core.condition import Cond
 from rift.core.loop import while_
 from rift.func.types.entity_base import Entity
 from rift.library.std import std
+from rift.logging import log_system
 from rift.runtime.config import Config, Mode
 from rift.types.bases import Builder, Cell, Int, Slice
 from rift.types.utils import Subscriptable, obtain_tmp
@@ -206,6 +207,7 @@ class Payload(metaclass=Subscriptable):
     def skip_tag(cls, from_):
         tag_len, _ = cls.tag_data()
         # from_.skip_bits_(tag_len)
+        log_system("DE", "skipping tag len={len}", len=tag_len)
         from_.uint_(tag_len)
 
     def to_builder(self, builder):

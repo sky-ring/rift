@@ -7,7 +7,7 @@ from .util import compile
 class Contract1(Contract):
     def internal_receive(self) -> None:
         b = self.body.uint(10)
-        c = self.body.coin()
+        c = self.body.coin_()
 
 
 def test_compile():

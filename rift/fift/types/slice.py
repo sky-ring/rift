@@ -15,7 +15,6 @@ class Slice(_FiftBaseType):
     def __init__(self, __value__: str = None, __factory__: bool = False):
         if not __factory__ and __value__:
             self.__load_data__(__value__)
-        pass
 
     @classmethod
     def __type__(cls) -> str:
@@ -148,8 +147,10 @@ class Slice(_FiftBaseType):
         if x == 0:
             return None
         if x == 2:
-            self.uint_(8)
-            self.uint_(256)
+            # TODO: return proper address object
+            w = self.uint_(9)
+            a = self.uint_(256)
+            return None
         return None
 
     def parse_addr(self) -> "Tuple":

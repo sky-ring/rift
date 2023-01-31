@@ -20,7 +20,7 @@ class PatchContract(Contract):
             elif a == 2:
                 b = a * 4
             else:
-                body.coin()
+                body.coin_()
             i = 1
         raise 0xFFFF
 

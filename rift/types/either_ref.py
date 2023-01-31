@@ -1,6 +1,7 @@
 from rift.core import Entity
 from rift.core.condition import Cond
 from rift.library import std
+from rift.logging import log_system
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.ref import Ref
@@ -98,6 +99,15 @@ class EitherRef(metaclass=CachingSubscriptable):
                 x.__assign__(first_name)
             m.bound = d
         elif Config.mode.is_fift():
+            log_system(
+                "DE",
+                "[{name}] loading either ref={ref} base={base} [{lazy}] from={frm}",
+                name=name,
+                lazy=lazy,
+                ref=m.which != 0,
+                base=base1.__name__,
+                frm=from_._init_hash(),
+            )
             if m.which == 0:
                 n = from_
             else:
