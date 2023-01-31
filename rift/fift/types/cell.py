@@ -54,11 +54,7 @@ class Cell(_FiftBaseType):
         inplace: bool = True,
         **kwargs,
     ):
-        if inplace:
-            v = from_.ref_()
-        else:
-            v = from_.ref()
-        return v
+        return from_
 
     def __eq__(self, __o: "Cell") -> bool:
         return __o.value == self.value

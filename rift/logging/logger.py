@@ -19,6 +19,7 @@ class Level(Enum):
     NOTE = 5
     INFO = 6
     DEBUG = 7
+    SYSTEM = 100
 
     def __lt__(self, other):
         if self.__class__ is other.__class__:
@@ -33,7 +34,7 @@ class StyleMocker:
 
 class Logger:
     initialized = False
-    logging_level = Level.WARNING
+    logging_level = Level.INFO
     palette = {
         "red": "#F75590",
         "blue": "#3DB1F5",
@@ -41,6 +42,7 @@ class Logger:
         "green": "#9EE493",
         "yellow": "#FFF689",
         "black": "#000000",
+        "mint": "#4BA3C3",
     }
     colors = {
         Level.PANIC: "red",
@@ -51,6 +53,7 @@ class Logger:
         Level.NOTE: "green",
         Level.INFO: "blue",
         Level.DEBUG: "white",
+        Level.SYSTEM: "mint",
     }
     log_file = None
     mocker = StyleMocker()
@@ -97,6 +100,10 @@ def log_warn(tag, message, **kwargs):
 
 def log_debug(tag, message, **kwargs):
     Logger.log(tag, Level.DEBUG, message, **kwargs)
+
+
+def log_system(tag, message, **kwargs):
+    Logger.log(tag, Level.SYSTEM, message, **kwargs)
 
 
 def log_error(tag, message, **kwargs):

@@ -10,6 +10,7 @@ class Null(_FiftBaseType):
         pass
 
     def __load_data__(self, value: str, *args, **kwargs):
+        self.value = value
         pass
 
     @classmethod

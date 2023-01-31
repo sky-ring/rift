@@ -137,8 +137,8 @@ class Fift(metaclass=NativeLib):
             for proc in r:
                 id_ = calc_method_id(proc)
                 program = program.replace(
-                    f"DECLPROC {proc}",
-                    f"{id_} DECLMETHOD {proc}",
+                    f"DECLPROC {proc}\n",
+                    f"{id_} DECLMETHOD {proc}\n",
                 )
         c = Fift.exec(program.strip())
         return c[0]

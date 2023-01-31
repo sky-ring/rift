@@ -58,7 +58,7 @@ class Builder(_FiftBaseType):
         return b
 
     def dict(self, c: "Cell") -> "Builder":
-        b = self.uint(1 if c is None else 0, 1)
+        b = self.uint(1 if c is not None else 0, 1)
         if c is not None:
             return b.ref(c)
         return b

@@ -9,5 +9,7 @@ class CompiledContract(object):
 
     def to_func(self):
         printer = Printer()
+        printer.print("const int False = 0;")
+        printer.print("const int True = -1;")
         self.ast.print_func(printer)
         return printer.out()

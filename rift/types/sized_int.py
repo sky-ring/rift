@@ -1,4 +1,5 @@
 from rift.core import Entity
+from rift.logging import log_system
 from rift.types.bases import Builder, Int, Slice
 from rift.types.utils import CachingSubscriptable
 
@@ -21,6 +22,14 @@ class integer(Int, metaclass=CachingSubscriptable):
         lazy: bool = True,
         **kwargs,
     ):
+        log_system(
+            "DE",
+            "[{name}] loading sized int sign=>{sgn} size=>{size} [{lazy}]",
+            name=name,
+            lazy=lazy,
+            sgn=cls.__signed__,
+            size=cls.__bits__,
+        )
         if cls.__signed__:
             if inplace:
                 v = from_.sint_(cls.__bits__)

@@ -1,3 +1,4 @@
+from hashlib import sha256
 from typing import TYPE_CHECKING
 
 from rift.fift.fift_behavior import FiftBehavior
@@ -14,8 +15,12 @@ class _FiftBaseType(FiftBehavior):
     def __init__(self):
         pass
 
+    def _init_hash(self) -> str:
+        return sha256(self._init_val.encode("utf-8")).hexdigest()[:6]
+
     def __load_data__(self, value: str, *args, **kwargs):
         self.value = value
+        self._init_val = value
 
     def __stack_entry__(self):
         return {

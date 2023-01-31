@@ -1,4 +1,5 @@
 from rift.core import Entity
+from rift.logging import log_system
 from rift.types.bases import Builder, Int, Slice
 
 
@@ -17,6 +18,9 @@ class Bool(Int):
         lazy: bool = True,
         **kwargs,
     ):
+        log_system(
+            "DE", "[{name}] loading bool [{lazy}]", name=name, lazy=lazy
+        )
         if inplace:
             v = from_.uint_(1)
         else:

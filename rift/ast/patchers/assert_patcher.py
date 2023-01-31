@@ -7,6 +7,8 @@ class AssertPatcher(ast.NodeTransformer):
     """Transforms the AST to handle assertions."""
 
     def visit_Assert(self, node: ast.Assert) -> Any:
+        if node.msg is None:
+            node.msg = ast.Constant(999)
         u_node = ast.Expr(
             value=ast.Call(
                 func=ast.Attribute(

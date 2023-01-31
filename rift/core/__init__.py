@@ -1,4 +1,5 @@
 from rift.core.annots import (
+    asm,
     impure,
     inline,
     inline_ref,

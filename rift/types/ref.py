@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 
 from rift.core import Entity
 from rift.fift.types._fift_base import _FiftBaseType
+from rift.logging import log_system
+from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.utils import CachingSubscriptable
 from rift.util.type_id import type_id
@@ -49,6 +51,15 @@ class Ref(metaclass=CachingSubscriptable):
         **kwargs,
     ):
         base = cls.__basex__
+        if Config.mode.is_fift():
+            log_system(
+                "DE",
+                "[{name}] loading ref=>{base} [{lazy}] from=>{frm}",
+                name=name,
+                lazy=lazy,
+                base=base.__name__,
+                frm=from_._init_hash(),
+            )
         if inplace:
             v = from_.ref_()
         else:

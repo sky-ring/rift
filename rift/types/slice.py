@@ -1,4 +1,5 @@
 from rift.core import Entity
+from rift.logging import log_system
 from rift.types.bases import Builder, Slice
 from rift.types.utils import CachingSubscriptable
 
@@ -18,6 +19,13 @@ class slice(Slice, metaclass=CachingSubscriptable):
         lazy: bool = True,
         **kwargs,
     ):
+        log_system(
+            "DE",
+            "[{name}] loading slice size=>{size} [{lazy}]",
+            name=name,
+            lazy=lazy,
+            size=cls.__bits__,
+        )
         if inplace:
             v = from_.bits_(cls.__bits__)
         else:

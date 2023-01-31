@@ -1,4 +1,5 @@
 from rift.core import Entity
+from rift.logging import log_system
 from rift.types.bases import Builder, Int, Slice
 
 
@@ -21,8 +22,11 @@ class Coin(Int):
         lazy: bool = True,
         **kwargs,
     ):
+        log_system(
+            "DE", "[{name}] loading coin [{lazy}]", name=name, lazy=lazy
+        )
         # TODO: HANDLE INPLACE STUFF
-        v = from_.coin()
+        v = from_.coin_()
         if name is not None:
             v.__assign__(name)
         return v
