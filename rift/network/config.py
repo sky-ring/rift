@@ -11,8 +11,8 @@ class ConfigManager:
     @classmethod
     def acquire_config(cls, network="main", invalidate=True):
         config_url = {
-            "main": "https://ton-blockchain.github.io/global.config.json",
-            "test": "https://ton-blockchain.github.io/testnet-global.config.json",
+            "main": "https://ton.org/global-config.json",
+            "test": "https://ton.org/testnet-global.config.json",
         }[network]
         config_name = f"configs/{network}-config.json"
         ap = os.path.join(Config.dirs.user_data_dir, config_name)

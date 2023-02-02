@@ -43,11 +43,17 @@ def build(target, log_patches, keep):
     if not keep:
         clear_contents(build_dir)
 
-    build_target(
-        target,
-        config.contracts[target],
-        config,
-        contracts_dir,
-        build_dir,
-        save_patches=log_patches,
-    )
+    if target == "all":
+        targets = list(config.contracts.keys())
+    else:
+        targets = [target]
+
+    for target in targets:
+        build_target(
+            target,
+            config.contracts[target],
+            config,
+            contracts_dir,
+            build_dir,
+            save_patches=log_patches,
+        )

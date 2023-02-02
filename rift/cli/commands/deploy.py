@@ -45,6 +45,7 @@ def deploy(target: str, network: str):
             "Target doesn't have a deploy script!",
             fg="red",
         )
+        return
     fp = path.join(contracts_dir, compile_target + ".py")
 
     sys.path.append(cwd)
