@@ -1,11 +1,13 @@
 from os.path import join as pjoin
 
 import click
-from tomlkit import comment, document, nl
 
-from rift.bases import write_contract
 from rift.cli.entry import entry
-from rift.cli.util import DirectoryStructure
+import subprocess
+
+templates = {
+    "bare": "https://github.com/sky-ring/rift-bare-template",
+}
 
 
 @entry.command(help="Initializes a new rift project at the given path")
@@ -14,31 +16,26 @@ from rift.cli.util import DirectoryStructure
     "--base",
     default="bare",
     help="base for the contracts",
-    type=click.Choice(["bare"]),
+    type=click.Choice(list(templates.keys())),
 )
 @click.option("-p", "--path", default=".", help="base path")
 @click.argument("name")
 def init(name, path, base):
     click.echo("Initializing new rift project ...")
 
-    p_dir = DirectoryStructure(pjoin(path, name))
-    p_dir << "contracts"
-    p_dir << "build"
-    ok = p_dir.create_dirs()
-    if ok:
-        write_contract(base, pjoin(path, name, "contracts", f"{name}.py"))
+    repo = templates[base]
+    base_n = click.style(base, bold=True, italic=True, fg="magenta")
+    repo_n = click.style(repo, bold=True, italic=True, fg="magenta")
+    click.echo(f"Getting template {base_n} from {repo_n}")
 
-        doc = document()
-        doc.add(comment("rift project configuration file"))
-        doc.add(nl())
-        doc["name"] = name
-        r = doc.as_string()
-        f = open(pjoin(path, name, "project.toml"), "w")
-        f.write(r)
-        f.close()
-
+    pt = pjoin(path, name)
+    p = subprocess.run(f"git clone {repo} {pt}", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if p.returncode == 0:
         click.echo(click.style("Successfully created project!", fg="green"))
     else:
         click.echo(
-            click.style("Error creating project, dir exists!", fg="red"),
+            click.style("Error creating project!", fg="red"),
+        )
+        click.echo(
+            click.style(p.stderr.decode("utf-8"), fg="red"),
         )
