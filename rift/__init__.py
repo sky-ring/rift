@@ -4,3 +4,4 @@ from rift.func import *
 from rift.library import *
 from rift.network import *
 from rift.types import *
+from rift.runtime import *

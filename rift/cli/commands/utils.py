@@ -66,27 +66,43 @@ def build_target(
         callback = callback if save_patches else None
 
         is_target = contract.__name__ == target_config.contract
-        t = Engine.patch(contract, tg_dict, src_callback=callback)
-        patched_ones.append(t)
-        compiled = Engine.compile(t)
-        fc = compiled.to_func()
-        fc_file = path.join(build_dir, f"{name}.fc")
-        write_file(fc_file, fc)
-        contract_files[contract.__name__] = fc_file
-        add_info = ""
-        if not is_target:
-            add_info = click.style(" (Dependency)", fg="cyan")
-        if log:
-            click.echo(
-                f"Built {contract.__name__} -> build/{name}.fc{add_info}",
-            )
-        # Acquire dependency -> compile link func
-        # We need dependencies here to link against them
-        contract_classes = [v.contract for v in config.contracts.values()]
-        deps = [
-            v for k, v in contract_files.items() if k not in contract_classes
-        ]
-        files = [*deps, fc_file]
+
+        # We check whether contract is prebuilt or not
+        fc = contract.__fc_code__
+        if fc is not None:
+            # It's prebuilt
+            if isinstance(fc, tuple) or isinstance(fc, list):
+                fc = list(fc)
+            else:
+                fc = [fc]
+            files = [path.join(contracts_dir, f) for f in fc]
+            if log:
+                click.echo(
+                    f"Detected prebuilt contract {contract.__name__}",
+                )
+        else:
+            # It's not prebuilt so let's patch it up and compile it to FunC
+            t = Engine.patch(contract, tg_dict, src_callback=callback)
+            patched_ones.append(t)
+            compiled = Engine.compile(t)
+            fc = compiled.to_func()
+            fc_file = path.join(build_dir, f"{name}.fc")
+            write_file(fc_file, fc)
+            contract_files[contract.__name__] = fc_file
+            add_info = ""
+            if not is_target:
+                add_info = click.style(" (Dependency)", fg="cyan")
+            if log:
+                click.echo(
+                    f"Built {contract.__name__} -> build/{name}.fc{add_info}",
+                )
+            # Acquire dependency -> compile link func
+            # We need dependencies here to link against them
+            contract_classes = [v.contract for v in config.contracts.values()]
+            deps = [
+                v for k, v in contract_files.items() if k not in contract_classes
+            ]
+            files = [*deps, fc_file]
         ok, res = compile_func(files)
         if ok:
             name_styled = click.style(name)
@@ -120,6 +136,7 @@ def build_target(
                 )
                 click.secho(fe.msg, fg="red")
         else:
+            name_styled = click.style(name)
             click.echo(
                 f"Failure during compilation of {name_styled}.fc to fift",
             )

@@ -29,6 +29,10 @@ class ExecutableContract:
             self.data = res.result.data
         return res
 
+    def __getattr__(self, name: str):
+        f = functools.partial(ExecutableContract._run_method, self, name)
+        return f
+
     @classmethod
     def create(
         cls,

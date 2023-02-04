@@ -22,6 +22,7 @@ T = TypeVar("T", bound="Contract")
 
 
 class Contract(metaclass=ContractMeta):
+    __fc_code__ = None
     __interface__ = False
     NOT_IMPLEMENTED = 0x91AC43
 

@@ -7,6 +7,7 @@ import subprocess
 
 templates = {
     "bare": "https://github.com/sky-ring/rift-bare-template",
+    "func": "https://github.com/sky-ring/rift-func-template",
 }
 
 

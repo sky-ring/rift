@@ -18,6 +18,8 @@ from rift.types.msg import (
     MessageMode,
     SimpleLib,
     StateInit,
+    ExternalMessage,
+    InboundExternalMsgInfo,
 )
 from rift.types.payload import Payload
 from rift.types.ref import Ref

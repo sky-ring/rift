@@ -29,6 +29,7 @@ class Model:
     def from_slice(cls, data):
         d = cls()
         d.__data__ = data
+        d._has_data = True
         d._pointer = -1
         return d
 
