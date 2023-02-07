@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rift-framework"
-version = "0.9.8"
+version = "0.9.9"
 description = "The magical Python -> TON Portal"
 authors = ["Amin Rezaei <AminRezaei0x443@gmail.com>"]
 license = "MIT"
