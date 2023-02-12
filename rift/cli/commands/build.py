@@ -1,4 +1,4 @@
-from os import getcwd, path
+from os import getcwd, path, makedirs
 
 import click
 
@@ -39,6 +39,7 @@ def build(target, log_patches, keep):
 
     contracts_dir = path.join(cwd, "contracts")
     build_dir = path.join(cwd, "build")
+    makedirs(build_dir, mode=0o777, exist_ok=True)
 
     if not keep:
         clear_contents(build_dir)

@@ -94,52 +94,56 @@ def test(target):
 
     contracts_dir = path.join(cwd, "tests")
     build_dir = path.join(cwd, "build")
+    
+    if target == "all":
+        targets = list(config.contracts.keys())
+    else:
+        targets = [target]
 
-    contract_config = config.contracts[target]
-    test_targets = contract_config.tests
+    for target in targets:
+        contract_config = config.contracts[target]
+        test_targets = contract_config.tests
 
-    sys.path.append(cwd)
-    session = TestSession()
-    session.project = config.name
-    session.target = target
-    session.tests = {}
-    session.progress_cache = {}
+        sys.path.append(cwd)
+        session = TestSession()
+        session.project = config.name
+        session.target = target
+        session.tests = {}
+        session.progress_cache = {}
 
-    with Live(render_test_panel(session), refresh_per_second=4) as live:
-        for test_tg in test_targets:
-            session.tests[test_tg] = {}
-            fp = path.join(contracts_dir, test_tg + ".py")
+        with Live(render_test_panel(session), refresh_per_second=4) as live:
+            for test_tg in test_targets:
+                session.tests[test_tg] = {}
+                fp = path.join(contracts_dir, test_tg + ".py")
 
-            mod, *_ = load_module(fp, test_tg, patch=False)
-            contracts = ContractMeta.defined_contracts()
-            for contract in contracts:
-                contract_cfg = config.get_contract(contract.__name__)
-                name = contract_cfg.get_file_name()
-                boc_file = path.join(build_dir, f"{name}.patched.boc")
-                if not contract.__interface__:
-                    if not path.exists(boc_file):
-                        click.secho(
-                            f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
-                            fg="red",
-                        )
-                        return
-                    code_cell = Cell.load_from(boc_file)
-                    contract.__code_cell__ = code_cell
+                mod, *_ = load_module(fp, test_tg, patch=False)
+                contracts = ContractMeta.defined_contracts()
+                for contract in contracts:
+                    contract_cfg = config.get_contract(contract.__name__)
+                    name = contract_cfg.get_file_name()
+                    boc_file = path.join(build_dir, f"{name}.patched.boc")
+                    if not contract.__interface__:
+                        if not path.exists(boc_file):
+                            click.secho(
+                                f"Couldn't find {name}.boc, Have you built the target? (rift build <target>)",
+                                fg="red",
+                            )
+                            return
+                        code_cell = Cell.load_from(boc_file)
+                        contract.__code_cell__ = code_cell
 
-            keys = list(filter(lambda x: x.startswith("test_"), mod.__dict__))
-            for k in keys:
-                session.tests[test_tg][k] = False
-            for k in keys:
-                try:
-                    mod.__dict__[k]()
-                    session.tests[test_tg][k] = 1
-                except TestError as te:
-                    traceback.print_exception(te)
-                    # print(te)
-                    session.tests[test_tg][k] = -1
-                except Exception as e:
-                    traceback.print_exception(e)
-                    # print(e)
-                    session.tests[test_tg][k] = -1
-                live.update(render_test_panel(session))
-                sleep(0.1)
+                keys = list(filter(lambda x: x.startswith("test_"), mod.__dict__))
+                for k in keys:
+                    session.tests[test_tg][k] = False
+                for k in keys:
+                    try:
+                        mod.__dict__[k]()
+                        session.tests[test_tg][k] = 1
+                    except TestError as te:
+                        traceback.print_exception(te)
+                        session.tests[test_tg][k] = -1
+                    except Exception as e:
+                        traceback.print_exception(e)
+                        session.tests[test_tg][k] = -1
+                    live.update(render_test_panel(session))
+                    sleep(0.1)
