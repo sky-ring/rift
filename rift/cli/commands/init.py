@@ -30,7 +30,7 @@ def init(name, path, base):
     click.echo(f"Getting template {base_n} from {repo_n}")
 
     pt = pjoin(path, name)
-    p = subprocess.run(f"git clone {repo} {pt}", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.run(["git", "clone", repo, pt], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if p.returncode == 0:
         click.echo(click.style("Successfully created project!", fg="green"))
     else:

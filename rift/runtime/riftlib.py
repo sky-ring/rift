@@ -66,7 +66,7 @@ class RiftLibSetup:
 
     @classmethod
     def get_shared_libs(cls):
-        ok, res = cls._call_get("ldconfig -p")
+        ok, res = cls._call_get(["ldconfig", "-p"])
         if not ok:
             raise RuntimeError("Error fetching shared libraries!")
         res = filter(lambda x: "=>" in x, res.split("\n"))
@@ -79,7 +79,7 @@ class RiftLibSetup:
 
     @classmethod
     def get_glibc_version(cls):
-        ok, res = cls._call_get("ldconfig --version")
+        ok, res = cls._call_get(["ldconfig", "--version"])
         if not ok:
             raise RuntimeError("Error fetching glibc version!")
         return res.split("\n")[0].split(" ")[-1].strip()
@@ -110,6 +110,6 @@ class RiftLibSetup:
             return
         url = cls.determine_lib()
         os.makedirs(
-            Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True
+            Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True,
         )
         cls._download(url, lib_path, buffer=4096)
