@@ -10,6 +10,7 @@ from rift.runtime.config import Config
 
 
 class RiftLibSetup:
+    version = 2
     urls = {
         "windows": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-win64.dll",
         "darwin": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-macOS.dylib",
@@ -26,6 +27,14 @@ class RiftLibSetup:
 
     @classmethod
     def is_setup(cls) -> bool:
+        version_file = os.path.join(Config.dirs.user_data_dir, "_rl_version")
+        if not os.path.exists(version_file):
+            return False
+        with open(version_file, "r") as vf:
+            version = vf.read()
+        version = int(version)
+        if version < cls.version:
+            return False
         return os.path.exists(cls.acquire_lib())
 
     @classmethod
@@ -112,4 +121,7 @@ class RiftLibSetup:
         os.makedirs(
             Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True,
         )
+        version_file = os.path.join(Config.dirs.user_data_dir, "_rl_version")
+        with open(version_file, "w") as vf:
+            vf.write(str(cls.version))
         cls._download(url, lib_path, buffer=4096)
