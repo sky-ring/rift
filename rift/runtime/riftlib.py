@@ -11,11 +11,11 @@ from rift.runtime.config import Config
 
 class RiftLibSetup:
     urls = {
-        "windows": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.0/rift-lib-win64.dll",
-        "darwin": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.0/rift-lib-macOS.dylib",
-        "linux-u18": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.0/rift-lib-ubuntu-18.04.so",
-        "linux-u20": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.0/rift-lib-ubuntu-20.04.so",
-        "linux-u22": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.0/rift-lib-ubuntu-22.04.so",
+        "windows": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-win64.dll",
+        "darwin": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-macOS.dylib",
+        "linux-u18": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-18.04.so",
+        "linux-u20": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-20.04.so",
+        "linux-u22": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-22.04.so",
     }
 
     @classmethod
