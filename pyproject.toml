@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rift-framework"
-version = "0.9.10"
+version = "0.9.11"
 description = "The magical Python -> TON Portal"
 authors = ["Amin Rezaei <AminRezaei0x443@gmail.com>"]
 license = "MIT"
@@ -23,6 +23,7 @@ setuptools = "^65.6.3"
 rift-tonlib = "^0.0.2"
 cryptography = "^39.0.0"
 pynacl = "^1.5.0"
+rich = "^13.3.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
