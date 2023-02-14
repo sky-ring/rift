@@ -50,8 +50,8 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 
 ## Guides
 
-- Step-by-step guide on how to use `Rift` to develop on TON: [Link](https://rift.skyring.io/guide-full)
-- Step-by-step guide on integrating `Rift` into existing `FunC` projects: [Link](https://rift.skyring.io/guide-func)
+- Step-by-step guide on how to use `Rift` to develop on TON: *Coming Soon!*
+- Step-by-step guide on integrating `Rift` into existing `FunC` projects: *Coming Soon!*
 
 ## Standard Contracts Implementation
 - [x] Jetton Implementation ([jettons](https://github.com/sky-ring/jettons))
