@@ -10,10 +10,11 @@ from rift.runtime.config import Config
 
 
 class RiftLibSetup:
-    version = 2
+    version = 3
     urls = {
         "windows": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-win64.dll",
         "darwin": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-macOS.dylib",
+        "darwin-slc": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-macOS-silicon.dylib",
         "linux-u18": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-18.04.so",
         "linux-u20": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-20.04.so",
         "linux-u22": "https://github.com/AminRezaei0x443/ton/releases/download/v0.1.5/rift-lib-ubuntu-22.04.so",
@@ -54,8 +55,16 @@ class RiftLibSetup:
     @classmethod
     def determine_lib(cls) -> str:
         s = platform.uname().system.lower()
-        if s == "windows" or s == "darwin":
+        if s == "windows":
             return cls.urls[s]
+        if s == "darwin":
+            proc = platform.processor()
+            if proc == "i386":
+                return cls.urls[s]
+            elif proc == "arm":
+                return cls.urls[f"{s}-slc"]
+            else:
+                raise RuntimeError(f"Unknown processor: {proc}")
         uv = cls._ubuntu_version()
         if uv == -1:
             raise RuntimeError("Unsupported os")
