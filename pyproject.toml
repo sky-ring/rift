@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rift-framework"
-version = "0.9.13"
+version = "0.9.14"
 description = "The magical Python -> TON Portal"
 authors = ["Amin Rezaei <AminRezaei0x443@gmail.com>"]
 license = "MIT"
@@ -20,7 +20,7 @@ appdirs = "~1.4.4"
 colorful = "~0.5.4"
 tqdm = "^4.64.1"
 setuptools = "^65.6.3"
-rift-tonlib = "^0.0.2"
+rift-tonlib = "^0.0.3"
 cryptography = "^39.0.0"
 pynacl = "^1.5.0"
 rich = "^13.3.1"
