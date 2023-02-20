@@ -100,7 +100,9 @@ def build_target(
             # We need dependencies here to link against them
             contract_classes = [v.contract for v in config.contracts.values()]
             deps = [
-                v for k, v in contract_files.items() if k not in contract_classes
+                v
+                for k, v in contract_files.items()
+                if k not in contract_classes
             ]
             files = [*deps, fc_file]
         ok, res = compile_func(files)
@@ -223,6 +225,7 @@ def compile_func(target_files, link_std=True):
     links = []
     if link_std:
         links.append("#stdlib")
+    links.append("#rstd")
     res = FunC.compile_link(
         target_files,
         links,

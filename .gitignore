@@ -3,6 +3,8 @@
 test_space/
 doc_space/
 .build/
+.DS_Store
+Icon*
 
 # VSCode
 .vscode/

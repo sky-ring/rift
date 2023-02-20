@@ -54,7 +54,7 @@ def render_test_panel(session: TestSession) -> Panel:
     table.add_column("Progress", justify="right")
 
     for test_tg, tests in session.tests.items():
-        for (t, state) in tests.items():
+        for t, state in tests.items():
             if state != 0:
                 state_t = (
                     "[magenta] ✗[/magenta]"
@@ -94,7 +94,7 @@ def test(target):
 
     contracts_dir = path.join(cwd, "tests")
     build_dir = path.join(cwd, "build")
-    
+
     if target == "all":
         targets = list(config.contracts.keys())
     else:
@@ -132,7 +132,9 @@ def test(target):
                         code_cell = Cell.load_from(boc_file)
                         contract.__code_cell__ = code_cell
 
-                keys = list(filter(lambda x: x.startswith("test_"), mod.__dict__))
+                keys = list(
+                    filter(lambda x: x.startswith("test_"), mod.__dict__)
+                )
                 for k in keys:
                     session.tests[test_tg][k] = False
                 for k in keys:

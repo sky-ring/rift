@@ -8,6 +8,10 @@ from rift.func.types.types import Builder, Cell, Cont, Slice, Tuple
 class RiftLib(Library):
     __ignore__ = True
 
+    @asm()
+    def equal_slices(self, a: Slice, b: Slice) -> int:
+        return "SDEQ"
+
     @impure
     @asm()
     def dump(self, a: int) -> None:

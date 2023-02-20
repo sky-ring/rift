@@ -70,7 +70,23 @@ class FunC:
         return cls.compile(*f_sources, optimization_level=optimization_level)
 
     @classmethod
+    def prepare_rstd(cls):
+        # TODO: is this an ideal place for this func?
+        if "rstd" in FUNC_LIBS:
+            return
+        from rift.library.rstd import RiftLib
+        from rift.func.engine import Engine
+
+        t = Engine.patched(RiftLib)
+        compiled = Engine.compile(t)
+        code = compiled.to_func()
+        c = zlib.compress(code.encode("utf-8"))
+        b = base64.b64encode(c)
+        FUNC_LIBS["rstd"] = b
+
+    @classmethod
     def compile_link(cls, files, links, optimization_level=2):
+        cls.prepare_rstd()
         f_sources = []
         for i, s in enumerate(links):
             if s.startswith("#"):

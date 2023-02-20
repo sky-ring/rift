@@ -128,7 +128,9 @@ class RiftLibSetup:
             return
         url = cls.determine_lib()
         os.makedirs(
-            Path(lib_path).parent.absolute(), mode=0o777, exist_ok=True,
+            Path(lib_path).parent.absolute(),
+            mode=0o777,
+            exist_ok=True,
         )
         version_file = os.path.join(Config.dirs.user_data_dir, "_rl_version")
         with open(version_file, "w") as vf:
