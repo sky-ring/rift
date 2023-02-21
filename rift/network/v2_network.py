@@ -1,9 +1,10 @@
-import json
+import base64 as b64
 from urllib.parse import urlencode
 
 import requests
 
 from rift.network.account import Account, AccountState
+from rift.network.error import NetworkError
 from rift.network.inetwork import INetwork
 from rift.network.ton_access import endpoint as get_endpoint
 
@@ -16,27 +17,35 @@ class Network(INetwork):
             endpoint = endpoint[:-1]
         self.endpoint = endpoint
 
-    def execute(self, method, query=None, **kwargs):
+    def execute_get(self, method: str, query=None, **kwargs):
         if query is None:
             query = {}
         query = {**query, **kwargs}
         params = urlencode(query)
         full_url = f"{self.endpoint}/{method}?{params}"
         r = requests.get(full_url)
+        d = r.json()
         if r.status_code != 200:
-            # TODO: Better Exception maybe??
-            raise Exception("Error in v2 retreive")
-        d = json.loads(r.content)
-        if not d["ok"]:
-            # TODO: use "error" and "code" fields
-            raise Exception("Error in v2 result")
+            raise NetworkError(d["code"], d["error"])
+        return d["result"]
+
+    def execute_post(self, method: str, body: dict):
+        if body is None:
+            body = {}
+        full_url = f"{self.endpoint}/{method}"
+        r = requests.post(full_url, json=body)
+        d = r.json()
+        if r.status_code != 200:
+            raise NetworkError(d["code"], d["error"])
         return d["result"]
 
     def send_boc(self, boc: bytes):
-        pass
+        data = b64.b64encode(boc).decode("utf-8")
+        r = self.execute_post("sendBoc", {"boc": data})
+        return r
 
     def get_account(self, addr: str) -> Account:
-        result = self.execute("getAddressInformation", address=addr)
+        result = self.execute_get("getAddressInformation", address=addr)
         account = Account(addr=addr)
         match result["state"], balance := int(result["balance"]):
             case "active", _:
