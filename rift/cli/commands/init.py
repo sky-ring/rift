@@ -1,9 +1,9 @@
+import subprocess
 from os.path import join as pjoin
 
 import click
 
 from rift.cli.entry import entry
-import subprocess
 
 templates = {
     "bare": "https://github.com/sky-ring/rift-bare-template",

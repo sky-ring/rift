@@ -1,7 +1,7 @@
 from pytest import fixture
 
 from rift.fift.tvm import TVM, TVMResult
-from rift.network.network import Network
+from rift.network.v2_network import Network
 
 
 @fixture

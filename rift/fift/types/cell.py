@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.factory import Factory
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.util import type_id
 
 
