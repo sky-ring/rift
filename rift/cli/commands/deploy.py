@@ -8,7 +8,7 @@ from rift.cli.config import ProjectConfig
 from rift.cli.entry import entry
 from rift.fift.types import Cell
 from rift.func.meta_contract import ContractMeta
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.runtime.config import FiftMode
 from rift.wallet.wallet_manager import WalletManager
 
@@ -83,8 +83,6 @@ def deploy(target: str, network: str):
     else:
         # acquire wallet, build msg and then send
         r = WalletManager.send_message(n, msg)
-    if r["ok"]:
-        print("Successfuly deployed contract at the address:", "")
-    else:
-        print("Error deploying contract")
-        print(r)
+    if r == -1:
+        return
+    print("Successfuly deployed contract at the address")

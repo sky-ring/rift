@@ -1,6 +1,6 @@
 from rift.fift.types.builder import Builder
 from rift.fift.types.cell import Cell
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.runtime.keystore import KeyStore
 from rift.types.int_aliases import uint32, uint256
 from rift.types.model import Model
@@ -49,7 +49,7 @@ class WalletV3R2(WalletBase):
             b = b.uint(valid_until, 32)
         seq = forced_seq_no if forced_seq_no is not None else self.seq_no()
         b = b.uint(seq, 32)
-        b = b.uint(mode, 8)
         if message:
+            b = b.uint(mode, 8)
             b = b.ref(message)
         return b.end()

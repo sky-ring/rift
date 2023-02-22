@@ -3,7 +3,7 @@ import time
 from os import path
 
 from rift.fift.types.cell import Cell
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.runtime.config import Config
 from rift.types.msg import MessageFlag, MessageMode
 from rift.wallet.wallet_base import WalletBase
@@ -32,7 +32,7 @@ class WalletManager:
                 print(
                     "The wallet account is empty! Please send some TONs and proceed to deploying it.",
                 )
-                return
+                return -1
             elif account.state == account.state.UNINIT:
                 print("Account is uninitialized, proceeding to deploy it ...")
                 r = wallet.deploy_wallet()
