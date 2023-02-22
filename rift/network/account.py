@@ -19,12 +19,15 @@ class Account:
             self._init_from_raw(raw_data)
         if addr != "":
             self.addr = addr
+        self.data = ""
+        self.code = ""
 
     def _init_from_raw(self, data):
         balance = int(data["balance"])
         code = data["code"]
         c_data = data["data"]
         if balance == -1:
+            balance = 0
             state = AccountState.EMPTY
         elif code == "" and c_data == "":
             state = AccountState.UNINIT

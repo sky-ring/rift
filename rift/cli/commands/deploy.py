@@ -8,7 +8,7 @@ from rift.cli.config import ProjectConfig
 from rift.cli.entry import entry
 from rift.fift.types import Cell
 from rift.func.meta_contract import ContractMeta
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.runtime.config import FiftMode
 from rift.wallet.wallet_manager import WalletManager
 
@@ -68,14 +68,15 @@ def deploy(target: str, network: str):
             contract.__code_cell__ = code_cell
 
     FiftMode.activate()
-    res = mod.deploy()
+
+    network = network.lower()
+    n = Network(testnet=network == "test-net")
+
+    res = mod.deploy(n)
     if isinstance(res, tuple):
         msg, independent = res
     else:
         msg, independent = res, False
-
-    network = network.lower()
-    n = Network(testnet=network == "test-net")
 
     if independent:
         # send to blockchain
@@ -83,8 +84,6 @@ def deploy(target: str, network: str):
     else:
         # acquire wallet, build msg and then send
         r = WalletManager.send_message(n, msg)
-    if r["ok"]:
-        print("Successfuly deployed contract at the address:", "")
-    else:
-        print("Error deploying contract")
-        print(r)
+    if r == -1:
+        return
+    print("Successfuly deployed contract at the address")

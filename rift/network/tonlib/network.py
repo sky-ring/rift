@@ -12,7 +12,7 @@ from rift_tonlib.client import os
 from rift.logging import log_info, log_panic, log_warn
 from rift.network.account import Account
 from rift.network.config import ConfigManager
-from rift.network.servers import Servers
+from rift.network.tonlib.servers import Servers
 from rift.runtime.config import Config
 
 

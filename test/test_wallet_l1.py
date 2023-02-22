@@ -1,6 +1,5 @@
 from rift import *
 from rift.fift.tvm import TVM, TVMError, TVMResult
-from rift.network.network import Network
 from rift.runtime.config import Config, Mode
 from rift.runtime.keystore import KeyStore
 

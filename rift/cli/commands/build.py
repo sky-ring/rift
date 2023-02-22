@@ -1,4 +1,4 @@
-from os import getcwd, path, makedirs
+from os import getcwd, makedirs, path
 
 import click
 

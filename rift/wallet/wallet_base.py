@@ -1,6 +1,6 @@
 from rift.fift.types.cell import Cell
 from rift.func.contract import Contract
-from rift.network.network import Network
+from rift.network.v2_network import Network
 from rift.runtime.keystore import KeyStore
 from rift.types.msg import ExternalMessage, MessageFlag, MessageMode
 

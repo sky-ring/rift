@@ -7,7 +7,7 @@ from rift.fift.types.cell import Cell as FiftCell
 from rift.func.meta_contract import ContractMeta
 from rift.func.types.types import Cell, Slice
 from rift.func.util import cls_attrs
-from rift.network.network import Network
+from rift.network.inetwork import INetwork
 from rift.types.bases.cell import Cell as GeneralCell
 from rift.types.model import Model
 from rift.types.msg import (
@@ -70,7 +70,7 @@ class Contract(metaclass=ContractMeta):
 
     def connect(
         self,
-        network: Network,
+        network: INetwork,
         addr: str,
         use_code=False,
         use_data=True,

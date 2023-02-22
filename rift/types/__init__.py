@@ -11,6 +11,8 @@ from rift.types.maybe import Maybe
 from rift.types.model import Model
 from rift.types.msg import (
     CurrencyCollection,
+    ExternalMessage,
+    InboundExternalMsgInfo,
     InboundExtMsgInfo,
     InternalMessage,
     InternalMsgInfo,
@@ -18,8 +20,6 @@ from rift.types.msg import (
     MessageMode,
     SimpleLib,
     StateInit,
-    ExternalMessage,
-    InboundExternalMsgInfo,
 )
 from rift.types.payload import Payload
 from rift.types.ref import Ref

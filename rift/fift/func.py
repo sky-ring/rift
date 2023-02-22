@@ -74,8 +74,8 @@ class FunC:
         # TODO: is this an ideal place for this func?
         if "rstd" in FUNC_LIBS:
             return
-        from rift.library.rstd import RiftLib
         from rift.func.engine import Engine
+        from rift.library.rstd import RiftLib
 
         t = Engine.patched(RiftLib)
         compiled = Engine.compile(t)

@@ -1,7 +1,7 @@
 from pytest import fixture
 
 from rift.network.account import AccountState
-from rift.network.network import Network
+from rift.network.tonlib.network import Network
 
 
 @fixture
