@@ -38,6 +38,8 @@ class WalletManager:
                 r = wallet.deploy_wallet()
                 print(r)
                 print("Waiting 15 seconds to be sure wallet is deployed!")
+                # Reload the state and the data of the wallet
+                wallet.connect()
                 time.sleep(15)
         return wallet.send_message(
             message,
