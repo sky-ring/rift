@@ -20,6 +20,10 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 
 ## Quick Start
 
+> **Warning**
+> 
+> **Rift** is currently in an experimental state, and we strongly advise thorough testing before transitioning to production. We are still in the process of battle-testing and implementing standard contracts, and we anticipate announcing a stable release in the near future. It is advisable to first deploy your contracts to `testnet` and test them meticulously before making the decision to move to production. Additionally, please verify the `FunC` contracts generated.
+
 0. Install `Python 3.10+`
 1. Install `rift`
     ```bash
@@ -50,7 +54,7 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 
 ## Guides
 
-- Step-by-step guide on how to use `Rift` to develop on TON: *Coming Soon!*
+- [*Step-by-Step with Rift: Simple Storage Contract*](https://docs.skyring.io/rift/step-by-step-guides/simple-storage-contract)
 - Step-by-step guide on integrating `Rift` into existing `FunC` projects: *Coming Soon!*
 
 ## Standard Contracts Implementation
