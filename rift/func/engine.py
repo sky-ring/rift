@@ -20,6 +20,7 @@ from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
 from rift.func.util import cls_attrs
 from rift.types import helpers
+from rift.ast.sentry.intro import sentry_analyze, SentryState, SentryHalted
 
 
 class Engine(object):
@@ -186,6 +187,16 @@ class Engine(object):
         src = activate_func_mode + src
         src = cst_patch(src)
         x = ast.parse(src)
+
+        # Here we add sentry
+        status, warnings = sentry_analyze(x)
+        if not status.is_ok():
+            print(f"Sentry exitted with state: {status.name}")
+            for w in warnings:
+                w.log()
+            if status.should_halt():
+                raise SentryHalted()
+
         patched_ast = patch(x)
         if src_callback:
             src_callback(patched_ast)
