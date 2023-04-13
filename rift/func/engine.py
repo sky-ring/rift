@@ -1,5 +1,6 @@
 import ast
 import inspect
+import os
 import textwrap
 
 import yaml
@@ -20,7 +21,8 @@ from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
 from rift.func.util import cls_attrs
 from rift.types import helpers
-from rift.ast.sentry.intro import sentry_analyze, SentryState, SentryHalted
+from rift.ast.sentry.sentry import sentry_analyze
+from rift.ast.sentry.base_types import SentryHalted
 
 
 class Engine(object):
@@ -169,6 +171,12 @@ class Engine(object):
     @staticmethod
     def patch(contract, _globals, src_callback=None):
         lines, starting = inspect.findsource(contract)
+
+        # Get file path, relative to current dir
+        cwd = os.getcwd()
+        f_abs = inspect.getfile(contract)
+        f_name = f_abs.removeprefix(cwd).strip("/").strip("\\")
+
         selected = lines[:starting]
         selected.insert(0, "from rift.types import helpers\n")
         needed_src = "".join(selected)
@@ -189,9 +197,9 @@ class Engine(object):
         x = ast.parse(src)
 
         # Here we add sentry
-        status, warnings = sentry_analyze(x)
+        status, warnings = sentry_analyze(x, file=f_name)
         if not status.is_ok():
-            print(f"Sentry exitted with state: {status.name}")
+            print(f"Sentry exited with state: {status.name}")
             for w in warnings:
                 w.log()
             if status.should_halt():
