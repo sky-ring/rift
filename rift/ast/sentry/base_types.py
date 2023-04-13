@@ -35,7 +35,7 @@ class SentryEntry(NamedTuple):
     msg: str
 
     def log(self):
-        r = f"{self.flag.name} | {self.file} {self.loc[0]}:{self.loc[1]} | {self.msg}"
+        r = f"{self.flag.name} | {self.file} {self.loc[0] + 1}:{self.loc[1] + 1} | {self.msg}"
         print(r)
 
     def inject_file(self, file):
