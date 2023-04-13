@@ -5,10 +5,10 @@ from rift.ast.sentry.base_types import (
     SentryResult,
 )
 from rift.ast.sentry.watchers.base_watcher import Watcher
-from rift.ast.sentry.watchers.match import MatchWatcher
+from rift.ast.sentry.watchers.simple_restrictor import SimpleRestrictor
 
 watchers: list[Watcher] = [
-    MatchWatcher(),
+    SimpleRestrictor("match", ast.Match, breaks=True),
 ]
 
 

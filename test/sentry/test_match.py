@@ -1,4 +1,5 @@
 from rift import *
+from rift.ast.sentry.base_types import SentryHalted
 
 from test.util import compile
 
@@ -11,4 +12,8 @@ class DisallowMatch(Contract):
 
 
 def test_compile():
-    compile(DisallowMatch)
+    try:
+        compile(DisallowMatch)
+        raise RuntimeError("Shouldn't have c")
+    except SentryHalted:
+        pass
