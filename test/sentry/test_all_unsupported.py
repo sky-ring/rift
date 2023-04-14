@@ -1,5 +1,6 @@
 from rift import *
 from rift.ast.sentry.base_types import SentryHalted
+from rift.ast.sentry.watchers.codes import ErrorCode
 
 from test.util import compile
 
@@ -38,6 +39,8 @@ class DisallowUnsupportedSyntax(Contract):
         f_str = f"a: {a:.3f}"
         a, *b = list_comp
         theta = list_comp[1:3]
+        lx = 0 if a % 2 == 0 else 1
+        tl = lambda xx: xx * 2
 
         match self.data:
             case True:
@@ -49,5 +52,12 @@ def test_compile():
         compile(DisallowUnsupportedSyntax)
         raise RuntimeError("Shouldn't have compiled")
     except SentryHalted as halt:
-        assert len(halt.warnings) == 16
-        pass
+        assert len(halt.warnings) == 18
+        codes = {e.code.value for e in halt.warnings}
+        expected = {
+            c
+            for c in range(
+                ErrorCode.NoAsync.value, ErrorCode.NoComprehension.value + 1
+            )
+        }
+        assert codes == expected
