@@ -8,11 +8,16 @@ from ast import AST
 
 class SimpleRestrictor(Watcher):
     def __init__(
-        self, name, *args: type | Callable[[AST], bool], breaks=False
+        self,
+        name,
+        *args: type | Callable[[AST], bool],
+        breaks=False,
+        code=ErrorCode.RestrictUnknown,
     ):
         self.name = name
         self.breaks = breaks
         self.supports_ = list(args)
+        self.code = code
 
     def watch(self, node: AST):
         is_plural = len(self.supports_) > 1
@@ -22,7 +27,7 @@ class SimpleRestrictor(Watcher):
                 SentryState.HALT,
                 None,
                 (node.lineno, node.col_offset),
-                ErrorCode.UnSupportedFlow,
+                self.code,
                 f"{self.name} {verb} not supported!",
             ),
         ], not self.breaks
