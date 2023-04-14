@@ -203,7 +203,7 @@ class Engine(object):
             for w in warnings:
                 w.log()
             if status.should_halt():
-                raise SentryHalted()
+                raise SentryHalted(warnings)
 
         patched_ast = patch(x)
         if src_callback:

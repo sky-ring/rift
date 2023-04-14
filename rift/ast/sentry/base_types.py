@@ -6,7 +6,10 @@ from rift.ast.sentry.watchers.codes import ErrorCode
 
 
 class SentryHalted(Exception):
-    pass
+    def __init__(self, result: "SentryResult" = None):
+        if result is None:
+            result = []
+        self.warnings = result
 
 
 @total_ordering

@@ -3,8 +3,6 @@ from rift.ast.sentry.base_types import SentryHalted
 
 from test.util import compile
 
-ab = 10
-
 
 class DisallowUnsupportedSyntax(Contract):
     class Data(Model):
@@ -29,8 +27,9 @@ class DisallowUnsupportedSyntax(Contract):
         gen_comp = (Entity() for i in range(10))
         del self.data
         with 10 as f:
-            nonlocal ab
-            pass
+
+            def theta():
+                nonlocal gen_comp
 
         if (a := 10) == 11:
             print(a)
@@ -49,5 +48,6 @@ def test_compile():
     try:
         compile(DisallowUnsupportedSyntax)
         raise RuntimeError("Shouldn't have compiled")
-    except SentryHalted:
+    except SentryHalted as halt:
+        assert len(halt.warnings) == 16
         pass

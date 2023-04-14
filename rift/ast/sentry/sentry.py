@@ -18,9 +18,7 @@ watchers: list[Watcher] = [
         ast.AsyncFunctionDef,
         breaks=False,
     ),
-    SimpleRestrictor(
-        "with statements", ast.With, ast.AsyncWith, breaks=False
-    ),
+    SimpleRestrictor("with statements", ast.With, breaks=False),
     SimpleRestrictor(
         "yield expressions", ast.Yield, ast.YieldFrom, breaks=False
     ),
@@ -30,7 +28,7 @@ watchers: list[Watcher] = [
     SimpleRestrictor("lambda expressions", ast.Lambda, breaks=False),
     SimpleRestrictor("if expressions", ast.IfExp, breaks=False),
     SimpleRestrictor(
-        "f-strings", ast.FormattedValue, ast.JoinedStr, breaks=False
+        "f-strings", ast.FormattedValue, ast.JoinedStr, breaks=True
     ),
     SimpleRestrictor("starred statements", ast.Starred, breaks=False),
     SimpleRestrictor("slicing statements", ast.Slice, breaks=False),
