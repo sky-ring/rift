@@ -15,13 +15,15 @@ class SimpleRestrictor(Watcher):
         self.supports_ = list(args)
 
     def watch(self, node: AST):
+        is_plural = len(self.supports_) > 1
+        verb = "are" if is_plural else "is"
         return [
             SentryEntry(
                 SentryState.HALT,
                 None,
                 (node.lineno, node.col_offset),
                 ErrorCode.UnSupportedFlow,
-                f"{self.name} is not supported!",
+                f"{self.name} {verb} not supported!",
             ),
         ], not self.breaks
 

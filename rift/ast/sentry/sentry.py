@@ -8,7 +8,40 @@ from rift.ast.sentry.watchers.base_watcher import Watcher
 from rift.ast.sentry.watchers.simple_restrictor import SimpleRestrictor
 
 watchers: list[Watcher] = [
-    SimpleRestrictor("match", ast.Match, breaks=True),
+    SimpleRestrictor("match statement", ast.Match, breaks=False),
+    SimpleRestrictor("delete statement", ast.Delete, breaks=False),
+    SimpleRestrictor(
+        "async ops",
+        ast.AsyncFor,
+        ast.AsyncWith,
+        ast.Await,
+        ast.AsyncFunctionDef,
+        breaks=False,
+    ),
+    SimpleRestrictor(
+        "with statements", ast.With, ast.AsyncWith, breaks=False
+    ),
+    SimpleRestrictor(
+        "yield expressions", ast.Yield, ast.YieldFrom, breaks=False
+    ),
+    SimpleRestrictor("try statements", ast.Try, breaks=False),
+    SimpleRestrictor("nonlocal statements", ast.Nonlocal, breaks=False),
+    SimpleRestrictor("named expressions", ast.NamedExpr, breaks=False),
+    SimpleRestrictor("lambda expressions", ast.Lambda, breaks=False),
+    SimpleRestrictor("if expressions", ast.IfExp, breaks=False),
+    SimpleRestrictor(
+        "f-strings", ast.FormattedValue, ast.JoinedStr, breaks=False
+    ),
+    SimpleRestrictor("starred statements", ast.Starred, breaks=False),
+    SimpleRestrictor("slicing statements", ast.Slice, breaks=False),
+    SimpleRestrictor(
+        "comprehensions",
+        ast.ListComp,
+        ast.SetComp,
+        ast.DictComp,
+        ast.GeneratorExp,
+        breaks=False,
+    ),
 ]
 
 
