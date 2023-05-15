@@ -16,9 +16,28 @@ from rift.util import type_id
 class Dict(Cell):
     __type_id__ = type_id("Dict")
 
+    def __init__(self, __factory__: bool = False, __value__: str = None):
+        if not __factory__:
+            c: Dict = self.cmd("dictnew")[0]
+            self.value = c.value
+        if __value__ is not None:
+            self.__load_data__(__value__)
+
     @classmethod
     def __type__(cls) -> str:
-        return "dict"
+        return "cell"
+
+    def idict_set(self, n_bits: "Int", x: "Int", value: "Slice"):
+        new_d, ok = self.cmd("idict!", value, x, self, n_bits)
+        new_d = Dict(__value__=new_d.value)
+        return new_d, ok
+
+    def idict_get(self, n_bits: "Int", x: "Int"):
+        stack_out = self.cmd("idict@", x, self, n_bits)
+        if len(stack_out) == 1:
+            return None
+        else:
+            return stack_out[0]
 
     @classmethod
     def __serialize__(
