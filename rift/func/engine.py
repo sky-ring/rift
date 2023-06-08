@@ -6,6 +6,8 @@ import textwrap
 import yaml
 
 from rift.ast import CallStacks, CompiledContract, patch
+from rift.ast.sentry.base_types import SentryHalted
+from rift.ast.sentry.sentry import sentry_analyze
 from rift.core import (
     Entity,
     is_asm,
@@ -21,8 +23,6 @@ from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
 from rift.func.util import cls_attrs
 from rift.types import helpers
-from rift.ast.sentry.sentry import sentry_analyze
-from rift.ast.sentry.base_types import SentryHalted
 
 
 class Engine(object):

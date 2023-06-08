@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from ast import AST
-from rift.ast.sentry.base_types import SentryResult
 from typing import Callable
+
+from rift.ast.sentry.base_types import SentryResult
 
 
 class Watcher(ABC):

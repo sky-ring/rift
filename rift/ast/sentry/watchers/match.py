@@ -1,7 +1,8 @@
+from ast import AST, Match
+
+from rift.ast.sentry.base_types import SentryEntry, SentryState
 from rift.ast.sentry.watchers.base_watcher import Watcher
 from rift.ast.sentry.watchers.codes import ErrorCode
-from rift.ast.sentry.base_types import SentryEntry, SentryState
-from ast import Match, AST
 
 
 class MatchWatcher(Watcher):

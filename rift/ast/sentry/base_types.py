@@ -1,6 +1,6 @@
 from enum import Enum
-from typing import NamedTuple
 from functools import total_ordering
+from typing import NamedTuple
 
 from rift.ast.sentry.watchers.codes import ErrorCode
 

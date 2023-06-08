@@ -25,7 +25,7 @@ class Dict(Cell):
 
     @classmethod
     def __type__(cls) -> str:
-        return "cell"
+        return "dict"
 
     def idict_set(self, n_bits: "Int", x: "Int", value: "Slice"):
         new_d, ok = self.cmd("idict!", value, x, self, n_bits)
@@ -57,6 +57,12 @@ class Dict(Cell):
     ):
         d = from_.ldict_()
         return d
+
+    def __stack_entry__(self):
+        return {
+            "type": "cell",
+            "value": self.value,
+        }
 
 
 Factory.register(Dict.__type__(), Dict)

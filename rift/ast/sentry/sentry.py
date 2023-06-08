@@ -1,9 +1,6 @@
 import ast
 
-from rift.ast.sentry.base_types import (
-    SentryState,
-    SentryResult,
-)
+from rift.ast.sentry.base_types import SentryResult, SentryState
 from rift.ast.sentry.watchers.base_watcher import Watcher
 from rift.ast.sentry.watchers.codes import ErrorCode
 from rift.ast.sentry.watchers.simple_restrictor import SimpleRestrictor

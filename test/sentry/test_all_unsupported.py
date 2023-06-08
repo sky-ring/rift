@@ -1,8 +1,8 @@
+from test.util import compile
+
 from rift import *
 from rift.ast.sentry.base_types import SentryHalted
 from rift.ast.sentry.watchers.codes import ErrorCode
-
-from test.util import compile
 
 
 class DisallowUnsupportedSyntax(Contract):

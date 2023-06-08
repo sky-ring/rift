@@ -55,6 +55,7 @@ class Slice(_FiftBaseType):
 
     def hash(self) -> int:
         from rift.fift.types.bytes import Bytes
+
         r: Bytes = self.cmd("shash", self)[0]
         return r.read_int(256)
 

@@ -1,7 +1,7 @@
 import pytest
 
-from rift.fift.types.dict import Dict
 from rift.fift.types.builder import Builder
+from rift.fift.types.dict import Dict
 
 
 @pytest.fixture

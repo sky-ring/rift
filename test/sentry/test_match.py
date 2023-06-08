@@ -1,7 +1,7 @@
+from test.util import compile
+
 from rift import *
 from rift.ast.sentry.base_types import SentryHalted
-
-from test.util import compile
 
 
 class DisallowMatch(Contract):
