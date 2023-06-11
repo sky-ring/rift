@@ -9,6 +9,7 @@ from rift.cst.cst_env import cst_use_native
 from rift.cst.import_visitor import (
     GeneralImportVisitor,
     RelativeImportVisitor,
+    ModuleImportVisitor,
 )
 
 
@@ -25,5 +26,14 @@ def target_imports(source: str, target: str | None) -> GeneralImportVisitor:
     tree = cst.parse_module(source)
     wrapper = cst.metadata.MetadataWrapper(tree)
     visitor = GeneralImportVisitor(target)
+    wrapper.visit(visitor)
+    return visitor
+
+
+def module_imports(source: str) -> ModuleImportVisitor:
+    cst_use_native()
+    tree = cst.parse_module(source)
+    wrapper = cst.metadata.MetadataWrapper(tree)
+    visitor = ModuleImportVisitor()
     wrapper.visit(visitor)
     return visitor

@@ -1,9 +1,11 @@
-from typing import Any
-
 from rift.ast.sentry.base_types import SentryEntry, SentryState
 from rift.ast.sentry.watchers.codes import ErrorCode
 from rift.ast.sentry.watchers.src_watcher import SrcWatcher
-from rift.cst.cst_visitor import relative_imports, target_imports
+from rift.cst.cst_visitor import (
+    relative_imports,
+    target_imports,
+    module_imports,
+)
 
 
 class ImportRestrictor(SrcWatcher):
@@ -18,8 +20,13 @@ class ImportRestrictor(SrcWatcher):
     def watch(self, src: str):
         _ = relative_imports(src)
         # TODO: is it good idea to restrict relative imports ?!
+        mi = module_imports(src)
+        imports_m, loc_meta_m = mi.imports, mi.loc
         gi = target_imports(src, target=None)
         imports, loc_meta = gi.imports, gi.loc
+        # Logic's same -> Merge entries
+        imports = {*imports.keys(), *imports_m}
+        loc_meta = {**loc_meta, **loc_meta_m}
         errs = []
         for k in imports:
             top = k.split(".")[0]

@@ -83,3 +83,26 @@ class RelativeImportVisitor(cst.CSTVisitor):
         elif len(node.relative) > 1:
             raise RuntimeError("Unsupported Import Expression!")
         return super().visit_ImportFrom(node)
+
+
+class ModuleImportVisitor(cst.CSTVisitor):
+    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
+
+    def __init__(self):
+        super().__init__()
+        self.imports = []
+        self.loc = {}
+
+    def visit_Import(self, node: "cst.Import"):
+        pos = self.get_metadata(cst.metadata.PositionProvider, node).start
+        for alias in node.names:
+            name = parse_name(alias.name)
+            self.imports.append(name)
+            self.loc[name] = (pos.line - 1, pos.column)
+        return super().visit_Import(node)
+
+
+def parse_name(node: cst.Name | cst.Attribute) -> str:
+    if isinstance(node, cst.Name):
+        return node.value
+    return parse_name(node.value) + "." + parse_name(node.attr)
