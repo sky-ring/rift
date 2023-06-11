@@ -7,6 +7,8 @@ from rift.cst.cst_visitor import (
     module_imports,
 )
 
+allowed_imports = ["rift"]
+
 
 class ImportRestrictor(SrcWatcher):
     def __init__(
@@ -31,7 +33,7 @@ class ImportRestrictor(SrcWatcher):
         errs = []
         for k in imports:
             top = k.split(".")[0]
-            if top != "rift":
+            if top not in allowed_imports:
                 errs.append(
                     SentryEntry(
                         SentryState.HALT,

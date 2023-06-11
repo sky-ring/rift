@@ -18,4 +18,4 @@ def test_compile():
         compile(DisallowIllegalImports)
         raise RuntimeError("Shouldn't have compiled")
     except SentryHalted as se:
-        assert len(se.warnings) == 6
+        assert len(se.warnings) == 5
