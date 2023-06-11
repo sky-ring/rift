@@ -14,6 +14,6 @@ class DisallowMatch(Contract):
 def test_compile():
     try:
         compile(DisallowMatch)
-        raise RuntimeError("Shouldn't have c")
+        raise RuntimeError("Shouldn't have compiled")
     except SentryHalted:
         pass

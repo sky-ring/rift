@@ -27,6 +27,7 @@ class ImportRestrictor(SrcWatcher):
         # Logic's same -> Merge entries
         imports = {*imports.keys(), *imports_m}
         loc_meta = {**loc_meta, **loc_meta_m}
+        imports = sorted(imports, key=lambda x: loc_meta[x])
         errs = []
         for k in imports:
             top = k.split(".")[0]
