@@ -16,37 +16,20 @@ class GeneralImportVisitor(cst.CSTVisitor):
         if len(node.relative) != 0:
             return super().visit_ImportFrom(node)
         m = node.module
-        if isinstance(m, cst.Attribute):
-            if (
-                isinstance(m.value, cst.Name)
-                and (m.value.value == self.target_module or self.global_)
-                and isinstance(m.attr, cst.Name)
-            ):
-                # Here we captured an `from [Target].[X] import [Names]`
-                tg = m.value.value
-                from_ = m.attr.value
-                n_sig = from_ if not self.global_ else f"{tg}.{from_}"
+        if isinstance(m, cst.Attribute) or isinstance(m, cst.Name):
+            name = parse_name(m)
+            r_tg = name.split(".")[0]
+            if r_tg == self.target_module or self.global_:
+                # Captured expression: from [Target](.[X])* import [Names]
+                if not self.global_:
+                    name = name.removeprefix(r_tg + ".")
                 names = node.names
                 if isinstance(names, cst.ImportStar):
-                    # TODO: Disallow this explicitly
-                    self.imports[n_sig] = ["*"]
-                    self.loc[n_sig] = (pos.line - 1, pos.column)
-                    pass
+                    self.imports[name] = ["*"]
                 else:
                     names = [name.name.value for name in names]
-                    self.imports[n_sig] = names
-                    self.loc[n_sig] = (pos.line - 1, pos.column)
-        elif isinstance(m, cst.Name):
-            tg = m.value
-            names = node.names
-            if isinstance(names, cst.ImportStar):
-                self.imports[tg] = ["*"]
-                self.loc[tg] = (pos.line - 1, pos.column)
-                pass
-            else:
-                names = [name.name.value for name in names]
-                self.imports[tg] = names
-                self.loc[tg] = (pos.line - 1, pos.column)
+                    self.imports[name] = names
+                self.loc[name] = (pos.line - 1, pos.column)
         else:
             raise RuntimeError("Unsupported Import Expression!")
         return super().visit_ImportFrom(node)

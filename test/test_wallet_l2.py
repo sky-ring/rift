@@ -1,10 +1,6 @@
 from rift import *
 
 from .util import compile
-import requests
-import os, functools
-import numpy.core.umath
-import numpy.random
 
 
 class SimpleWalletL2(Contract):
