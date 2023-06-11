@@ -197,7 +197,8 @@ class Engine(object):
         x = ast.parse(src)
 
         # Here we add sentry
-        status, warnings = sentry_analyze(x, file=f_name)
+        sentry_src = "".join(selected[1:])
+        status, warnings = sentry_analyze(x, src=sentry_src, file=f_name)
         if not status.is_ok():
             print(f"Sentry exited with state: {status.name}")
             for w in warnings:

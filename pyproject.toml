@@ -24,6 +24,7 @@ rift-tonlib = "^0.0.3"
 cryptography = "^39.0.0"
 pynacl = "^1.5.0"
 rich = "^13.3.1"
+pytest = "^7.3.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"

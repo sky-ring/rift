@@ -3,7 +3,9 @@ import ast
 from rift.ast.sentry.base_types import SentryResult, SentryState
 from rift.ast.sentry.watchers.base_watcher import Watcher
 from rift.ast.sentry.watchers.codes import ErrorCode
+from rift.ast.sentry.watchers.import_restrictor import ImportRestrictor
 from rift.ast.sentry.watchers.simple_restrictor import SimpleRestrictor
+from rift.ast.sentry.watchers.src_watcher import SrcWatcher
 
 watchers: list[Watcher] = [
     SimpleRestrictor(
@@ -85,6 +87,10 @@ watchers: list[Watcher] = [
     ),
 ]
 
+src_watchers: list[SrcWatcher] = [
+    ImportRestrictor(name="import!", code=ErrorCode.ExternalImport)
+]
+
 
 def walker(node, file=None) -> SentryResult:
     cont_array = []
@@ -104,7 +110,23 @@ def walker(node, file=None) -> SentryResult:
     return results
 
 
-def sentry_analyze(tree, file=None) -> tuple[SentryState, SentryResult]:
+def src_walker(src, file=None) -> SentryResult:
+    cont_array = []
+    results: SentryResult = []
+
+    for watcher in src_watchers:
+        result, cont = watcher.watch(src)
+        cont_array.append(int(cont))
+        results += result
+
+    results = [r.inject_file(file) for r in results]
+    return results
+
+
+def sentry_analyze(
+    tree, src=None, file=None
+) -> tuple[SentryState, SentryResult]:
     results = walker(tree, file=file)
+    results += src_walker(src, file=file)
     state = min(r.flag for r in results) if len(results) else SentryState.OK
     return state, results

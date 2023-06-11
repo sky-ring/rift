@@ -20,9 +20,10 @@ def relative_imports(source) -> RelativeImportVisitor:
     return visitor
 
 
-def target_imports(source: str, target: str) -> GeneralImportVisitor:
+def target_imports(source: str, target: str | None) -> GeneralImportVisitor:
     cst_use_native()
     tree = cst.parse_module(source)
+    wrapper = cst.metadata.MetadataWrapper(tree)
     visitor = GeneralImportVisitor(target)
-    tree.visit(visitor)
+    wrapper.visit(visitor)
     return visitor

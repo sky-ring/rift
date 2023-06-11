@@ -68,7 +68,9 @@ def build_target(
         is_target = contract.__name__ == target_config.contract
 
         # We check whether contract is prebuilt or not
-        fc = contract.__fc_code__
+        fc = (
+            contract.__fc_code__ if hasattr(contract, "__fc_code__") else None
+        )
         if fc is not None:
             # It's prebuilt
             if isinstance(fc, tuple) or isinstance(fc, list):
@@ -165,7 +167,7 @@ def load_module(file_path: str, module_name: str, patch=True):
     sys.modules[module_name] = mod
 
     imp_ = relative_imports(code)
-    full_imports = imp_._detailed_imports
+    full_imports = imp_.imports
     refs = []
     for i in full_imports:
         refs.append((module_name, i))

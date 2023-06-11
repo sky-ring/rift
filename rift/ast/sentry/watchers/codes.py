@@ -18,3 +18,4 @@ class ErrorCode(Enum):
     NoStarredStatement = 1013
     NoSlicing = 1014
     NoComprehension = 1015
+    ExternalImport = 1016

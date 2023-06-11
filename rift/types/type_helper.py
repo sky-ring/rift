@@ -17,5 +17,5 @@ def type_matches(base, incoming):
     i_ids.remove(None)
     b_ids = set(map(safe_type, base.__mro__))
     b_ids.remove(None)
-    print("This is an unexpected case!")
+    # print("This is an unexpected case!")
     return False
