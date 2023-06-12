@@ -53,8 +53,6 @@ class RelativeImportVisitor(cst.CSTVisitor):
                 self.imports[m_name] = []
             imported = node.names
             if isinstance(imported, cst.ImportStar):
-                # TODO: A good practice would be throwing
-                # and disallowing relative * imports
                 self.imports[m_name].append("*")
                 pass
             else:

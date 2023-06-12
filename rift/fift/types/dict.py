@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from rift.fift.types.slice import Slice
     from rift.fift.types.builder import Builder
-    from rift.fift.types.int import Int
-    from rift.fift.types.bytes import Bytes
 
 from rift.fift.types._fift_base import _FiftBaseType
 from rift.fift.types.cell import Cell
@@ -26,18 +24,6 @@ class Dict(Cell):
     @classmethod
     def __type__(cls) -> str:
         return "dict"
-
-    def idict_set(self, n_bits: "Int", x: "Int", value: "Slice"):
-        new_d, ok = self.cmd("idict!", value, x, self, n_bits)
-        new_d = Dict(__value__=new_d.value)
-        return new_d, ok
-
-    def idict_get(self, n_bits: "Int", x: "Int"):
-        stack_out = self.cmd("idict@", x, self, n_bits)
-        if len(stack_out) == 1:
-            return None
-        else:
-            return stack_out[0]
 
     @classmethod
     def __serialize__(
