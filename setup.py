@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="rift-framework",
-    version="0.10.0",
+    version="1.0.0-rc1",
     description="A magical Python3 -> TON portal",
     license="MIT",
     packages=find_packages(exclude=["test"]),

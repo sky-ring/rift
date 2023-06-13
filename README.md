@@ -2,7 +2,7 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-0.10.0-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
+[![PyPI version](https://img.shields.io/badge/rift--framework-1.0.0--rc1-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
 [![Telegram](https://img.shields.io/badge/Telegram-@skyring__org-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/skyring_org)
 [![Telegram](https://img.shields.io/badge/Docs-docs.skyring.io/rift-informational?style=flat-square&color=6A0F49&labelColor=360825)](https://docs.skyring.io/rift/)
 
@@ -21,8 +21,8 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 ## Quick Start
 
 > **Warning**
-> 
-> **Rift** is currently in an experimental state, and we strongly advise thorough testing before transitioning to production. We are still in the process of battle-testing and implementing standard contracts, and we anticipate announcing a stable release in the near future. It is advisable to first deploy your contracts to `testnet` and test them meticulously before making the decision to move to production. Additionally, please verify the `FunC` contracts generated.
+>
+> **Rift**'s stable version is currently in release-candidate state, and we strongly advise thorough testing before transitioning to production. We are still in the process of battle-testing some internal modules, and we anticipate announcing a stable release in the near future. It is advisable to first deploy your contracts to `testnet` and test them meticulously before making the decision to move to production. Additionally, please verify the `FunC` contracts generated.
 
 0. Install `Python 3.10+`
 1. Install `rift`
@@ -76,8 +76,14 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 - [x] Simple Deploying Options of Developed Contracts
 - [x] Testing Framework for the Contracts Developed with Rift
 
-### Milestone 3: What's Next?
-- Stay Tuned! We have extra plans that we will share soon with the community to further develop `Rift`.
+### Milestone 3: Community-driven Rift
+
+In this milestone we aim to announce the stable version of Rift which can be safely used to develop in real-world projects without risks. Our approach is to make Rift more community driven by creating opportunities that allow community members to contribute to Rift and making it more better! Here are some of our plans:
+- [ ] Rift Advancement Proposals (***RAPs***): A portal to suggest proposals to make Rift better
+- [ ] Robust Documentation: We aim to introduced simplified and detailed documentation to allow users dive deep in several sections of Rift's capabilities
+- [ ] Robust Example Sets
+- [ ] Multi-Contract Testing / Sandbox Integration
+
 
 ## Support the Project
 1. If `Rift` has been a lifesaver for you, giving it a star on GitHub is the ultimate high five!
