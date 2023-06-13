@@ -12,7 +12,7 @@ class CustomPayload(Payload):
 class MaybeTypeTest(Contract):
     @method()
     def custom_payload(self) -> Cell:
-        # Ensure Message Info is correctly costructed
+        # Ensure Message Info is correctly constructed
         p = CustomPayload(x=1, y=2)
         return p.as_cell()
 

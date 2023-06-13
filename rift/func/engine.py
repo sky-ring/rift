@@ -1,10 +1,14 @@
 import ast
 import inspect
+import os
 import textwrap
 
+import click
 import yaml
 
 from rift.ast import CallStacks, CompiledContract, patch
+from rift.ast.sentry.base_types import SentryHalted
+from rift.ast.sentry.sentry import sentry_analyze
 from rift.core import (
     Entity,
     is_asm,
@@ -19,6 +23,7 @@ from rift.core.utils import init_abstract_type
 from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
 from rift.func.util import cls_attrs
+from rift.logging.logger import Logger, Level
 from rift.types import helpers
 
 
@@ -168,6 +173,12 @@ class Engine(object):
     @staticmethod
     def patch(contract, _globals, src_callback=None):
         lines, starting = inspect.findsource(contract)
+
+        # Get file path, relative to current dir
+        cwd = os.getcwd()
+        f_abs = inspect.getfile(contract)
+        f_name = f_abs.removeprefix(cwd).strip("/").strip("\\")
+
         selected = lines[:starting]
         selected.insert(0, "from rift.types import helpers\n")
         needed_src = "".join(selected)
@@ -186,6 +197,22 @@ class Engine(object):
         src = activate_func_mode + src
         src = cst_patch(src)
         x = ast.parse(src)
+
+        # Here we add sentry
+        sentry_src = "".join(selected[1:])
+        status, warnings = sentry_analyze(x, src=sentry_src, file=f_name)
+        if not status.is_ok():
+            Logger.log(
+                "Engine",
+                Level.ERROR,
+                f"Sentry exited with state: {status.name}",
+            )
+            for w in warnings:
+                msg = w.log()
+                Logger.log("Engine", Level.ERROR, msg)
+            if status.should_halt():
+                raise SentryHalted(warnings)
+
         patched_ast = patch(x)
         if src_callback:
             src_callback(patched_ast)

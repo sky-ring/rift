@@ -36,6 +36,9 @@ class Bytes(_FiftBaseType):
     def hashB(self) -> "Bytes":
         return self.cmd("BhashB", self)[0]
 
+    def read_int(self, bit_len):
+        return self.cmd("B>i@", self, bit_len)[0]
+
     def __bytes__(self) -> bytes:
         return base64.b64decode(self.value)
 

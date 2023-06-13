@@ -28,7 +28,7 @@ class SimpleWallet(Contract):
         )
         self.accept_message()
         cs.touch_()
-        with while_(cs.slice_refs()):
+        while cs.slice_refs():
             mode = cs.load_uint_(8)
             self.send_raw_message(cs.load_ref_(), mode)
         cs.end_parse()

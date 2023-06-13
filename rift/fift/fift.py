@@ -98,7 +98,9 @@ class Fift(metaclass=NativeLib):
         if status != "ok":
             raise FiftError(fift_o["message"])
         stack_o = fift_o["stack"]
-        return [Factory.load(t["type"], t["value"]) for t in stack_o]
+        return [
+            Factory.load(t["type"], t.get("value", None)) for t in stack_o
+        ]
 
     @classmethod
     def _init(cls):

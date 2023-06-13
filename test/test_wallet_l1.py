@@ -1,5 +1,6 @@
 from rift import *
 from rift.fift.tvm import TVM, TVMError, TVMResult
+from rift.network.error import NetworkError
 from rift.runtime.config import Config, Mode
 from rift.runtime.keystore import KeyStore
 
@@ -67,6 +68,10 @@ def test_get_methods():
 def test_deploy():
     compile(SimpleWallet)
 
+    KeyStore.override(
+        "7a00324def8cdae8f70772914146de82f78e4dbe36bc49e4b289f9402d6e058a"
+    )
+
     d = SimpleWallet.Data()
     d.seq_no = 0
     d.public_key = KeyStore.public_key()
@@ -85,5 +90,21 @@ def test_deploy():
         independent=True,
     )
     print("Contract Address:", MsgAddress.human_readable(address))
-    r = msg.send(testnet=True)
-    print(r)
+    # What we're trying to do here is to redeploy an existing wallet on the network
+    # We expect it to throw error due to seq_no mismatch (33)
+    # If you change the private key, this test will fail if the account doesn't have enough balance
+    # Rerunning the test with charged wallet will result in successful execution
+    try:
+        r = msg.send(testnet=True)
+        print("Deploy successful, message is accepted:")
+        print(r)
+    except NetworkError as ne:
+        if "terminating vm with exit code 33" in ne.error:
+            print("Redeploy case is covered!")
+        elif "Failed to unpack account state" in ne.error:
+            print(
+                "No Funds case covered, account is null, try to charge the address with Test TON Giver and Retry!"
+            )
+        else:
+            # Unexpected Case!!
+            raise ne

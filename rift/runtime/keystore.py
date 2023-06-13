@@ -163,3 +163,14 @@ class KeyStore:
         if bytes_:
             return cls._global_ks.pair.pub_key
         return cls._global_ks.pair.pub_key.call("B>u@", 256)[0]
+
+    @classmethod
+    def override(cls, private_hex: str):
+        """
+        This function overrides a private key in the running session
+        Useful For Tests!
+        """
+        kp = KeyPair(priv_key=private_hex, encoding="hex")
+        ks = KeyStore()
+        ks.pair = kp
+        cls._global_ks = ks

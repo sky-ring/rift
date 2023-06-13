@@ -86,4 +86,4 @@ def deploy(target: str, network: str):
         r = WalletManager.send_message(n, msg)
     if r == -1:
         return
-    print("Successfuly deployed contract at the address")
+    print("Successfully deployed contract at the address")

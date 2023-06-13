@@ -13,7 +13,7 @@ from rift.runtime.config import Config
 class Level(Enum):
     PANIC = 0
     ALERT = 1
-    CRTIICAL = 2
+    CRITICAL = 2
     ERROR = 3
     WARNING = 4
     NOTE = 5
@@ -47,7 +47,7 @@ class Logger:
     colors = {
         Level.PANIC: "red",
         Level.ALERT: "red",
-        Level.CRTIICAL: "red",
+        Level.CRITICAL: "red",
         Level.ERROR: "red",
         Level.WARNING: "yellow",
         Level.NOTE: "green",

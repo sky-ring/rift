@@ -5,6 +5,7 @@ from rift.logging import log_system
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Slice
 from rift.types.ref import Ref
+from rift.types.type_helper import type_matches
 from rift.types.utils import CachingSubscriptable
 from rift.util.type_id import type_id
 
@@ -29,17 +30,17 @@ class EitherRef(metaclass=CachingSubscriptable):
             b = to.uint(0, 1)
             return b
         if not isinstance(value, EitherRef):
-            if type(value).__type_id__() == base1.__type_id__():
+            if type_matches(base1, type(value)):
                 v = 0
-            elif type(value).__type_id__() == Ref[base1].__type_id__():
+            elif type_matches(Ref[base1], type(value)):
                 v = 1
-            elif type(value).__type_id__() == Cell.__type_id__():
+            elif type_matches(Cell, type(value)):
                 # NOTE: Is this a good approach?
                 v = 0
-            elif type(value).__type_id__() == Slice.__type_id__():
+            elif type_matches(Slice, type(value)):
                 # NOTE: Is this a good approach?
                 v = 0
-            elif type(value).__type_id__() == Ref[Cell].__type_id__():
+            elif type_matches(Ref[Cell], type(value)):
                 v = 1
             else:
                 msg = "got {current} expected {e1} or {e2}"

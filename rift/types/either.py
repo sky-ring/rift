@@ -2,6 +2,7 @@ from rift.core import Entity
 from rift.core.condition import Cond
 from rift.runtime.config import Config
 from rift.types.bases import Builder, Cell, Slice
+from rift.types.type_helper import type_matches
 from rift.types.utils import CachingSubscriptable
 
 
@@ -23,9 +24,9 @@ class Either(metaclass=CachingSubscriptable):
             b = to.uint(0, 1)
             return b
         if not isinstance(value, Either):
-            if type(value).__type_id__() == base1.__type_id__():
+            if type_matches(base1, type(value)):
                 v = 0
-            elif type(value).__type_id__() == base2.__type_id__():
+            elif type_matches(base2, type(value)):
                 v = 1
             else:
                 msg = "got {current} expected {e1} or {e2}"
