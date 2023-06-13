@@ -76,13 +76,18 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 - [x] Simple Deploying Options of Developed Contracts
 - [x] Testing Framework for the Contracts Developed with Rift
 
-### Milestone 3: Community-driven Rift
+### Milestone 3: Launching a Community-Powered Rift
+In this milestone, we are thrilled to unveil the stable version of Rift, primed and ready for integration into real-world projects. Our vision is to foster a Rift ecosystem that thrives on the collective intelligence of its community. We are opening doors and creating avenues for our community members to contribute, refine, and evolve Rift. Here are some of the exciting initiatives we have in mind:
 
-In this milestone we aim to announce the stable version of Rift which can be safely used to develop in real-world projects without risks. Our approach is to make Rift more community driven by creating opportunities that allow community members to contribute to Rift and making it more better! Here are some of our plans:
-- [ ] Rift Advancement Proposals (***RAPs***): A portal to suggest proposals to make Rift better
-- [ ] Robust Documentation: We aim to introduced simplified and detailed documentation to allow users dive deep in several sections of Rift's capabilities
-- [ ] Robust Example Sets
-- [ ] Multi-Contract Testing / Sandbox Integration
+- [ ] **Rift Advancement Proposals (RAPs)**: A dynamic platform for you to propose and discuss enhancements for Rift. This is your chance to help shape the future of Rift!
+
+- [ ] **Comprehensive Documentation**: We are committed to offering an in-depth, yet user-friendly guide that reveals the full potential of Rift. Explore the inner workings and capabilities of Rift with ease and precision.
+
+- [ ] **Extensive Example Sets**: Gain a deeper understanding of Rift through practical examples that showcase its robust features and functionalities.
+
+- [ ] **Multi-Contract Testing / Sandbox Integration**: Embrace a worry-free testing environment. Experiment, play, and validate your projects with our integrated sandbox feature.
+
+Join us on this thrilling journey, shaping the future of Rift, one milestone at a time. We can't wait to see where your contributions will lead us next!
 
 
 ## Support the Project
