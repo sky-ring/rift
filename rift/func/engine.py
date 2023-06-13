@@ -3,6 +3,7 @@ import inspect
 import os
 import textwrap
 
+import click
 import yaml
 
 from rift.ast import CallStacks, CompiledContract, patch
@@ -22,6 +23,7 @@ from rift.core.utils import init_abstract_type
 from rift.cst.cst_patcher import patch as cst_patch
 from rift.cst.cst_visitor import relative_imports
 from rift.func.util import cls_attrs
+from rift.logging.logger import Logger, Level
 from rift.types import helpers
 
 
@@ -200,9 +202,14 @@ class Engine(object):
         sentry_src = "".join(selected[1:])
         status, warnings = sentry_analyze(x, src=sentry_src, file=f_name)
         if not status.is_ok():
-            print(f"Sentry exited with state: {status.name}")
+            Logger.log(
+                "Engine",
+                Level.ERROR,
+                f"Sentry exited with state: {status.name}",
+            )
             for w in warnings:
-                w.log()
+                msg = w.log()
+                Logger.log("Engine", Level.ERROR, msg)
             if status.should_halt():
                 raise SentryHalted(warnings)
 

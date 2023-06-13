@@ -37,8 +37,10 @@ class SentryEntry(NamedTuple):
     code: int | ErrorCode
     msg: str
 
-    def log(self):
+    def log(self, ret=True):
         r = f"{self.flag.name} | {self.file} {self.loc[0] + 1}:{self.loc[1] + 1} | {self.msg}"
+        if ret:
+            return r
         print(r)
 
     def inject_file(self, file):

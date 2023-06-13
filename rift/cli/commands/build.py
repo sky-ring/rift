@@ -2,6 +2,7 @@ from os import getcwd, makedirs, path
 
 import click
 
+from rift.ast.sentry.base_types import SentryHalted
 from rift.cli.commands.utils import build_target
 from rift.cli.config import ProjectConfig
 from rift.cli.entry import entry
@@ -50,11 +51,14 @@ def build(target, log_patches, keep):
         targets = [target]
 
     for target in targets:
-        build_target(
-            target,
-            config.contracts[target],
-            config,
-            contracts_dir,
-            build_dir,
-            save_patches=log_patches,
-        )
+        try:
+            build_target(
+                target,
+                config.contracts[target],
+                config,
+                contracts_dir,
+                build_dir,
+                save_patches=log_patches,
+            )
+        except SentryHalted as sh:
+            return
