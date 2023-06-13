@@ -2,7 +2,7 @@
 
 # Rift
 
-[![PyPI version](https://img.shields.io/badge/rift--framework-1.0.0--rc1-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/)
+[![PyPI version](https://img.shields.io/badge/rift--framework-1.0.0--rc1-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://pypi.org/project/rift-framework/1.0.0rc1/)
 [![Telegram](https://img.shields.io/badge/Telegram-@skyring__org-informational?style=flat-square&color=0088cc&labelColor=360825)](https://t.me/skyring_org)
 [![Telegram](https://img.shields.io/badge/Docs-docs.skyring.io/rift-informational?style=flat-square&color=6A0F49&labelColor=360825)](https://docs.skyring.io/rift/)
 
@@ -27,7 +27,7 @@ Rift is a full-stack development framework for [TON (The Open Network)](https://
 0. Install `Python 3.10+`
 1. Install `rift`
     ```bash
-    pip install rift-framework
+    pip install rift-framework==1.0.0-rc1
     # or from source
     git clone https://github.com/sky-ring/rift
     cd rift
